@@ -13,8 +13,8 @@
 declare module esri {
 
     class esriNS {
-	constructor();    
-       version: number;
+		constructor();    
+	    version: number;
     }
 
     interface graphicsUtils {
@@ -24,12 +24,12 @@ declare module esri {
 
 
     interface request {
-	url : string;
-	content? : Object;
-	form? : Object;
-	handleAs? : string;
-	callbackParamName? : string;
-	timeout? : number;			    
+		url : string;
+		content? : Object;
+		form? : Object;
+		handleAs? : string;
+		callbackParamName? : string;
+		timeout? : number;			    
     }
 
     interface esriRequest {
@@ -38,7 +38,6 @@ declare module esri {
     }
 
 	class domUtils {
-
 	    constructor();    
 		documentBox: Object;
 	    hide(element : Element): void;
@@ -54,10 +53,16 @@ declare module esri {
 	    isDefined(value : Object): boolean;
 	}
 
+	interface ProxyRule {
+		proxyUrl : string;
+		urlPrefix : string;
+	}
+
+
 	interface urlUtils {
 	    urlToObject(url : string): Object;
-	    addProxyRule(rule : Object): number;
-	    getProxyRule(url : string): Object;
+	    addProxyRule(rule : ProxyRule): number;
+	    getProxyRule(url : string): ProxyRule;
 	}
 
 
@@ -424,6 +429,15 @@ declare module "esri/lang" {
 	export = i;
 }
 
+declare module "esri/graphicsUtils" {
+	var i : esri.graphicsUtils;
+	export = i;
+}
+
+declare module "esri/urlUtils" {
+	var i : esri.urlUtils;
+	export = i;
+}
 
 declare module "esri/request" {
 	var i : esri.esriRequest;
@@ -435,14 +449,58 @@ declare module "esri/domUtils" {
 	export = i;
 }
 
-
-declare module "esri/map" {
-	var map : esri.Map;
-	export = map;
+declare module "esri/config" { // not typed for the moment
+	export = Object;
 }
 
-declare module "esri/config" {
-	export = Object;
+declare module "esri/units" {
+	var i : esri.Units;
+	export = i;
+}
+
+declare module "esri/geometry/webMercatorUtils" {
+	var i : esri.geometry.webMercatorUtils;
+	export = i;
+}
+
+declare module "esri/geometry/scaleUtils" {
+	var i : esri.geometry.scaleUtils;
+	export = i;
+}
+
+declare module "esri/geometry/jsonUtils" {
+	var i : esri.geometry.jsonUtils;
+	export = i;
+}
+
+declare module "esri/geometry/screenUtils" {
+	var i : esri.geometry.screenUtils;
+	export = i;
+}
+
+declare module "esri/geometry/mathUtils" {
+	var i : esri.geometry.mathUtils;
+	export = i;
+}
+
+declare module "esri/geometry/geodesicUtils" {
+	var i : esri.geometry.geodesicUtils;
+	export = i;
+}
+
+declare module "esri/geometry/normalizeUtils" {
+	var i : esri.geometry.normalizeUtils;
+	export = i;
+}
+
+declare module "esri.symbol.jsonUtils" {
+	var i : esri.symbol.jsonUtils;
+	export = i;
+}
+
+declare module "esri/renderers/jsonUtils" {
+	var i : esri.renderer.jsonUtils;
+	export = i;
 }
 
 declare module esri.arcgis {
@@ -1093,26 +1151,51 @@ declare module esri.dijit {
 }
 
 declare module esri.geometry {
-    export function fromJson(json : Object) : Object;
-    export function geodesicAreas(polygons : esri.geometry.Geometry[], areaUnit : esri.Units) : number[];
-    export function geodesicDensify(geometry : esri.geometry.Geometry, maxSegmentLength : number) : esri.geometry.Geometry;
-    export function geodesicLengths(polylines : esri.geometry.Polyline[], lengthUnit : esri.Units) : number[];
-    export function geographicToWebMercator(geometry : esri.geometry.Geometry) : esri.geometry.Geometry;
-    export function getExtentForScale(map : esri.Map, scale : number) : esri.geometry.Extent;
-    export function getJsonType(geometry : esri.geometry.Geometry) : string;
-    export function getLength(point1: esri.geometry.Point, point2 : esri.geometry.Point) : number;
-    export function getLineIntersection(line1start: esri.geometry.Point, line1end: esri.geometry.Point, line2start: esri.geometry.Point, line2end: esri.geometry.Point) : esri.geometry.Point;
-    export function getScale(map : esri.Map) : number;
+
+	interface webMercatorUtils {
+		lngLatToXY(long : number,lat : number,isLinear : boolean) : number[];
+		webMercatorToGeographic(geometry: esri.geometry.Geometry) : esri.geometry.Geometry;
+		xyToLngLat(long : number,lat : number) : number[];
+		geographicToWebMercator(geometry : esri.geometry.Geometry) : esri.geometry.Geometry;
+	}
+
+	interface scaleUtils {
+		getScale(map : esri.Map) : number;
+		getExtentForScale(map : esri.Map, scale : number) : esri.geometry.Extent;
+	}
+
+	interface jsonUtils {
+		getJsonType(geometry : esri.geometry.Geometry) : string;
+		fromJson(json : Object) : Object;
+	}
+
+	interface screenUtils {
+		toMapGeometry(extent : esri.geometry.Extent,width : number,height : number,mapGeometry: esri.geometry.Geometry) : esri.geometry.Geometry;
+		//toMapPoint(extent: esri.geometry.Extent,width : number,height : number,screenPoint : esri.geometry.ScreenPoint) : esri.geometry.Point; // Deprecated since 1.1, use toMapGeometry
+		toScreenGeometry(extent: esri.geometry.Extent, width: number, height: number, screenGeometry : esri.geometry.Geometry) : esri.geometry.Geometry;
+		toScreenPoint(extent: esri.geometry.Extent, width: number, height: number,mapPoint : esri.geometry.Point) : ScreenPoint;
+	}
+
+	interface mathUtils {
+		getLength(point1: esri.geometry.Point, point2 : esri.geometry.Point) : number;
+		getLineIntersection(line1start: esri.geometry.Point, line1end: esri.geometry.Point, line2start: esri.geometry.Point, line2end: esri.geometry.Point) : esri.geometry.Point;
+	}
+
+	interface geodesicUtils {
+
+		geodesicAreas(polygons : esri.geometry.Geometry[], areaUnit : esri.Units) : number[];
+		geodesicDensify(geometry : esri.geometry.Geometry, maxSegmentLength : number) : esri.geometry.Geometry;
+		geodesicLengths(polylines : esri.geometry.Polyline[], lengthUnit : esri.Units) : number[];
+	}
+	
+	interface normalizeUtils {
+		normalizeCentralMeridian(geometries: esri.geometry.Geometry[], geometryService : esri.tasks.GeometryService, callback : Function,errback: Function) : dojo.Deferred<any>;
+	}
+
+	// TODO thoses 2 functions are associated in documentation to Polygon class, but have the same module as Polygon ??? is it a doc issue or the Polygon class must be augmented by there 2 functions ?
+
     export function isClockwise(ring : any) : boolean; // any for Ring
-    export function lngLatToXY(long : number,lat : number,isLinear : boolean) : number[];
-    export function normalizeCentralMeridian(geometries: esri.geometry.Geometry[], geometryService : esri.tasks.GeometryService, callback : Function,errback: Function) : dojo.Deferred<any>;
     export function polygonSelfIntersecting(polygon : esri.geometry.Polygon) : boolean;
-    export function toMapGeometry(extent : esri.geometry.Extent,width : number,height : number,mapGeometry: esri.geometry.Geometry) : esri.geometry.Geometry;
-    export function toMapPoint(extent: esri.geometry.Extent,width : number,height : number,screenPoint : esri.geometry.ScreenPoint) : esri.geometry.Point;
-    export function toScreenGeometry(extent: esri.geometry.Extent, width: number, height: number, screenGeometry : esri.geometry.Geometry) : esri.geometry.Geometry;
-    export function toScreenPoint(extent: esri.geometry.Extent, width: number, height: number,mapPoint : esri.geometry.Point) : ScreenPoint;
-    export function webMercatorToGeographic(geometry: esri.geometry.Geometry) : esri.geometry.Geometry;
-    export function xyToLngLat(long : number,lat : number) : number[];
 
     export class Extent extends Geometry {
         constructor(xmin: number, ymin: number, xmax: number, ymax: number, spatialReference : esri.SpatialReference);
@@ -1840,13 +1923,13 @@ declare module esri.layers {
     }
     export class InheritedDomain extends Domain {
     }
-    export class JoinDataSource {
+    export class JoinDataSource extends DataSource {
         constructor(json? : Object);
         joinType: string;
         leftTableKey: string;
-        leftTableSource: any; // LayerMapSource or LayerDataSource
+        leftTableSource: DataSource; // LayerMapSource or LayerDataSource
         rightTableKey: string;
-        rightTableSource: any; // LayerMapSource or LayerDataSource
+        rightTableSource: DataSource; // LayerMapSource or LayerDataSource
         toJson(): Object;
     }
     export class KMLFolder {
@@ -1980,7 +2063,14 @@ declare module esri.layers {
         //update-start : void;
         //visibility-change : <boolean> visible;
     }
-    export class LayerDataSource {
+
+
+	export class DataSource { // abstract class used for specify the datasources
+		constructor(json?);
+	}
+
+
+    export class LayerDataSource extends DataSource {
         constructor(json?);
         dataSource: Object;
         toJson(): Object;
@@ -2105,7 +2195,7 @@ declare module esri.layers {
         constructor(options: Object);
         copyright: string;
     }
-    export class QueryDataSource {
+    export class QueryDataSource extends DataSource {
         constructor(json?: Object);
         geometryType: string;
         oidFields: string[];
@@ -2118,7 +2208,7 @@ declare module esri.layers {
         maxValue: number;
         minValue: number;
     }
-    export class RasterDataSource {
+    export class RasterDataSource extends DataSource {
         constructor(json?: Object);
         dataSourceName: string;
         workspaceId: string;
@@ -2131,7 +2221,7 @@ declare module esri.layers {
         variableName: string;
         toJson(): Object;
     }
-    export class TableDataSource {
+    export class TableDataSource extends DataSource {
         constructor(json?: Object);
         dataSourceName: string;
         gdbVersion: string;
@@ -2281,18 +2371,12 @@ declare module esri.layers {
 }
 
 
-declare module "esri/layers/ArcGISDynamicMapServiceLayer" {
-	var adl : esri.layers.ArcGISDynamicMapServiceLayer;
-	export = adl;
-}
-declare module "esri/layers/ImageParameters" {
-        var i : esri.layers.ImageParameters;
-	export = i;
-}
-
-
 declare module esri.renderer {
-    export function fromJson(json: Object): Object;
+
+	interface jsonUtils {
+		fromJson(json: Object): Renderer; // return the renderer
+	}
+
 
     export class ClassBreaksRenderer extends Renderer {
         constructor(defaultSymbol: Object, attributeField: string);
@@ -2372,8 +2456,11 @@ declare module esri.renderer {
 }
 
 declare module esri.symbol {
-    export function fromJson(json : Object): esri.symbol.Symbol;
-    export function getShapeDescriptors(): Object;
+
+	interface jsonUtils {
+		fromJson(json : Object): esri.symbol.Symbol;
+		getShapeDescriptors(): Object;
+	}
 
     export class CartographicLineSymbol extends SimpleLineSymbol{
         constructor();
@@ -2624,7 +2711,7 @@ declare module esri.tasks {
         location: esri.geometry.Point;
         score: number;
     }
-    export class AlgorithmicColorRamp {
+    export class AlgorithmicColorRamp extends ColorRamp {
         constructor();
         algorithim: string;
         fromColor: Dojo.Color;
@@ -3053,7 +3140,12 @@ declare module esri.tasks {
         //addresses-to - locations-complete : AddressCandidate[];
         //location-to - address-complete : AddressCandidate;
     }
-    export class MultipartColorRamp {
+
+	export class ColorRamp {
+		constructor();
+	}
+
+    export class MultipartColorRamp extends ColorRamp {
         constructor();
         colorRamps: esri.tasks.AlgorithmicColorRamp[];
         toJson(): Object;
@@ -3515,4 +3607,1064 @@ declare module esri.virtualearth {
         //	update-start : void;
         //	visibility-change : <boolean> visible;
     }
+
+
 }
+
+//class,esri/IdentityManager,IdentityManager
+declare module "esri/IdentityManager" {
+	var i : esri.IdentityManager;
+	export = i;
+}
+//class,esri/IdentityManagerBase,IdentityManagerBase
+declare module "esri/IdentityManagerBase" {
+	var i : esri.IdentityManagerBase;
+	export = i;
+}
+//class,esri/InfoTemplate,InfoTemplate
+declare module "esri/InfoTemplate" {
+	var i : esri.InfoTemplate;
+	export = i;
+}
+//class,esri/InfoWindowBase,InfoWindowBase
+declare module "esri/InfoWindowBase" {
+	var i : esri.InfoWindowBase;
+	export = i;
+}
+//class,esri/OperationBase,OperationBase
+declare module "esri/OperationBase" {
+	var i : esri.OperationBase;
+	export = i;
+}
+
+/*
+	not available yet
+	@TODO
+
+//class,esri/PopupBase,PopupBase
+declare module "esri/PopupBase" {
+	var i : esri.PopupBase;
+	export = i;
+}
+*/
+
+/*
+	not available yet
+	@TODO
+
+//class,esri/PopupInfo,PopupInfo
+declare module "esri/PopupInfo" {
+	var i : esri.PopupInfo;
+	export = i;
+}
+*/
+
+//class,esri/ServerInfo,ServerInfo
+declare module "esri/ServerInfo" {
+	var i : esri.ServerInfo;
+	export = i;
+}
+//class,esri/SnappingManager,SnappingManager
+declare module "esri/SnappingManager" {
+	var i : esri.SnappingManager;
+	export = i;
+}
+//class,esri/SpatialReference,SpatialReference
+declare module "esri/SpatialReference" {
+	var i : esri.SpatialReference;
+	export = i;
+}
+//class,esri/TimeExtent,TimeExtent
+declare module "esri/TimeExtent" {
+	var i : esri.TimeExtent;
+	export = i;
+}
+//class,esri/arcgis/Portal,esriPortal
+declare module "esri/arcgis/Portal" {
+	var i : esri.arcgis.Portal;
+	export = i;
+}
+
+/*
+Dijit to do
+
+
+
+//class,esri/dijit/AttributeInspector,AttributeInspector
+declare module "esri/dijit/AttributeInspector" {
+	var i : esri.dijit.AttributeInspector;
+	export = i;
+}
+//class,esri/dijit/Attribution,Attribution
+declare module "esri/dijit/Attribution" {
+	var i : esri.dijit.Attribution;
+	export = i;
+}
+//class,esri/dijit/Basemap,Basemap
+declare module "esri/dijit/Basemap" {
+	var i : esri.dijit.Basemap;
+	export = i;
+}
+//class,esri/dijit/BasemapGallery,BasemapGallery
+declare module "esri/dijit/BasemapGallery" {
+	var i : esri.dijit.BasemapGallery;
+	export = i;
+}
+//class,esri/dijit/BookmarkItem,BookmarkItem
+declare module "esri/dijit/BookmarkItem" {
+	var i : esri.dijit.BookmarkItem;
+	export = i;
+}
+//class,esri/dijit/Bookmarks,Bookmarks
+declare module "esri/dijit/Bookmarks" {
+	var i : esri.dijit.Bookmarks;
+	export = i;
+}
+//class,esri/dijit/Directions,Directions
+declare module "esri/dijit/Directions" {
+	var i : esri.dijit.Directions;
+	export = i;
+}
+//class,esri/dijit/Gallery,Gallery
+declare module "esri/dijit/Gallery" {
+	var i : esri.dijit.Gallery;
+	export = i;
+}
+//class,esri/dijit/Geocoder,Geocoder
+declare module "esri/dijit/Geocoder" {
+	var i : esri.dijit.Geocoder;
+	export = i;
+}
+//class,esri/dijit/HistogramTimeSlider,HistogramTimeSlider
+declare module "esri/dijit/HistogramTimeSlider" {
+	var i : esri.dijit.HistogramTimeSlider;
+	export = i;
+}
+//class,esri/dijit/InfoView,InfoView
+declare module "esri/dijit/InfoView" {
+	var i : esri.dijit.InfoView;
+	export = i;
+}
+//class,esri/dijit/InfoWindow,InfoWindow
+declare module "esri/dijit/InfoWindow" {
+	var i : esri.dijit.InfoWindow;
+	export = i;
+}
+//class,esri/dijit/InfoWindowLite,InfoWindowLite
+declare module "esri/dijit/InfoWindowLite" {
+	var i : esri.dijit.InfoWindowLite;
+	export = i;
+}
+//class,esri/dijit/Legend,Legend
+declare module "esri/dijit/Legend" {
+	var i : esri.dijit.Legend;
+	export = i;
+}
+//class,esri/dijit/Measurement,Measurement
+declare module "esri/dijit/Measurement" {
+	var i : esri.dijit.Measurement;
+	export = i;
+}
+//class,esri/dijit/OverviewMap,OverviewMap
+declare module "esri/dijit/OverviewMap" {
+	var i : esri.dijit.OverviewMap;
+	export = i;
+}
+//class,esri/dijit/Popup,Popup
+declare module "esri/dijit/Popup" {
+	var i : esri.dijit.Popup;
+	export = i;
+}
+//class,esri/dijit/PopupMobile,PopupMobile
+declare module "esri/dijit/PopupMobile" {
+	var i : esri.dijit.PopupMobile;
+	export = i;
+}
+//class,esri/dijit/PopupRenderer,PopupRenderer
+declare module "esri/dijit/PopupRenderer" {
+	var i : esri.dijit.PopupRenderer;
+	export = i;
+}
+//class,esri/dijit/PopupTemplate,PopupTemplate
+declare module "esri/dijit/PopupTemplate" {
+	var i : esri.dijit.PopupTemplate;
+	export = i;
+}
+//class,esri/dijit/Print,Print
+declare module "esri/dijit/Print" {
+	var i : esri.dijit.Print;
+	export = i;
+}
+//class,esri/dijit/Scalebar,Scalebar
+declare module "esri/dijit/Scalebar" {
+	var i : esri.dijit.Scalebar;
+	export = i;
+}
+//class,esri/dijit/TimeSlider,TimeSlider
+declare module "esri/dijit/TimeSlider" {
+	var i : esri.dijit.TimeSlider;
+	export = i;
+}
+*/
+
+
+
+/* new class 
+   not available yet
+
+//class,esri/dijit/analysisAggregateTool,AggregateTool
+declare module "esri/dijit/analysisAggregateTool" {
+	var i : esri.dijit.analysisAggregateTool;
+	export = i;
+}
+//class,esri/dijit/analysisAnalysisBase,AnalysisBase
+declare module "esri/dijit/analysisAnalysisBase" {
+	var i : esri.dijit.analysisAnalysisBase;
+	export = i;
+}
+//class,esri/dijit/analysisBufferTool,BufferTool
+declare module "esri/dijit/analysisBufferTool" {
+	var i : esri.dijit.analysisBufferTool;
+	export = i;
+}
+//class,esri/dijit/analysisCreateDriveTimeAreas,CreateDriveTimeAreas
+declare module "esri/dijit/analysisCreateDriveTimeAreas" {
+	var i : esri.dijit.analysisCreateDriveTimeAreas;
+	export = i;
+}
+//class,esri/dijit/analysisDissolveBoundaries,DissolveBoundaries
+declare module "esri/dijit/analysisDissolveBoundaries" {
+	var i : esri.dijit.analysisDissolveBoundaries;
+	export = i;
+}
+//class,esri/dijit/analysisEnrichLayer,EnrichLayer
+declare module "esri/dijit/analysisEnrichLayer" {
+	var i : esri.dijit.analysisEnrichLayer;
+	export = i;
+}
+//class,esri/dijit/analysisExtractData,ExtractData
+declare module "esri/dijit/analysisExtractData" {
+	var i : esri.dijit.analysisExtractData;
+	export = i;
+}
+//class,esri/dijit/analysisFindHotSpots,FindHotSpots
+declare module "esri/dijit/analysisFindHotSpots" {
+	var i : esri.dijit.analysisFindHotSpots;
+	export = i;
+}
+//class,esri/dijit/analysisFindNearest,FindNearest
+declare module "esri/dijit/analysisFindNearest" {
+	var i : esri.dijit.analysisFindNearest;
+	export = i;
+}
+//class,esri/dijit/analysisMergeLayers,MergeLayers
+declare module "esri/dijit/analysisMergeLayers" {
+	var i : esri.dijit.analysisMergeLayers;
+	export = i;
+}
+//class,esri/dijit/analysisOverlayLayers,OverlayLayers
+declare module "esri/dijit/analysisOverlayLayers" {
+	var i : esri.dijit.analysisOverlayLayers;
+	export = i;
+}
+//class,esri/dijit/analysisSummarizeNearby,SummarizeNearby
+declare module "esri/dijit/analysisSummarizeNearby" {
+	var i : esri.dijit.analysisSummarizeNearby;
+	export = i;
+}
+//class,esri/dijit/analysisSummarizeWithin,SummarizeWithin
+declare module "esri/dijit/analysisSummarizeWithin" {
+	var i : esri.dijit.analysisSummarizeWithin;
+	export = i;
+}
+
+*/
+
+/*
+
+//class,esri/dijit/editing/AttachmentEditor,AttachmentEditor
+declare module "esri/dijit/editing/AttachmentEditor" {
+	var i : esri.dijit.editing.AttachmentEditor;
+	export = i;
+}
+//class,esri/dijit/editing/Editor,Editor
+declare module "esri/dijit/editing/Editor" {
+	var i : esri.dijit.editing.Editor;
+	export = i;
+}
+//class,esri/dijit/editing/TemplatePicker,TemplatePicker
+declare module "esri/dijit/editing/TemplatePicker" {
+	var i : esri.dijit.editing.TemplatePicker;
+	export = i;
+}
+//class,esri/dijt/geoenrichment/Infographic,Infographic
+declare module "esri/dijt/geoenrichment/Infographic" {
+	var i : esri.dijt.geoenrichment.Infographic;
+	export = i;
+}
+//class,esri/dijt/geoenrichment/InfographicsCarousel,InfographicsCarousel
+declare module "esri/dijt/geoenrichment/InfographicsCarousel" {
+	var i : esri.dijt.geoenrichment.InfographicsCarousel;
+	export = i;
+}
+//class,esri/dijt/geoenrichment/InfographicsOptions,InfographicsOptions
+declare module "esri/dijt/geoenrichment/InfographicsOptions" {
+	var i : esri.dijt.geoenrichment.InfographicsOptions;
+	export = i;
+}
+
+*/
+
+//class,esri/geometry/Extent,Extent
+declare module "esri/geometry/Extent" {
+	var i : esri.geometry.Extent;
+	export = i;
+}
+//class,esri/geometry/Geometry,Geometry
+declare module "esri/geometry/Geometry" {
+	var i : esri.geometry.Geometry;
+	export = i;
+}
+//class,esri/geometry/Multipoint,Multipoint
+declare module "esri/geometry/Multipoint" {
+	var i : esri.geometry.Multipoint;
+	export = i;
+}
+//class,esri/geometry/Point,Point
+declare module "esri/geometry/Point" {
+	var i : esri.geometry.Point;
+	export = i;
+}
+//class,esri/geometry/Polygon,Polygon
+declare module "esri/geometry/Polygon" {
+	var i : esri.geometry.Polygon;
+	export = i;
+}
+//class,esri/geometry/Polyline,Polyline
+declare module "esri/geometry/Polyline" {
+	var i : esri.geometry.Polyline;
+	export = i;
+}
+
+//class,esri/geometry/ScreenPoint,ScreenPoint
+declare module "esri/geometry/ScreenPoint" {
+	var i : esri.geometry.ScreenPoint;
+	export = i;
+}
+//class,esri/graphic,Graphic
+declare module "esri/graphic" {
+	var i : esri.Graphic;
+	export = i;
+}
+//class,esri/layers/ArcGISDynamicMapServiceLayer,ArcGISDynamicMapServiceLayer
+declare module "esri/layers/ArcGISDynamicMapServiceLayer" {
+	var i : esri.layers.ArcGISDynamicMapServiceLayer;
+	export = i;
+}
+//class,esri/layers/ArcGISImageServiceLayer,ArcGISImageServiceLayer
+declare module "esri/layers/ArcGISImageServiceLayer" {
+	var i : esri.layers.ArcGISImageServiceLayer;
+	export = i;
+}
+
+/*
+//class,esri/layers/ArcGISMapServiceLayer,ArcGISMapServiceLayer
+declare module "esri/layers/ArcGISMapServiceLayer" {
+	var i : esri.layers.ArcGISMapServiceLayer;
+	export = i;
+}
+*/
+
+//class,esri/layers/ArcGISTiledMapServiceLayer,ArcGISTiledMapServiceLayer
+declare module "esri/layers/ArcGISTiledMapServiceLayer" {
+	var i : esri.layers.ArcGISTiledMapServiceLayer;
+	export = i;
+}
+//class,esri/layers/CodedValueDomain,CodedValueDomain
+declare module "esri/layers/CodedValueDomain" {
+	var i : esri.layers.CodedValueDomain;
+	export = i;
+}
+//class,esri/layers/DataSource,DataSource
+declare module "esri/layers/DataSource" {
+	var i : esri.layers.DataSource;
+	export = i;
+}
+//class,esri/layers/Domain,Domain
+declare module "esri/layers/Domain" {
+	var i : esri.layers.Domain;
+	export = i;
+}
+//class,esri/layers/DynamicLayerInfo,DynamicLayerInfo
+declare module "esri/layers/DynamicLayerInfo" {
+	var i : esri.layers.DynamicLayerInfo;
+	export = i;
+}
+//class,esri/layers/DynamicMapServiceLayer,DynamicMapServiceLayer
+declare module "esri/layers/DynamicMapServiceLayer" {
+	var i : esri.layers.DynamicMapServiceLayer;
+	export = i;
+}
+//class,esri/layers/FeatureEditResult,FeatureEditResult
+declare module "esri/layers/FeatureEditResult" {
+	var i : esri.layers.FeatureEditResult;
+	export = i;
+}
+//class,esri/layers/FeatureLayer,FeatureLayer
+declare module "esri/layers/FeatureLayer" {
+	var i : esri.layers.FeatureLayer;
+	export = i;
+}
+//class,esri/layers/FeatureTemplate,FeatureTemplate
+declare module "esri/layers/FeatureTemplate" {
+	var i : esri.layers.FeatureTemplate;
+	export = i;
+}
+//class,esri/layers/FeatureType,FeatureType
+declare module "esri/layers/FeatureType" {
+	var i : esri.layers.FeatureType;
+	export = i;
+}
+//class,esri/layers/Field,Field
+declare module "esri/layers/Field" {
+	var i : esri.layers.Field;
+	export = i;
+}
+//class,esri/layers/GeoRSSLayer,GeoRSSLayer
+declare module "esri/layers/GeoRSSLayer" {
+	var i : esri.layers.GeoRSSLayer;
+	export = i;
+}
+//class,esri/layers/GraphicsLayer,GraphicsLayer
+declare module "esri/layers/GraphicsLayer" {
+	var i : esri.layers.GraphicsLayer;
+	export = i;
+}
+//class,esri/layers/ImageParameters,ImageParameters
+declare module "esri/layers/ImageParameters" {
+	var i : esri.layers.ImageParameters;
+	export = i;
+}
+//class,esri/layers/ImageServiceParameters,ImageServiceParameters
+declare module "esri/layers/ImageServiceParameters" {
+	var i : esri.layers.ImageServiceParameters;
+	export = i;
+}
+//class,esri/layers/InheritedDomain,InheritedDomain
+declare module "esri/layers/InheritedDomain" {
+	var i : esri.layers.InheritedDomain;
+	export = i;
+}
+//class,esri/layers/JoinDataSource,JoinDataSource
+declare module "esri/layers/JoinDataSource" {
+	var i : esri.layers.JoinDataSource;
+	export = i;
+}
+//class,esri/layers/KMLFolder,KMLFolder
+declare module "esri/layers/KMLFolder" {
+	var i : esri.layers.KMLFolder;
+	export = i;
+}
+//class,esri/layers/KMLGroundOverlay,KMLGroundOverlay
+declare module "esri/layers/KMLGroundOverlay" {
+	var i : esri.layers.KMLGroundOverlay;
+	export = i;
+}
+//class,esri/layers/KMLLayer,KMLLayer
+declare module "esri/layers/KMLLayer" {
+	var i : esri.layers.KMLLayer;
+	export = i;
+}
+//class,esri/layers/LOD,LOD
+declare module "esri/layers/LOD" {
+	var i : esri.layers.LOD;
+	export = i;
+}
+//class,esri/layers/Layer,Layer
+declare module "esri/layers/Layer" {
+	var i : esri.layers.Layer;
+	export = i;
+}
+//class,esri/layers/LayerDataSource,LayerDataSource
+declare module "esri/layers/LayerDataSource" {
+	var i : esri.layers.LayerDataSource;
+	export = i;
+}
+//class,esri/layers/LayerDrawingOptions,LayerDrawingOptions
+declare module "esri/layers/LayerDrawingOptions" {
+	var i : esri.layers.LayerDrawingOptions;
+	export = i;
+}
+//class,esri/layers/LayerInfo,LayerInfo
+declare module "esri/layers/LayerInfo" {
+	var i : esri.layers.LayerInfo;
+	export = i;
+}
+//class,esri/layers/LayerMapSource,LayerMapSource
+declare module "esri/layers/LayerMapSource" {
+	var i : esri.layers.LayerMapSource;
+	export = i;
+}
+
+/*
+    not found
+	TODO
+
+//class,esri/layers/LayerSource,LayerSource
+declare module "esri/layers/LayerSource" {
+	var i : esri.layers.LayerSource;
+	export = i;
+}
+
+*/
+
+
+//class,esri/layers/LayerTimeOptions,LayerTimeOptions
+declare module "esri/layers/LayerTimeOptions" {
+	var i : esri.layers.LayerTimeOptions;
+	export = i;
+}
+//class,esri/layers/MapImage,MapImage
+declare module "esri/layers/MapImage" {
+	var i : esri.layers.MapImage;
+	export = i;
+}
+//class,esri/layers/MapImageLayer,MapImageLayer
+declare module "esri/layers/MapImageLayer" {
+	var i : esri.layers.MapImageLayer;
+	export = i;
+}
+//class,esri/layers/MosaicRule,MosaicRule
+declare module "esri/layers/MosaicRule" {
+	var i : esri.layers.MosaicRule;
+	export = i;
+}
+//class,esri/layers/OpenStreetMapLayer,OpenStreetMapLayer
+declare module "esri/layers/OpenStreetMapLayer" {
+	var i : esri.layers.OpenStreetMapLayer;
+	export = i;
+}
+//class,esri/layers/QueryDataSource,QueryDataSource
+declare module "esri/layers/QueryDataSource" {
+	var i : esri.layers.QueryDataSource;
+	export = i;
+}
+//class,esri/layers/RangeDomain,RangeDomain
+declare module "esri/layers/RangeDomain" {
+	var i : esri.layers.RangeDomain;
+	export = i;
+}
+//class,esri/layers/RasterDataSource,RasterDataSource
+declare module "esri/layers/RasterDataSource" {
+	var i : esri.layers.RasterDataSource;
+	export = i;
+}
+
+/*
+  new class TODO
+//class,esri/layers/StreamLayer,StreamLayer
+declare module "esri/layers/StreamLayer" {
+	var i : esri.layers.StreamLayer;
+	export = i;
+}
+
+*/
+
+//class,esri/layers/TableDataSource,TableDataSource
+declare module "esri/layers/TableDataSource" {
+	var i : esri.layers.TableDataSource;
+	export = i;
+}
+//class,esri/layers/TileInfo,TileInfo
+declare module "esri/layers/TileInfo" {
+	var i : esri.layers.TileInfo;
+	export = i;
+}
+//class,esri/layers/TiledMapServiceLayer,TiledMapServiceLayer
+declare module "esri/layers/TiledMapServiceLayer" {
+	var i : esri.layers.TiledMapServiceLayer;
+	export = i;
+}
+//class,esri/layers/TimeInfo,TimeInfo
+declare module "esri/layers/TimeInfo" {
+	var i : esri.layers.TimeInfo;
+	export = i;
+}
+//class,esri/layers/TimeReference,TimeReference
+declare module "esri/layers/TimeReference" {
+	var i : esri.layers.TimeReference;
+	export = i;
+}
+//class,esri/layers/WMSLayer,WMSLayer
+declare module "esri/layers/WMSLayer" {
+	var i : esri.layers.WMSLayer;
+	export = i;
+}
+//class,esri/layers/WMSLayerInfo,WMSLayerInfo
+declare module "esri/layers/WMSLayerInfo" {
+	var i : esri.layers.WMSLayerInfo;
+	export = i;
+}
+//class,esri/layers/WMTSLayer,WMTSLayer
+declare module "esri/layers/WMTSLayer" {
+	var i : esri.layers.WMTSLayer;
+	export = i;
+}
+//class,esri/layers/WMTSLayerInfo,WMTSLayerInfo
+declare module "esri/layers/WMTSLayerInfo" {
+	var i : esri.layers.WMTSLayerInfo;
+	export = i;
+}
+//class,esri/layers/WebTiledLayer,WebTiledLayer
+declare module "esri/layers/WebTiledLayer" {
+	var i : esri.layers.WebTiledLayer;
+	export = i;
+}
+//class,esri/map,Map
+declare module "esri/map" {
+	var i : esri.Map;
+	export = i;
+}
+//class,esri/renderer/ClassBreaksRenderer,ClassBreaksRenderer
+declare module "esri/renderers/ClassBreaksRenderer" {
+	var i : esri.renderer.ClassBreaksRenderer;
+	export = i;
+}
+//class,esri/renderer/Renderer,Renderer
+declare module "esri/renderers/Renderer" {
+	var i : esri.renderer.Renderer;
+	export = i;
+}
+//class,esri/renderer/SimpleRenderer,SimpleRenderer
+declare module "esri/renderers/SimpleRenderer" {
+	var i : esri.renderer.SimpleRenderer;
+	export = i;
+}
+//class,esri/renderer/SymbolAger,SymbolAger
+declare module "esri/renderers/SymbolAger" {
+	var i : esri.renderer.SymbolAger;
+	export = i;
+}
+//class,esri/renderer/TemporalRenderer,TemporalRenderer
+declare module "esri/renderers/TemporalRenderer" {
+	var i : esri.renderer.TemporalRenderer;
+	export = i;
+}
+//class,esri/renderer/TimeClassBreaksAger,TimeClassBreaksAger
+declare module "esri/renderers/TimeClassBreaksAger" {
+	var i : esri.renderer.TimeClassBreaksAger;
+	export = i;
+}
+//class,esri/renderer/TimeRampAger,TimeRampAger
+declare module "esri/renderers/TimeRampAger" {
+	var i : esri.renderer.TimeRampAger;
+	export = i;
+}
+//class,esri/renderer/UniqueValueRenderer,UniqueValueRenderer
+declare module "esri/renderers/UniqueValueRenderer" {
+	var i : esri.renderer.UniqueValueRenderer;
+	export = i;
+}
+//class,esri.symbol.CartographicLineSymbol,CartographicLineSymbol
+declare module "esri.symbol.CartographicLineSymbol" {
+	var i : esri.symbol.CartographicLineSymbol;
+	export = i;
+}
+//class,esri.symbol.FillSymbol,FillSymbol
+declare module "esri.symbol.FillSymbol" {
+	var i : esri.symbol.FillSymbol;
+	export = i;
+}
+//class,esri.symbol.Font,Font
+declare module "esri.symbol.Font" {
+	var i : esri.symbol.Font;
+	export = i;
+}
+//class,esri.symbol.LineSymbol,LineSymbol
+declare module "esri.symbol.LineSymbol" {
+	var i : esri.symbol.LineSymbol;
+	export = i;
+}
+//class,esri.symbol.MarkerSymbol,MarkerSymbol
+declare module "esri.symbol.MarkerSymbol" {
+	var i : esri.symbol.MarkerSymbol;
+	export = i;
+}
+//class,esri.symbol.PictureFillSymbol,PictureFillSymbol
+declare module "esri.symbol.PictureFillSymbol" {
+	var i : esri.symbol.PictureFillSymbol;
+	export = i;
+}
+//class,esri.symbol.PictureMarkerSymbol,PictureMarkerSymbol
+declare module "esri.symbol.PictureMarkerSymbol" {
+	var i : esri.symbol.PictureMarkerSymbol;
+	export = i;
+}
+//class,esri.symbol.SimpleFillSymbol,SimpleFillSymbol
+declare module "esri.symbol.SimpleFillSymbol" {
+	var i : esri.symbol.SimpleFillSymbol;
+	export = i;
+}
+//class,esri.symbol.SimpleLineSymbol,SimpleLineSymbol
+declare module "esri.symbol.SimpleLineSymbol" {
+	var i : esri.symbol.SimpleLineSymbol;
+	export = i;
+}
+//class,esri.symbol.SimpleMarkerSymbol,SimpleMarkerSymbol
+declare module "esri.symbol.SimpleMarkerSymbol" {
+	var i : esri.symbol.SimpleMarkerSymbol;
+	export = i;
+}
+//class,esri.symbol.Symbol,Symbol
+declare module "esri.symbol.Symbol" {
+	var i : esri.symbol.Symbol;
+	export = i;
+}
+//class,esri.symbol.TextSymbol,TextSymbol
+declare module "esri.symbol.TextSymbol" {
+	var i : esri.symbol.TextSymbol;
+	export = i;
+}
+//class,esri/tasks/AddressCandidate,AddressCandidate
+declare module "esri/tasks/AddressCandidate" {
+	var i : esri.tasks.AddressCandidate;
+	export = i;
+}
+//class,esri/tasks/AlgorithmicColorRamp,AlgorithmicColorRamp
+declare module "esri/tasks/AlgorithmicColorRamp" {
+	var i : esri.tasks.AlgorithmicColorRamp;
+	export = i;
+}
+//class,esri/tasks/AreasAndLengthsParameters,AreasAndLengthsParameters
+declare module "esri/tasks/AreasAndLengthsParameters" {
+	var i : esri.tasks.AreasAndLengthsParameters;
+	export = i;
+}
+//class,esri/tasks/BufferParameters,BufferParameters
+declare module "esri/tasks/BufferParameters" {
+	var i : esri.tasks.BufferParameters;
+	export = i;
+}
+//class,esri/tasks/ClassBreaksDefinition,ClassBreaksDefinition
+declare module "esri/tasks/ClassBreaksDefinition" {
+	var i : esri.tasks.ClassBreaksDefinition;
+	export = i;
+}
+//class,esri/tasks/ClassificationDefinition,ClassificationDefinition
+declare module "esri/tasks/ClassificationDefinition" {
+	var i : esri.tasks.ClassificationDefinition;
+	export = i;
+}
+//class,esri/tasks/ClosestFacilityParameters,ClosestFacilityParameters
+declare module "esri/tasks/ClosestFacilityParameters" {
+	var i : esri.tasks.ClosestFacilityParameters;
+	export = i;
+}
+//class,esri/tasks/ClosestFacilitySolveResult,ClosestFacilitySolveResult
+declare module "esri/tasks/ClosestFacilitySolveResult" {
+	var i : esri.tasks.ClosestFacilitySolveResult;
+	export = i;
+}
+//class,esri/tasks/ClosestFacilityTask,ClosestFacilityTask
+declare module "esri/tasks/ClosestFacilityTask" {
+	var i : esri.tasks.ClosestFacilityTask;
+	export = i;
+}
+//class,esri/tasks/ColorRamp,ColorRamp
+declare module "esri/tasks/ColorRamp" {
+	var i : esri.tasks.ColorRamp;
+	export = i;
+}
+//class,esri/tasks/DataFile,DataFile
+declare module "esri/tasks/DataFile" {
+	var i : esri.tasks.DataFile;
+	export = i;
+}
+//class,esri/tasks/DataLayer,DataLayer
+declare module "esri/tasks/DataLayer" {
+	var i : esri.tasks.DataLayer;
+	export = i;
+}
+//class,esri/tasks/Date,EsriDate
+declare module "esri/tasks/Date" {
+	var i : esri.tasks.Date;
+	export = i;
+}
+
+/* new class TODO
+
+//class,esri/tasks/DensifyParameters,DensifyParameters
+declare module "esri/tasks/DensifyParameters" {
+	var i : esri.tasks.DensifyParameters;
+	export = i;
+}
+*/
+
+//class,esri/tasks/DirectionsFeatureSet,DirectionsFeatureSet
+declare module "esri/tasks/DirectionsFeatureSet" {
+	var i : esri.tasks.DirectionsFeatureSet;
+	export = i;
+}
+//class,esri/tasks/DistanceParameters,DistanceParameters
+declare module "esri/tasks/DistanceParameters" {
+	var i : esri.tasks.DistanceParameters;
+	export = i;
+}
+//class,esri/tasks/FeatureSet,FeatureSet
+declare module "esri/tasks/FeatureSet" {
+	var i : esri.tasks.FeatureSet;
+	export = i;
+}
+//class,esri/tasks/FindParameters,FindParameters
+declare module "esri/tasks/FindParameters" {
+	var i : esri.tasks.FindParameters;
+	export = i;
+}
+//class,esri/tasks/FindResult,FindResult
+declare module "esri/tasks/FindResult" {
+	var i : esri.tasks.FindResult;
+	export = i;
+}
+//class,esri/tasks/FindTask,FindTask
+declare module "esri/tasks/FindTask" {
+	var i : esri.tasks.FindTask;
+	export = i;
+}
+//class,esri/tasks/GPMessage,GPMessage
+declare module "esri/tasks/GPMessage" {
+	var i : esri.tasks.GPMessage;
+	export = i;
+}
+//class,esri/tasks/GeneralizeParameters,GeneralizeParameters
+declare module "esri/tasks/GeneralizeParameters" {
+	var i : esri.tasks.GeneralizeParameters;
+	export = i;
+}
+//class,esri/tasks/GenerateRendererParameters,GenerateRendererParameters
+declare module "esri/tasks/GenerateRendererParameters" {
+	var i : esri.tasks.GenerateRendererParameters;
+	export = i;
+}
+//class,esri/tasks/GenerateRendererTask,GenerateRendererTask
+declare module "esri/tasks/GenerateRendererTask" {
+	var i : esri.tasks.GenerateRendererTask;
+	export = i;
+}
+//class,esri/tasks/GeometryService,GeometryService
+declare module "esri/tasks/GeometryService" {
+	var i : esri.tasks.GeometryService;
+	export = i;
+}
+//class,esri/tasks/Geoprocessor,Geoprocessor
+declare module "esri/tasks/Geoprocessor" {
+	var i : esri.tasks.Geoprocessor;
+	export = i;
+}
+//class,esri/tasks/IdentifyParameters,IdentifyParameters
+declare module "esri/tasks/IdentifyParameters" {
+	var i : esri.tasks.IdentifyParameters;
+	export = i;
+}
+//class,esri/tasks/IdentifyResult,IdentifyResult
+declare module "esri/tasks/IdentifyResult" {
+	var i : esri.tasks.IdentifyResult;
+	export = i;
+}
+//class,esri/tasks/IdentifyTask,IdentifyTask
+declare module "esri/tasks/IdentifyTask" {
+	var i : esri.tasks.IdentifyTask;
+	export = i;
+}
+//class,esri/tasks/ImageServiceIdentifyParameters,ImageServiceIdentifyParameters
+declare module "esri/tasks/ImageServiceIdentifyParameters" {
+	var i : esri.tasks.ImageServiceIdentifyParameters;
+	export = i;
+}
+//class,esri/tasks/ImageServiceIdentifyResult,ImageServiceIdentifyResult
+declare module "esri/tasks/ImageServiceIdentifyResult" {
+	var i : esri.tasks.ImageServiceIdentifyResult;
+	export = i;
+}
+//class,esri/tasks/ImageServiceIdentifyTask,ImageServiceIdentifyTask
+declare module "esri/tasks/ImageServiceIdentifyTask" {
+	var i : esri.tasks.ImageServiceIdentifyTask;
+	export = i;
+}
+//class,esri/tasks/JobInfo,JobInfo
+declare module "esri/tasks/JobInfo" {
+	var i : esri.tasks.JobInfo;
+	export = i;
+}
+//class,esri/tasks/LegendLayer,LegendLayer
+declare module "esri/tasks/LegendLayer" {
+	var i : esri.tasks.LegendLayer;
+	export = i;
+}
+//class,esri/tasks/LengthsParameters,LengthsParameters
+declare module "esri/tasks/LengthsParameters" {
+	var i : esri.tasks.LengthsParameters;
+	export = i;
+}
+//class,esri/tasks/LinearUnit,LinearUnit
+declare module "esri/tasks/LinearUnit" {
+	var i : esri.tasks.LinearUnit;
+	export = i;
+}
+//class,esri/tasks/Locator,Locator
+declare module "esri/tasks/Locator" {
+	var i : esri.tasks.Locator;
+	export = i;
+}
+//class,esri/tasks/MultipartColorRamp,MultipartColorRamp
+declare module "esri/tasks/MultipartColorRamp" {
+	var i : esri.tasks.MultipartColorRamp;
+	export = i;
+}
+//class,esri/tasks/NAMessage,NAMessage
+declare module "esri/tasks/NAMessage" {
+	var i : esri.tasks.NAMessage;
+	export = i;
+}
+//class,esri/tasks/OffsetParameters,OffsetParameters
+declare module "esri/tasks/OffsetParameters" {
+	var i : esri.tasks.OffsetParameters;
+	export = i;
+}
+//class,esri/tasks/ParameterValue,ParameterValue
+declare module "esri/tasks/ParameterValue" {
+	var i : esri.tasks.ParameterValue;
+	export = i;
+}
+//class,esri/tasks/PrintParameters,PrintParameters
+declare module "esri/tasks/PrintParameters" {
+	var i : esri.tasks.PrintParameters;
+	export = i;
+}
+//class,esri/tasks/PrintTask,PrintTask
+declare module "esri/tasks/PrintTask" {
+	var i : esri.tasks.PrintTask;
+	export = i;
+}
+//class,esri/tasks/PrintTemplate,PrintTemplate
+declare module "esri/tasks/PrintTemplate" {
+	var i : esri.tasks.PrintTemplate;
+	export = i;
+}
+//class,esri/tasks/ProjectParameters,ProjectParameters
+declare module "esri/tasks/ProjectParameters" {
+	var i : esri.tasks.ProjectParameters;
+	export = i;
+}
+//class,esri/tasks/QueryTask,QueryTask
+declare module "esri/tasks/QueryTask" {
+	var i : esri.tasks.QueryTask;
+	export = i;
+}
+//class,esri/tasks/RasterData,RasterData
+declare module "esri/tasks/RasterData" {
+	var i : esri.tasks.RasterData;
+	export = i;
+}
+//class,esri/tasks/RelationParameters,RelationParameters
+declare module "esri/tasks/RelationParameters" {
+	var i : esri.tasks.RelationParameters;
+	export = i;
+}
+//class,esri/tasks/RelationshipQuery,RelationshipQuery
+declare module "esri/tasks/RelationshipQuery" {
+	var i : esri.tasks.RelationshipQuery;
+	export = i;
+}
+//class,esri/tasks/RouteParameters,RouteParameters
+declare module "esri/tasks/RouteParameters" {
+	var i : esri.tasks.RouteParameters;
+	export = i;
+}
+//class,esri/tasks/RouteResult,RouteResult
+declare module "esri/tasks/RouteResult" {
+	var i : esri.tasks.RouteResult;
+	export = i;
+}
+//class,esri/tasks/RouteTask,RouteTask
+declare module "esri/tasks/RouteTask" {
+	var i : esri.tasks.RouteTask;
+	export = i;
+}
+//class,esri/tasks/ServiceAreaParameters,ServiceAreaParameters
+declare module "esri/tasks/ServiceAreaParameters" {
+	var i : esri.tasks.ServiceAreaParameters;
+	export = i;
+}
+//class,esri/tasks/ServiceAreaSolveResult,ServiceAreaSolveResult
+declare module "esri/tasks/ServiceAreaSolveResult" {
+	var i : esri.tasks.ServiceAreaSolveResult;
+	export = i;
+}
+//class,esri/tasks/ServiceAreaTask,ServiceAreaTask
+declare module "esri/tasks/ServiceAreaTask" {
+	var i : esri.tasks.ServiceAreaTask;
+	export = i;
+}
+//class,esri/tasks/StatisticDefinition,StatisticDefinition
+declare module "esri/tasks/StatisticDefinition" {
+	var i : esri.tasks.StatisticDefinition;
+	export = i;
+}
+//class,esri/tasks/TrimExtendParameters,TrimExtendParameters
+declare module "esri/tasks/TrimExtendParameters" {
+	var i : esri.tasks.TrimExtendParameters;
+	export = i;
+}
+//class,esri/tasks/UniqueValueDefinition,UniqueValueDefinition
+declare module "esri/tasks/UniqueValueDefinition" {
+	var i : esri.tasks.UniqueValueDefinition;
+	export = i;
+}
+//class,esri/tasks/query,Query
+declare module "esri/tasks/query" {
+	var i : esri.tasks.Query;
+	export = i;
+}
+//class,esri/toolbars/draw,Draw
+declare module "esri/toolbars/draw" {
+	var i : esri.toolbars.Draw;
+	export = i;
+}
+//class,esri/toolbars/edit,Edit
+declare module "esri/toolbars/edit" {
+	var i : esri.toolbars.Edit;
+	export = i;
+}
+//class,esri/toolbars/navigation,Navigation
+declare module "esri/toolbars/navigation" {
+	var i : esri.toolbars.Navigation;
+	export = i;
+}
+//class,esri/undoManager,UndoManager
+declare module "esri/undoManager" {
+	var i : esri.UndoManager;
+	export = i;
+}
+//class,esri/virtualearth/VEAddress,VEAddress
+declare module "esri/virtualearth/VEAddress" {
+	var i : esri.virtualearth.VEAddress;
+	export = i;
+}
+//class,esri/virtualearth/VEGeocodeResult,VEGeocodeResult
+declare module "esri/virtualearth/VEGeocodeResult" {
+	var i : esri.virtualearth.VEGeocodeResult;
+	export = i;
+}
+//class,esri/virtualearth/VEGeocoder,VEGeocoder
+declare module "esri/virtualearth/VEGeocoder" {
+	var i : esri.virtualearth.VEGeocoder;
+	export = i;
+}
+//class,esri/virtualearth/VETiledLayer,VETiledLayer
+declare module "esri/virtualearth/VETiledLayer" {
+	var i : esri.virtualearth.VETiledLayer;
+	export = i;
+}
+
+
+
