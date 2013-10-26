@@ -155,6 +155,21 @@ declare module esri {
         onHide(): void;
         onShow(): void;
     }
+
+
+
+	interface ExtentEvent extends Event {
+		
+        // onExtentChange(extent: esri.geometry.Extent, delta: esri.geometry.Point, levelChange: boolean, lod : esri.layers.LOD): void;
+		extent : esri.geometry.Extent;
+		delta : esri.geometry.Point;
+		levelChange : boolean;
+		lod : esri.layers.LOD;
+
+	}
+
+
+
     export class Map {
         constructor(divId, options?: Object);
         esriAttribution: string;
@@ -292,6 +307,7 @@ declare module esri {
         //click : <MouseEvent> <MouseEvent>;
         //dbl-click : <MouseEvent> <MouseEvent>;
         //extent-change : esri.geometry.Extent;
+		on(name : "extent-change", listener : (ev:ExtentEvent)=>void):Dojo.RemovableHandle;
         //key-down : <KeyboardEvent> <KeyboardEvent>;
         //key-up : <KeyboardEvent> <KeyboardEvent>;
         //layer-add : Layer;
@@ -325,6 +341,7 @@ declare module esri {
         //zoom : esri.geometry.Extent;
         //zoom-end : esri.geometry.Extent;
         //zoom-start : esri.geometry.Extent;
+		on(type: string, listener: Dojo.Action): Dojo.RemovableHandle;
     }
     export class OperationBase {
         constructor(params : Object);
