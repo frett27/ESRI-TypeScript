@@ -100,10 +100,9 @@ declare module esri {
         show(): void;
         toJson(): Object;
     }
-    export class IdentityManager {
+    export class IdentityManager extends IdentityManagerBase {
         esriSignInDialog: string;
         dialog: any; //dijit.Dialog;
-        signIn(): dojo.Deferred<any>;
         onDialogCancel(info : Object): void;
         onDialogCreate(): void;
         //dialogcancel: Object; // Event
@@ -121,7 +120,7 @@ declare module esri {
         registerToken(properties : Object): void;
         setProtocolErrorHandler(handlerFunction : Function): void;
         setRedirectionHandler(handler : Object): void;
-        signIn(url : string, serverInfo : esri.ServerInfo, options? : Object): dojo.Deferred<any>;
+        signIn(url : string, serverInfo : esri.ServerInfo, options : Object): dojo.Deferred<any>;
         toJson(): Object;
     }
     export class InfoTemplate {
@@ -170,7 +169,8 @@ declare module esri {
 
 
 
-    export class Map {
+    export class Map { // we can't extends the dijit._Widget because of a compiler bug, see : https://github.com/schungx/Dojo-TypeScript/issues/2
+		// in that case, we have to define the base methods
         constructor(divId, options?: Object);
         esriAttribution: string;
         esriAttributionOpen: string;
@@ -307,7 +307,7 @@ declare module esri {
         //click : <MouseEvent> <MouseEvent>;
         //dbl-click : <MouseEvent> <MouseEvent>;
         //extent-change : esri.geometry.Extent;
-		on(name : "extent-change", listener : (ev:ExtentEvent)=>void):Dojo.RemovableHandle;
+		on(name : "extent-change", listener : (ev:ExtentEvent) =>void):Dojo.RemovableHandle;
         //key-down : <KeyboardEvent> <KeyboardEvent>;
         //key-up : <KeyboardEvent> <KeyboardEvent>;
         //layer-add : Layer;
@@ -466,8 +466,55 @@ declare module "esri/domUtils" {
 	export = i;
 }
 
+
+declare module esri {
+
+	interface esriConfigIo {
+		alwaysUseProxy : boolean;
+		corsDetection : boolean;
+		corsEnabledServers : Array<string>;
+		proxyRules : Array<ProxyRule>;
+		proxyUrl : string;
+		timeout : number;
+		useCors : boolean;
+		
+	}
+
+	interface esriConfigMap {
+		basemaps : any;
+		panDuration : number;
+		panRate : number;
+		slider : Object;
+		sliderLabel : Object;
+		zoomDuration : number;
+		zoomRate : number;
+		zoomSymbol : esri.symbol.SimpleFillSymbol;
+	}
+
+	interface esriConfigDefaults {
+		
+		geometryService : esri.tasks.GeometryService;
+		io : esriConfigIo;
+		map : esriConfigMap;
+	
+	}
+
+
+
+	interface esriConfig {
+
+		defaults : esriConfigDefaults;
+
+	}
+
+
+
+}
+
+
 declare module "esri/config" { // not typed for the moment
-	export = Object;
+	var i : esri.esriConfig;
+	export = i;
 }
 
 declare module "esri/units" {
@@ -518,6 +565,13 @@ declare module "esri.symbol.jsonUtils" {
 declare module "esri/renderers/jsonUtils" {
 	var i : esri.renderer.jsonUtils;
 	export = i;
+}
+
+
+declare module "esri/arcgis/utils" {
+	var i : esri.arcgis.utils;
+	export = i;
+
 }
 
 declare module esri.arcgis {
