@@ -4266,62 +4266,62 @@ declare module "esri/renderers/UniqueValueRenderer" {
 	export = i;
 }
 //class,esri.symbol.CartographicLineSymbol,CartographicLineSymbol
-declare module "esri.symbol.CartographicLineSymbol" {
+declare module "esri/symbols/CartographicLineSymbol" {
 	var i : esri.symbol.CartographicLineSymbol;
 	export = i;
 }
 //class,esri.symbol.FillSymbol,FillSymbol
-declare module "esri.symbol.FillSymbol" {
+declare module "esri/symbols/FillSymbol" {
 	var i : esri.symbol.FillSymbol;
 	export = i;
 }
 //class,esri.symbol.Font,Font
-declare module "esri.symbol.Font" {
+declare module "esri/symbols/Font" {
 	var i : esri.symbol.Font;
 	export = i;
 }
 //class,esri.symbol.LineSymbol,LineSymbol
-declare module "esri.symbol.LineSymbol" {
+declare module "esri/symbols/LineSymbol" {
 	var i : esri.symbol.LineSymbol;
 	export = i;
 }
 //class,esri.symbol.MarkerSymbol,MarkerSymbol
-declare module "esri.symbol.MarkerSymbol" {
+declare module "esri/symbols/MarkerSymbol" {
 	var i : esri.symbol.MarkerSymbol;
 	export = i;
 }
 //class,esri.symbol.PictureFillSymbol,PictureFillSymbol
-declare module "esri.symbol.PictureFillSymbol" {
+declare module "esri/symbols/PictureFillSymbol" {
 	var i : esri.symbol.PictureFillSymbol;
 	export = i;
 }
 //class,esri.symbol.PictureMarkerSymbol,PictureMarkerSymbol
-declare module "esri.symbol.PictureMarkerSymbol" {
+declare module "esri/symbols/PictureMarkerSymbol" {
 	var i : esri.symbol.PictureMarkerSymbol;
 	export = i;
 }
 //class,esri.symbol.SimpleFillSymbol,SimpleFillSymbol
-declare module "esri.symbol.SimpleFillSymbol" {
+declare module "esri/symbols/SimpleFillSymbol" {
 	var i : esri.symbol.SimpleFillSymbol;
 	export = i;
 }
 //class,esri.symbol.SimpleLineSymbol,SimpleLineSymbol
-declare module "esri.symbol.SimpleLineSymbol" {
+declare module "esri/symbols/SimpleLineSymbol" {
 	var i : esri.symbol.SimpleLineSymbol;
 	export = i;
 }
 //class,esri.symbol.SimpleMarkerSymbol,SimpleMarkerSymbol
-declare module "esri.symbol.SimpleMarkerSymbol" {
+declare module "esri/symbols/SimpleMarkerSymbol" {
 	var i : esri.symbol.SimpleMarkerSymbol;
 	export = i;
 }
 //class,esri.symbol.Symbol,Symbol
-declare module "esri.symbol.Symbol" {
+declare module "esri/symbols/Symbol" {
 	var i : esri.symbol.Symbol;
 	export = i;
 }
 //class,esri.symbol.TextSymbol,TextSymbol
-declare module "esri.symbol.TextSymbol" {
+declare module "esri/symbols/TextSymbol" {
 	var i : esri.symbol.TextSymbol;
 	export = i;
 }
