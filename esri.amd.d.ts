@@ -4019,9 +4019,23 @@ declare module esri.tasks {
         geometry1: esri.geometry.Geometry;
         geometry2: esri.geometry.Geometry;
     }
+
+	//
+	// information about field
+	//
+	export class Field {
+		name : string;
+		alias : string;
+		type : string;
+	}
+
+
     export class FeatureSet {
         constructor();
         constructor(json : Object);
+		objectIdFieldName : string; // since ??
+		globalIdFieldName : string; // since ??
+		fields : Field[]; 
         displayFieldName: string;
         exceededTransferLimit: number;
         features: Graphic[];
@@ -4432,7 +4446,7 @@ declare module esri.tasks {
     export class QueryTask {
         constructor(url: string, options?: Object);
         url: string;
-        execute(parameters: esri.tasks.Query, callback?: Function, errback?: Function): dojo.Deferred<any>;
+		execute(parameters: esri.tasks.Query, callback?: (result : esri.tasks.FeatureSet) => void , errback?: Function): dojo.Deferred<any>;
         executeForCount(query: esri.tasks.Query, callback?: Function, errback?: Function): dojo.Deferred<any>;
         executeForIds(parameters: esri.tasks.Query, callback?: Function, errback?: Function): dojo.Deferred<any>;
         executeRelationshipQuery(parameters: esri.tasks.RelationshipQuery, callback?: Function, errback?: Function): dojo.Deferred<any>;
