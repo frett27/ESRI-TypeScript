@@ -736,12 +736,14 @@ declare module esri.arcgis {
 declare module esri.dijit.editing {
     export class AttachmentEditor {
         constructor(params : Object, srcNodeRef : string);
+        constructor(params : Object, domNode : Element);
         showAttachments(graphic : esri.Graphic, featureLayer : esri.layers.FeatureLayer): void;
         startup(): void;
     }
 
   export class TemplatePicker {
-        constructor(params : Object, srcNodeRef : Object);
+        constructor(params : Object, srcNodeRef : string);
+        constructor(params : Object, domNode : Element);
         templatePicker: string;
         // grid : string; // TODO FLE : remove all CSS stuff !!!
         groupLabel: string;
@@ -761,7 +763,8 @@ declare module esri.dijit.editing {
         onSelectionChange(): void;
     }
     export class Editor {
-        constructor(params : Object, srcNodeRef : Object);
+        constructor(params : Object, srcNodeRef : string);
+        constructor(params : Object, domNode : Element);
         CREATE_TOOL_FREEHAND_POLYGON: string;
         CREATE_TOOL_POLYGON: string;
         CREATE_TOOL_AUTOCOMPLETE: string;
@@ -781,6 +784,7 @@ declare module esri.dijit.editing {
 declare module esri.dijit {
     export class AttributeInspector {
         constructor(params : Object, srcNodeRef : string);
+        constructor(params : Object, domNode : Element);
         STRING_FIELD_OPTION_TEXTBOX: string;
         STRING_FIELD_OPTION_TEXTAREA: string;
         STRING_FIELD_OPTION_RICHTEXT: string;
@@ -809,6 +813,7 @@ declare module esri.dijit {
     }
     export class Attribution {
         constructor(options : Object, srcNodeRef : string);
+        constructor(params : Object, domNode : Element);
         esriAttributionList: string;
         esriAttributionItem: string;
         esriAttributionLastItem: string;
@@ -828,6 +833,7 @@ declare module esri.dijit {
     }
     export class BasemapGallery {
         constructor(params : Object, srcNodeRef? : string);
+        constructor(params : Object, domNode : Element);
         esriBasemapGallery: string;
         esriBasemapGalleryNode: string;
         esriBasemapGallerySelectedNode: string;
@@ -859,7 +865,8 @@ declare module esri.dijit {
     }
 // New 3.7
     export class BasemapToggle {
-		constructor(params : Object,srcNodeRef : any); // fleray : srcNodeRef is either DOMNode or String
+		constructor(params : Object,srcNodeRef : string);
+        constructor(params : Object, domNode : Element);
 		basemapContainer : string;
 		toggleButton : string;
 		basemapImage : string;
@@ -882,7 +889,8 @@ declare module esri.dijit {
         constructor(name : string, extent : esri.geometry.Extent);
     }
     export class Bookmarks {
-        constructor(params : Object, srcNodeRef : Object);
+        constructor(params : Object, srcNodeRef : string);
+        constructor(params : Object, domNode : Element);
         esriBookmarks: string;
         esriBookmarkTable: string;
         esriBookmarkItem: string;
@@ -905,6 +913,7 @@ declare module esri.dijit {
     }
     export class Directions {
         constructor(params : Object, srcNodeRef : string);
+        constructor(params : Object, domNode : Element);
         esriDirectionsContainer: string;
         esriStopsContainer: string;
         esriStopsReverse: string;
@@ -987,6 +996,7 @@ declare module esri.dijit {
     }
    export class Gallery {
         constructor(params : Object, srcNodeRef : string);
+        constructor(params : Object, domNode : Element);
         esriMobileGallery: string;
         //esriMobileGallery.galleryLandscape : string; // TODO FLE : remove CSS Stuff
         //esriMobileGallery.thumbnailContainer : string;
@@ -1010,6 +1020,7 @@ declare module esri.dijit {
     }
     export class Gauge {
         constructor(params : Object, srcNodeRef : string);
+        constructor(params: Object, domNode: Element);
         gaugeContainer: string;
         destroy(): void;
         get(): any; //varies;
@@ -1018,7 +1029,7 @@ declare module esri.dijit {
     }
     export class Geocoder {
         constructor(params: Object, srcNodeRef: string);
-        constructor(params: Object, srcNodeRef: Node);
+        constructor(params: Object, domNode: Element);
         esriGeocoder: string;
         esriGeocoderMultiple: string;
         esriGeocoderContainer: string;
@@ -1073,7 +1084,8 @@ declare module esri.dijit {
     }
 // New 3.7
    export class HistogramTimeSlider {
-		constructor(params : Object, srcNodeRef : Object);
+		constructor(params : Object, srcNodeRef : string);
+        constructor(params: Object, domNode: Element);
 		// histogram-timeslider : string;
 		// histogram-timeslider #histogram-range : string;
 		destroy() : void;
@@ -1084,7 +1096,8 @@ declare module esri.dijit {
     }
 // New 3.7
     export class HomeButton {
-		constructor(params : Object,srcNodeRef : any); // fleray : srcNodeRef is either DOMNode or String
+		constructor(params : Object,srcNodeRef : string);
+        constructor(params: Object, domNode: Element);
 		homeContainer : string;
 		home : string;
 		loading : string;
@@ -1108,7 +1121,7 @@ declare module esri.dijit {
 
     export class InfoWindow extends InfoWindowBase {
         constructor(params: Object, srcNodeRef: string);
-        constructor(params: Object, srcNodeRef: Node);
+        constructor(params: Object, domNode: Element);
         ANCHOR_UPPERRIGHT: string;
         ANCHOR_LOWERRIGHT: string;
         ANCHOR_LOWERLEFT: string;
@@ -1162,7 +1175,8 @@ declare module esri.dijit {
     }
 	// New 3.7
     export class LayerSwipe {
-		constructor(params : Object,srcNodeRef : any);
+		constructor(params : Object,srcNodeRef : string);
+        constructor(params: Object, domNode: Element);
 		handleContainer : string;
 		handle : string;
 		clip : number;
@@ -1188,7 +1202,8 @@ declare module esri.dijit {
 
 
     export class Legend {
-        constructor(srcNodeRef : string, params : Object); // TO CHECK : in esri code sample parameters are inversed..??
+        constructor(srcNodeRef : string, params : Object); // params are inverted
+        constructor(domNode : Element, params : Object); // params are inverted
         esriLegendService: string;
         esriLegendServiceLabel: string;
         esriLegendGroupLayer: string;
@@ -1200,7 +1215,8 @@ declare module esri.dijit {
     }
 	// New 3.7
     export class LocateButton {
-		constructor(params : Object, srcNodeRef : any); // <DOMNode | String> srcNodeRef
+		constructor(params : Object, srcNodeRef : string); // <DOMNode | String> srcNodeRef
+		constructor(params : Object, domNode : Element); 
 		locateContainer : string;
 		zoomLocateButton : string;
 		loading : string;
@@ -1227,6 +1243,7 @@ declare module esri.dijit {
 
     export class Measurement {
         constructor(params : Object, srcNodeRef : string);
+		constructor(params : Object, domNode : Element); 
         distanceIcon: string;
         areaIcon: string;
         locationIcon: string;
@@ -1244,7 +1261,8 @@ declare module esri.dijit {
         onMeasureEnd(activeToolName : string, geometry : esri.geometry.Geometry): void;
     }
     export class OverviewMap {
-        constructor(params : Object, srcNodeRef : Object);
+        constructor(params : Object, srcNodeRef : string);
+		constructor(params : Object, domNode : Element); 
         destroy(): void;
         hide(): void;
         show(): void;
@@ -1252,6 +1270,7 @@ declare module esri.dijit {
     }
     export class Popup extends InfoWindowBase {
         constructor(options: Object, srcNodeRef : string);
+		constructor(params : Object, domNode : Element); 
         count: number;
         deferreds: dojo.Deferred<Graphic>[];
         domNode: Object;
@@ -1290,7 +1309,7 @@ declare module esri.dijit {
     }
     export class PopupMobile extends InfoWindowBase {
         constructor(options: Object, srcNodeRef : string);
-        constructor(options: Object, srcNodeRef : Node);
+        constructor(options: Object, srcNodeRef : Element);
         titlePane: string;
         //pointer.top : string;
         //pointer.bottom : string;
@@ -1317,7 +1336,8 @@ declare module esri.dijit {
         info: Object;
     }
     export class Print {
-        constructor(params : Object, srcNodeRef : Object);
+        constructor(params : Object, srcNodeRef : string);
+        constructor(options: Object, srcNodeRef : Element);
         esriPrint: string;
         esriPrintButton: string;
         esriPrintout: string;
@@ -1331,6 +1351,7 @@ declare module esri.dijit {
     }
     export class Scalebar {
         constructor(params : Object, srcNodeRef? : string);
+        constructor(params : Object, domNode : Element);
         esriScalebar: string;
         esriScalebarRuler: string;
         esriScalebarLabel: string;
@@ -1341,7 +1362,8 @@ declare module esri.dijit {
         show(): void;
     }
     export class TemplatePicker {
-        constructor(params : Object, srcNodeRef : Object);
+        constructor(params : Object, srcNodeRef : string);
+        constructor(params : Object, domNode : Element);
         templatePicker: string;
         // grid : string; // TODO FLE : remove all CSS stuff !!!
         groupLabel: string;
@@ -1361,7 +1383,8 @@ declare module esri.dijit {
         onSelectionChange(): void;
     }
     export class TimeSlider {
-        constructor(params: string, srcNodeRef: Object);
+        constructor(params: string, srcNodeRef: string);
+        constructor(params : Object, domNode : Element);
         loop: boolean;
         playing: boolean;
         thumbCount: number;
@@ -1412,8 +1435,8 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class AggregatePoints extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
-		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,srcNodeRef : string); // srcNodeRed is a DOMNode
+		constructor(params : Object,domNode : Element);
 		analysisGpServer : string;
 		groupByField : string;
 		keepBoundariesWithNoPoints : boolean;
@@ -1453,7 +1476,7 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class CreateBuffers extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
+		constructor(params : Object,domNode : Element); 
 		constructor(params : Object,srcNodeRef : string);
 		analysisGpServer : string;
 		bufferDistance : string;
@@ -1490,8 +1513,8 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class CreateDriveTimeAreas extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
-		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,srcNodeRef : string); // srcNodeRed is a DOMNode
+		constructor(params : Object,domNode : Element);
 		analysisGpServer : string;
 		breakUnits : string;
 		breakValues : number[];
@@ -1530,8 +1553,8 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class DissolveBoundaries extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
-		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,srcNodeRef : string); // srcNodeRed is a DOMNode
+		constructor(params : Object,domNode : Element);
 		analysisGpServer : string;
 		dissolveFields : String[];
 		inputLayer : esri.layers.FeatureLayer;
@@ -1568,8 +1591,8 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class EnrichLayer extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
 		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,domNode : Element);
 		analysisGpServer : string;
 		distance : number;
 		inputLayer : esri.layers.FeatureLayer;
@@ -1606,8 +1629,8 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class ExtractData extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
 		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,domNode : Element);
 		analysisGpServer : string;
 		clip : boolean;
 		dataFormat : string;
@@ -1645,8 +1668,8 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class FindHotSpots extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
 		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,domNode : Element);
 		aggregationPolygonLayers : esri.layers.FeatureLayer[];
 		analysisField : string;
 		analysisGpServer : string;
@@ -1684,8 +1707,8 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class FindNearest extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
 		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,domNode : Element);
 		analysisGpServer : string;
 		analysisLayer : esri.layers.FeatureLayer;
 		map : esri.Map;
@@ -1725,8 +1748,8 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class MergeLayers extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
 		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,domNode : Element);
 		analysisGpServer : string;
 		inputLayer : esri.layers.FeatureLayer;
 		map : esri.Map;
@@ -1763,8 +1786,8 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class OverlayLayers extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
 		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,domNode : Element);
 		analysisGpServer : string;
 		inputLayer : esri.layers.FeatureLayer;
 		map : esri.Map;
@@ -1803,8 +1826,8 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class SummarizeNearby extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
 		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,domNode : Element);
 		analysisGpServer : string;
 		distance : number[];
 		groupByField : string;
@@ -1848,8 +1871,8 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
     export class SummarizeWithin extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
 		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,domNode : Element);
 		analysisGpServer : string;
 		groupByField : string;
 		map : esri.Map;
@@ -1892,8 +1915,8 @@ declare module esri.dijit.analysis {
 
 declare module esri.dijit.geoenrichment {
     export class Infographic {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
-		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,srcNodeRef : string); // srcNodeRed is a DOMNode
+		constructor(params : Object,domNode : Element);
 		cacheLimit : number;
 		countryID : string;
 		datasetID : string;
@@ -1926,8 +1949,8 @@ declare module esri.dijit.geoenrichment {
         toJson(): Object;
     }
     export class InfographicsCarousel {
-		constructor(params : Object,srcNodeRef : any); // srcNodeRed is a DOMNode
 		constructor(params : Object,srcNodeRef : string);
+		constructor(params : Object,domNode : Element);
 		expanded : boolean;
         options: any; //esri.dijit.geoenrichment.InfographicsOptions;
 		returnGeometry : boolean;
