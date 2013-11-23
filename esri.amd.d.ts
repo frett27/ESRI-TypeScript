@@ -156,6 +156,10 @@ declare module esri {
     }
 
 
+	interface MapEvent extends Event {
+		map : esri.Map;
+	}
+
 
 	interface ExtentEvent extends Event {
 		
@@ -167,6 +171,67 @@ declare module esri {
 
 	}
 
+	// event fired when a zoom change
+	interface ZoomEvent extends Event {
+		extent : esri.geometry.Extent;
+		zoomFactor : Number;
+		anchor : esri.geometry.Point;
+		level : Number;
+	}
+
+
+	interface BasemapChangeEvent extends Event {
+		current : Object;
+		previous : Object;
+	}
+
+	interface LayerEvent extends Event {
+		layer : esri.layers.Layer;
+	}
+
+	interface LayersEvent extends Event {
+		layers : esri.layers.Layer[];
+	}
+
+
+	interface LayerReorderEvent extends LayerEvent {
+		index : Number;
+	}
+
+	interface LayersReorderEvent extends Event {
+		layerIds : Number[];
+	}
+
+
+	interface PanEvent extends Event {
+		extent : esri.geometry.Extent;
+		delta : esri.geometry.Point;
+
+	}
+
+	interface RepositionEvent extends Event {
+		x : Number;
+		y : Number;
+	}
+
+	interface MapResizeEvent extends Event {
+		extent:esri.geometry.Extent;
+		width:Number;
+		height:Number;
+	}
+
+	interface ErrorEvent extends Event {
+		error : Error;
+	}
+
+	interface TimeExtentEvent extends Event {
+		timeExtent:esri.TimeExtent;
+	}
+
+	interface LayerAddResultEvent extends Event {
+		layer : esri.layers.Layer;
+		error : Error;
+	}
 
 
     export class Map { // we can't extends the dijit._Widget because of a compiler bug, see : https://github.com/schungx/Dojo-TypeScript/issues/2
@@ -303,46 +368,149 @@ declare module esri {
         onZoom(extent : esri.geometry.Extent, zoomFactor : number, anchor : esri.geometry.Point): void;
         onZoomEnd(extent : esri.geometry.Extent, zoomFactor : number, anchor : esri.geometry.Point, level : number): void;
         onZoomStart(extent: esri.geometry.Extent, zoomFactor: number, anchor: esri.geometry.Point, level: number): void;
-        //basemap-change : void;
+
+		// Events handling
+
         //click : <MouseEvent> <MouseEvent>;
+		on(name : "click", 
+			listener : (ev:MouseEvent)=>void):Dojo.RemovableHandle;
         //dbl-click : <MouseEvent> <MouseEvent>;
+		on(name : "dbl-click", 
+			listener : (ev:MouseEvent)=>void):Dojo.RemovableHandle;
+
+        //basemap-change : void;
+		on(name : "basemap-change", 
+			listener : (ev:BasemapChangeEvent)=>void):Dojo.RemovableHandle;
+
+
         //extent-change : esri.geometry.Extent;
-		on(name : "extent-change", listener : (ev:ExtentEvent) =>void):Dojo.RemovableHandle;
+		on(name : "extent-change", 
+			listener : (ev:ExtentEvent) =>void):Dojo.RemovableHandle;
+
+
         //key-down : <KeyboardEvent> <KeyboardEvent>;
+		on(name : "key-down", 
+			listener:(ev:KeyboardEvent)=>void):Dojo.RemovableHandle;
         //key-up : <KeyboardEvent> <KeyboardEvent>;
+		on(name : "key-up", 
+			listener:(ev:KeyboardEvent)=>void):Dojo.RemovableHandle;
+
         //layer-add : Layer;
+		on(name:"layer-add", 
+			listener:(ev:LayerEvent)=>void):Dojo.RemovableHandle;
+
         //layer-add-result : Layer;
-        //layer-add-result : Layer;
+		on(name:"layer-add-result", 
+			listener:(ev:LayerAddResultEvent)=>void):Dojo.RemovableHandle;
+
         //layer-remove : Layer;
+		on(name:"layer-remove", 
+			listener:(ev:LayerEvent)=>void):Dojo.RemovableHandle;
+
         //layer-reorder : Layer;
+		on(name:"layer-reorder", 
+			listener:(ev:LayerReorderEvent)=>void):Dojo.RemovableHandle;
+
         //layer-resume : Layer;
+		on(name:"layer-resume", 
+			listener:(ev:LayerEvent)=>void):Dojo.RemovableHandle;
+
+		on(name:"layer-suspend", 
+			listener:(ev:LayerEvent)=>void):Dojo.RemovableHandle;
+
         //layers-add-result : void;
+		on(name:"layers-add-result", 
+			listener:(ev:LayersEvent)=>void):Dojo.RemovableHandle;
+
         //layers-removed : void;
+		on(name:"layers-removed", 
+			listener:(ev:Event)=>void):Dojo.RemovableHandle;
+
         //layers-reordered : <number[]> layerIds;
+		on(name:"layers-reordered", 
+			listener:(ev:LayersReorderEvent)=>void):Dojo.RemovableHandle;
+
         //load : Map;
+		on(name:"load", 
+			listener:(ev:MapEvent)=>void):Dojo.RemovableHandle;
+
         //mouse-down : <MouseEvent> <MouseEvent>;
+		on(name:"mouse-down", 
+			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
+
         //mouse-drag : <MouseEvent> <MouseEvent>;
+		on(name:"mouse-drag", 
+			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
+
         //mouse-drag-end : <MouseEvent> <MouseEvent>;
+		on(name:"mouse-drag-end", 
+			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
+
         //mouse-drag-start : <MouseEvent> <MouseEvent>;
+		on(name:"mouse-drag-start", 
+			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
+
         //mouse-move : <MouseEvent> <MouseEvent>;
+		on(name:"mouse-move", 
+			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
         //mouse-out : <MouseEvent> <MouseEvent>;
+		on(name:"mouse-out", 
+			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
         //mouse-over : <MouseEvent> <MouseEvent>;
+		on(name:"mouse-over", 
+			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
         //mouse-up : <MouseEvent> <MouseEvent>;
+		on(name:"mouse-up", 
+			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
         //mouse-wheel : <MouseEvent> <MouseEvent>;
+		on(name:"mouse-wheel", 
+			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
+
         //pan : esri.geometry.Extent;
+		on(name:"pan", 
+			listener:(ev:PanEvent)=>void):Dojo.RemovableHandle;
         //pan-end : esri.geometry.Point;
+		on(name:"pan-end", 
+			listener:(ev:PanEvent)=>void):Dojo.RemovableHandle;
         //pan-start : esri.geometry.Extent;
+		on(name:"pan-start", 
+			listener:(ev:PanEvent)=>void):Dojo.RemovableHandle;
+
         //reposition : <number> x;
+		on(name:"reposition", 
+			listener:(ev:RepositionEvent)=>void):Dojo.RemovableHandle;
         //resize : esri.geometry.Extent;
+		on(name:"resize", 
+			listener:(ev:MapResizeEvent)=>void):Dojo.RemovableHandle;
         //time-extent-change : TimeExtent;
+		on(name:"time-extent-change", 
+			listener:(ev:TimeExtentEvent)=>void):Dojo.RemovableHandle;
+
         //unload : Map;
+		on(name:"unload", 
+			listener:(ev:MapEvent)=>void):Dojo.RemovableHandle;
+
         //update-end : <Error> error;
+		on(name:"update-end", 
+			listener:(ev:ErrorEvent)=>void):Dojo.RemovableHandle;
+
         //update-start : void;
+		on(name:"update-start", 
+			listener:(ev:Event)=>void):Dojo.RemovableHandle;
+
         //zoom : esri.geometry.Extent;
+		on(name:"zoom", 
+			listener:(ev:ZoomEvent)=>void):Dojo.RemovableHandle;
         //zoom-end : esri.geometry.Extent;
+		on(name:"zoom-end", 
+			listener:(ev:ZoomEvent)=>void):Dojo.RemovableHandle;
         //zoom-start : esri.geometry.Extent;
+		on(name:"zoom-start", 
+			listener:(ev:ZoomEvent)=>void):Dojo.RemovableHandle;
+
 		on(type: string, listener: Dojo.Action): Dojo.RemovableHandle;
     }
+
     export class OperationBase {
         constructor(params : Object);
         label: string;
