@@ -156,10 +156,6 @@ declare module esri {
     }
 
 
-	interface MapEvent extends Event {
-		map : esri.Map;
-	}
-
 
 	interface ExtentEvent extends Event {
 		
@@ -171,67 +167,6 @@ declare module esri {
 
 	}
 
-	// event fired when a zoom change
-	interface ZoomEvent extends Event {
-		extent : esri.geometry.Extent;
-		zoomFactor : Number;
-		anchor : esri.geometry.Point;
-		level : Number;
-	}
-
-
-	interface BasemapChangeEvent extends Event {
-		current : Object;
-		previous : Object;
-	}
-
-	interface LayerEvent extends Event {
-		layer : esri.layers.Layer;
-	}
-
-	interface LayersEvent extends Event {
-		layers : esri.layers.Layer[];
-	}
-
-
-	interface LayerReorderEvent extends LayerEvent {
-		index : Number;
-	}
-
-	interface LayersReorderEvent extends Event {
-		layerIds : Number[];
-	}
-
-
-	interface PanEvent extends Event {
-		extent : esri.geometry.Extent;
-		delta : esri.geometry.Point;
-
-	}
-
-	interface RepositionEvent extends Event {
-		x : Number;
-		y : Number;
-	}
-
-	interface MapResizeEvent extends Event {
-		extent:esri.geometry.Extent;
-		width:Number;
-		height:Number;
-	}
-
-	interface ErrorEvent extends Event {
-		error : Error;
-	}
-
-	interface TimeExtentEvent extends Event {
-		timeExtent:esri.TimeExtent;
-	}
-
-	interface LayerAddResultEvent extends Event {
-		layer : esri.layers.Layer;
-		error : Error;
-	}
 
 
     export class Map { // we can't extends the dijit._Widget because of a compiler bug, see : https://github.com/schungx/Dojo-TypeScript/issues/2
@@ -368,149 +303,46 @@ declare module esri {
         onZoom(extent : esri.geometry.Extent, zoomFactor : number, anchor : esri.geometry.Point): void;
         onZoomEnd(extent : esri.geometry.Extent, zoomFactor : number, anchor : esri.geometry.Point, level : number): void;
         onZoomStart(extent: esri.geometry.Extent, zoomFactor: number, anchor: esri.geometry.Point, level: number): void;
-
-		// Events handling
-
-        //click : <MouseEvent> <MouseEvent>;
-		on(name : "click", 
-			listener : (ev:MouseEvent)=>void):Dojo.RemovableHandle;
-        //dbl-click : <MouseEvent> <MouseEvent>;
-		on(name : "dbl-click", 
-			listener : (ev:MouseEvent)=>void):Dojo.RemovableHandle;
-
         //basemap-change : void;
-		on(name : "basemap-change", 
-			listener : (ev:BasemapChangeEvent)=>void):Dojo.RemovableHandle;
-
-
+        //click : <MouseEvent> <MouseEvent>;
+        //dbl-click : <MouseEvent> <MouseEvent>;
         //extent-change : esri.geometry.Extent;
-		on(name : "extent-change", 
-			listener : (ev:ExtentEvent) =>void):Dojo.RemovableHandle;
-
-
+		on(name : "extent-change", listener : (ev:ExtentEvent) =>void):Dojo.RemovableHandle;
         //key-down : <KeyboardEvent> <KeyboardEvent>;
-		on(name : "key-down", 
-			listener:(ev:KeyboardEvent)=>void):Dojo.RemovableHandle;
         //key-up : <KeyboardEvent> <KeyboardEvent>;
-		on(name : "key-up", 
-			listener:(ev:KeyboardEvent)=>void):Dojo.RemovableHandle;
-
         //layer-add : Layer;
-		on(name:"layer-add", 
-			listener:(ev:LayerEvent)=>void):Dojo.RemovableHandle;
-
         //layer-add-result : Layer;
-		on(name:"layer-add-result", 
-			listener:(ev:LayerAddResultEvent)=>void):Dojo.RemovableHandle;
-
+        //layer-add-result : Layer;
         //layer-remove : Layer;
-		on(name:"layer-remove", 
-			listener:(ev:LayerEvent)=>void):Dojo.RemovableHandle;
-
         //layer-reorder : Layer;
-		on(name:"layer-reorder", 
-			listener:(ev:LayerReorderEvent)=>void):Dojo.RemovableHandle;
-
         //layer-resume : Layer;
-		on(name:"layer-resume", 
-			listener:(ev:LayerEvent)=>void):Dojo.RemovableHandle;
-
-		on(name:"layer-suspend", 
-			listener:(ev:LayerEvent)=>void):Dojo.RemovableHandle;
-
         //layers-add-result : void;
-		on(name:"layers-add-result", 
-			listener:(ev:LayersEvent)=>void):Dojo.RemovableHandle;
-
         //layers-removed : void;
-		on(name:"layers-removed", 
-			listener:(ev:Event)=>void):Dojo.RemovableHandle;
-
         //layers-reordered : <number[]> layerIds;
-		on(name:"layers-reordered", 
-			listener:(ev:LayersReorderEvent)=>void):Dojo.RemovableHandle;
-
         //load : Map;
-		on(name:"load", 
-			listener:(ev:MapEvent)=>void):Dojo.RemovableHandle;
-
         //mouse-down : <MouseEvent> <MouseEvent>;
-		on(name:"mouse-down", 
-			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
-
         //mouse-drag : <MouseEvent> <MouseEvent>;
-		on(name:"mouse-drag", 
-			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
-
         //mouse-drag-end : <MouseEvent> <MouseEvent>;
-		on(name:"mouse-drag-end", 
-			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
-
         //mouse-drag-start : <MouseEvent> <MouseEvent>;
-		on(name:"mouse-drag-start", 
-			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
-
         //mouse-move : <MouseEvent> <MouseEvent>;
-		on(name:"mouse-move", 
-			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
         //mouse-out : <MouseEvent> <MouseEvent>;
-		on(name:"mouse-out", 
-			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
         //mouse-over : <MouseEvent> <MouseEvent>;
-		on(name:"mouse-over", 
-			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
         //mouse-up : <MouseEvent> <MouseEvent>;
-		on(name:"mouse-up", 
-			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
         //mouse-wheel : <MouseEvent> <MouseEvent>;
-		on(name:"mouse-wheel", 
-			listener:(mouseEvent:MouseEvent)=>void):Dojo.RemovableHandle;
-
         //pan : esri.geometry.Extent;
-		on(name:"pan", 
-			listener:(ev:PanEvent)=>void):Dojo.RemovableHandle;
         //pan-end : esri.geometry.Point;
-		on(name:"pan-end", 
-			listener:(ev:PanEvent)=>void):Dojo.RemovableHandle;
         //pan-start : esri.geometry.Extent;
-		on(name:"pan-start", 
-			listener:(ev:PanEvent)=>void):Dojo.RemovableHandle;
-
         //reposition : <number> x;
-		on(name:"reposition", 
-			listener:(ev:RepositionEvent)=>void):Dojo.RemovableHandle;
         //resize : esri.geometry.Extent;
-		on(name:"resize", 
-			listener:(ev:MapResizeEvent)=>void):Dojo.RemovableHandle;
         //time-extent-change : TimeExtent;
-		on(name:"time-extent-change", 
-			listener:(ev:TimeExtentEvent)=>void):Dojo.RemovableHandle;
-
         //unload : Map;
-		on(name:"unload", 
-			listener:(ev:MapEvent)=>void):Dojo.RemovableHandle;
-
         //update-end : <Error> error;
-		on(name:"update-end", 
-			listener:(ev:ErrorEvent)=>void):Dojo.RemovableHandle;
-
         //update-start : void;
-		on(name:"update-start", 
-			listener:(ev:Event)=>void):Dojo.RemovableHandle;
-
         //zoom : esri.geometry.Extent;
-		on(name:"zoom", 
-			listener:(ev:ZoomEvent)=>void):Dojo.RemovableHandle;
         //zoom-end : esri.geometry.Extent;
-		on(name:"zoom-end", 
-			listener:(ev:ZoomEvent)=>void):Dojo.RemovableHandle;
         //zoom-start : esri.geometry.Extent;
-		on(name:"zoom-start", 
-			listener:(ev:ZoomEvent)=>void):Dojo.RemovableHandle;
-
 		on(type: string, listener: Dojo.Action): Dojo.RemovableHandle;
     }
-
     export class OperationBase {
         constructor(params : Object);
         label: string;
@@ -563,7 +395,7 @@ declare module esri {
         peekRedo(): esri.OperationBase;
         peekUndo(): esri.OperationBase;
         redo() : void;
-        remove(operation: esri.OperationBase): esri.OperationBase;
+        remove(operation): esri.OperationBase;
         undo() : void;
         onAdd(): void;
         onChange(): void;
@@ -725,7 +557,7 @@ declare module "esri/geometry/normalizeUtils" {
 	export = i;
 }
 
-declare module "esri.symbol.jsonUtils" {
+declare module "esri/symbols/jsonUtils" {
 	var i : esri.symbol.jsonUtils;
 	export = i;
 }
@@ -814,7 +646,7 @@ declare module esri.arcgis {
         title: string;
         url: string;
         getMembers(): dojo.Deferred<any>;
-        queryItems(queryParams? : PortalQueryParams ): dojo.Deferred<any>;
+        queryItems(queryParams): dojo.Deferred<any>;
     }
     export class PortalGroupMembers {
         admins: string[];
@@ -904,55 +736,13 @@ declare module esri.arcgis {
 declare module esri.dijit.editing {
     export class AttachmentEditor {
         constructor(params : Object, srcNodeRef : string);
-        constructor(params : Object, domNode : Element);
         showAttachments(graphic : esri.Graphic, featureLayer : esri.layers.FeatureLayer): void;
         startup(): void;
     }
-
-  export class TemplatePicker {
-        constructor(params : Object, srcNodeRef : string);
-        constructor(params : Object, domNode : Element);
-        templatePicker: string;
-        // grid : string; // TODO FLE : remove all CSS stuff !!!
-        groupLabel: string;
-        item: string;
-        itemLabel: string;
-        itemSymbol: string;
-        selectedItem: string;
-        // tooltip : string; // TODO FLE : remove all CSS stuff !!!
-        // grid: Dojo.grid.DataGrid;
-        tooltip: any; //div;
-        attr(name : string, value? : Object): void;
-        clearSelection(): void;
-        destroy(): void;
-        getSelected(): Object;
-        startup(): void;
-        update(): void;
-        onSelectionChange(): void;
-    }
-    export class Editor {
-        constructor(params : Object, srcNodeRef : string);
-        constructor(params : Object, domNode : Element);
-        CREATE_TOOL_FREEHAND_POLYGON: string;
-        CREATE_TOOL_POLYGON: string;
-        CREATE_TOOL_AUTOCOMPLETE: string;
-        CREATE_TOOL_FREEHAND_POLYLINE: string;
-        CREATE_TOOL_POLYLINE: string;
-        CREATE_TOOL_ARROW: string;
-        CREATE_TOOL_TRIANGLE: string;
-        CREATE_TOOL_RECTANGLE: string;
-        CREATE_TOOL_CIRCLE: string;
-        CREATE_TOOL_ELLIPSE: string;
-    }
- 
-
-
-
 }
 declare module esri.dijit {
     export class AttributeInspector {
         constructor(params : Object, srcNodeRef : string);
-        constructor(params : Object, domNode : Element);
         STRING_FIELD_OPTION_TEXTBOX: string;
         STRING_FIELD_OPTION_TEXTAREA: string;
         STRING_FIELD_OPTION_RICHTEXT: string;
@@ -981,7 +771,6 @@ declare module esri.dijit {
     }
     export class Attribution {
         constructor(options : Object, srcNodeRef : string);
-        constructor(params : Object, domNode : Element);
         esriAttributionList: string;
         esriAttributionItem: string;
         esriAttributionLastItem: string;
@@ -1001,7 +790,6 @@ declare module esri.dijit {
     }
     export class BasemapGallery {
         constructor(params : Object, srcNodeRef? : string);
-        constructor(params : Object, domNode : Element);
         esriBasemapGallery: string;
         esriBasemapGalleryNode: string;
         esriBasemapGallerySelectedNode: string;
@@ -1023,42 +811,12 @@ declare module esri.dijit {
     }
     export class BasemapLayer {
         constructor(params? : Object);
-		copyright : string;
-		fullExtent : esri.geometry.Extent;
-		initialExtent : esri.geometry.Extent;
-		subDomains : string[];
-		tileInfo : esri.layers.TileInfo;
-		tileServer : string[];
-		type : string;
-    }
-// New 3.7
-    export class BasemapToggle {
-		constructor(params : Object,srcNodeRef : string);
-        constructor(params : Object, domNode : Element);
-		basemapContainer : string;
-		toggleButton : string;
-		basemapImage : string;
-		basemapTitle : string;
-		basemap : string;
-		basemaps : Object;
-		loaded : boolean;
-		map : esri.Map;
-		theme : string;
-		visible : boolean;
-		destroy() : void;
-		hide() : void;
-		show() : void;
-		startup() : void;
-		toggle() : void;
-		// load : void;
-		// toggle : <String> previousBasemap;
     }
     export class BookmarkItem {
         constructor(name : string, extent : esri.geometry.Extent);
     }
     export class Bookmarks {
-        constructor(params : Object, srcNodeRef : string);
-        constructor(params : Object, domNode : Element);
+        constructor(params : Object, srcNodeRef : Object);
         esriBookmarks: string;
         esriBookmarkTable: string;
         esriBookmarkItem: string;
@@ -1081,7 +839,6 @@ declare module esri.dijit {
     }
     export class Directions {
         constructor(params : Object, srcNodeRef : string);
-        constructor(params : Object, domNode : Element);
         esriDirectionsContainer: string;
         esriStopsContainer: string;
         esriStopsReverse: string;
@@ -1162,9 +919,21 @@ declare module esri.dijit {
         onSegmentHighlight(graphic : esri.Graphic): void;
         onSegmentSelect(graphic : esri.Graphic): void;
     }
-   export class Gallery {
+    export class Editor {
+        constructor(params : Object, srcNodeRef : Object);
+        CREATE_TOOL_FREEHAND_POLYGON: string;
+        CREATE_TOOL_POLYGON: string;
+        CREATE_TOOL_AUTOCOMPLETE: string;
+        CREATE_TOOL_FREEHAND_POLYLINE: string;
+        CREATE_TOOL_POLYLINE: string;
+        CREATE_TOOL_ARROW: string;
+        CREATE_TOOL_TRIANGLE: string;
+        CREATE_TOOL_RECTANGLE: string;
+        CREATE_TOOL_CIRCLE: string;
+        CREATE_TOOL_ELLIPSE: string;
+    }
+    export class Gallery {
         constructor(params : Object, srcNodeRef : string);
-        constructor(params : Object, domNode : Element);
         esriMobileGallery: string;
         //esriMobileGallery.galleryLandscape : string; // TODO FLE : remove CSS Stuff
         //esriMobileGallery.thumbnailContainer : string;
@@ -1188,7 +957,6 @@ declare module esri.dijit {
     }
     export class Gauge {
         constructor(params : Object, srcNodeRef : string);
-        constructor(params: Object, domNode: Element);
         gaugeContainer: string;
         destroy(): void;
         get(): any; //varies;
@@ -1197,7 +965,7 @@ declare module esri.dijit {
     }
     export class Geocoder {
         constructor(params: Object, srcNodeRef: string);
-        constructor(params: Object, domNode: Element);
+        constructor(params: Object, srcNodeRef: Node);
         esriGeocoder: string;
         esriGeocoderMultiple: string;
         esriGeocoderContainer: string;
@@ -1250,46 +1018,9 @@ declare module esri.dijit {
         onGeocoderSelect(geocoder: Object): void;
         onSelect(results: Object): void;
     }
-// New 3.7
-   export class HistogramTimeSlider {
-		constructor(params : Object, srcNodeRef : string);
-        constructor(params: Object, domNode: Element);
-		// histogram-timeslider : string;
-		// histogram-timeslider #histogram-range : string;
-		destroy() : void;
-		// time-extent-change : void;
-		update : void;
-		onTimeExtentChange() : void;
-		onUpdate() : void;
-    }
-// New 3.7
-    export class HomeButton {
-		constructor(params : Object,srcNodeRef : string);
-        constructor(params: Object, domNode: Element);
-		homeContainer : string;
-		home : string;
-		loading : string;
-		extent : esri.geometry.Extent;
-		loaded : boolean;
-		map : esri.Map;
-		theme : string;
-		visible : boolean;
-		destroy() : void;
-		hide() : void;
-		// home() : void;
-		show() : void;
-		startup() : void;
-		// home : esri.geometry.Extent;
-		// load : void;
-    }
-
-
-
-
-
     export class InfoWindow extends InfoWindowBase {
         constructor(params: Object, srcNodeRef: string);
-        constructor(params: Object, domNode: Element);
+        constructor(params: Object, srcNodeRef: Node);
         ANCHOR_UPPERRIGHT: string;
         ANCHOR_LOWERRIGHT: string;
         ANCHOR_LOWERLEFT: string;
@@ -1318,60 +1049,8 @@ declare module esri.dijit {
         onHide(): void;
         onShow(): void;
     }
-   export class InfoWindowLite extends InfoWindowBase {
-		anchor : string;
-		coords : esri.geometry.Point;
-		domNode : Object;
-		fixedAnchor : string;
-		isShowing : boolean;
-		destroyDijits() : void;
-		hide() : void;
-		move(point : esri.geometry.Point) : void;
-		place(value : any,parentNode : Object) : void;
-		resize(width : number, height : number) : void;
-		setContent(content : Object) : void;
-		setFixedAnchor(anchor : string) : void;
-		setMap(map : esri.Map) : void;
-		setTitle(title : string) : InfoWindow;
-		show(point : esri.geometry.Point, placement? : string) : void;
-		startupDijits() : void;
-		unsetMap(map : esri.Map) : void;
-		// hide : void;
-		// show : void;
-		onHide() : void;
-		onShow() : void;
-    }
-	// New 3.7
-    export class LayerSwipe {
-		constructor(params : Object,srcNodeRef : string);
-        constructor(params: Object, domNode: Element);
-		handleContainer : string;
-		handle : string;
-		clip : number;
-		enabled : boolean;
-		layers : esri.layers.Layer[];
-		left : number;
-		loaded : boolean;
-		map : esri.Map;
-		theme : string;
-		top : number;
-		type : string;
-		visible : boolean;
-		destroy() : void;
-		disable() : void;
-		enable() : void;
-		startup() : void;
-		swipe() : void;
-		// load : void;
-		// swipe : <Object[]> layers;
-    }
-
-
-
-
     export class Legend {
-        constructor(srcNodeRef : string, params : Object); // params are inverted
-        constructor(domNode : Element, params : Object); // params are inverted
+        constructor(srcNodeRef : string, params : Object); // TO CHECK : in esri code sample parameters are inversed..??
         esriLegendService: string;
         esriLegendServiceLabel: string;
         esriLegendGroupLayer: string;
@@ -1381,37 +1060,8 @@ declare module esri.dijit {
         refresh(): void;
         startup(): void;
     }
-	// New 3.7
-    export class LocateButton {
-		constructor(params : Object, srcNodeRef : string); // <DOMNode | String> srcNodeRef
-		constructor(params : Object, domNode : Element); 
-		locateContainer : string;
-		zoomLocateButton : string;
-		loading : string;
-		geolocationOptions : void;
-		highlightLocation : boolean;
-		infoTemplate : esri.InfoTemplate;
-		loaded : boolean;
-		map : esri.Map;
-		scale : number;
-		symbol : esri.symbol.Symbol;
-		theme : string;
-		visible : boolean;
-		clear() : void;
-		destroy() : void;
-		hide() : void;
-		locate() : dojo.Deferred<any>;
-		show() : void;
-		startup() : void;
-		// load : void;
-		// locate : esri.Graphic;
-    }
-
-
-
     export class Measurement {
         constructor(params : Object, srcNodeRef : string);
-		constructor(params : Object, domNode : Element); 
         distanceIcon: string;
         areaIcon: string;
         locationIcon: string;
@@ -1429,8 +1079,7 @@ declare module esri.dijit {
         onMeasureEnd(activeToolName : string, geometry : esri.geometry.Geometry): void;
     }
     export class OverviewMap {
-        constructor(params : Object, srcNodeRef : string);
-		constructor(params : Object, domNode : Element); 
+        constructor(params : Object, srcNodeRef : Object);
         destroy(): void;
         hide(): void;
         show(): void;
@@ -1438,7 +1087,6 @@ declare module esri.dijit {
     }
     export class Popup extends InfoWindowBase {
         constructor(options: Object, srcNodeRef : string);
-		constructor(params : Object, domNode : Element); 
         count: number;
         deferreds: dojo.Deferred<Graphic>[];
         domNode: Object;
@@ -1477,7 +1125,7 @@ declare module esri.dijit {
     }
     export class PopupMobile extends InfoWindowBase {
         constructor(options: Object, srcNodeRef : string);
-        constructor(options: Object, srcNodeRef : Element);
+        constructor(options: Object, srcNodeRef : Node);
         titlePane: string;
         //pointer.top : string;
         //pointer.bottom : string;
@@ -1504,8 +1152,7 @@ declare module esri.dijit {
         info: Object;
     }
     export class Print {
-        constructor(params : Object, srcNodeRef : string);
-        constructor(options: Object, srcNodeRef : Element);
+        constructor(params : Object, srcNodeRef : Object);
         esriPrint: string;
         esriPrintButton: string;
         esriPrintout: string;
@@ -1519,7 +1166,6 @@ declare module esri.dijit {
     }
     export class Scalebar {
         constructor(params : Object, srcNodeRef? : string);
-        constructor(params : Object, domNode : Element);
         esriScalebar: string;
         esriScalebarRuler: string;
         esriScalebarLabel: string;
@@ -1530,8 +1176,7 @@ declare module esri.dijit {
         show(): void;
     }
     export class TemplatePicker {
-        constructor(params : Object, srcNodeRef : string);
-        constructor(params : Object, domNode : Element);
+        constructor(params : Object, srcNodeRef : Object);
         templatePicker: string;
         // grid : string; // TODO FLE : remove all CSS stuff !!!
         groupLabel: string;
@@ -1551,8 +1196,7 @@ declare module esri.dijit {
         onSelectionChange(): void;
     }
     export class TimeSlider {
-        constructor(params: string, srcNodeRef: string);
-        constructor(params : Object, domNode : Element);
+        constructor(params: string, srcNodeRef: Object);
         loop: boolean;
         playing: boolean;
         thumbCount: number;
@@ -1576,580 +1220,6 @@ declare module esri.dijit {
         onTimeExtentChange(timeExtent : esri.TimeExtent): void;
     }
 }
-
-declare module esri.dijit.analysis {
-    export class AnalysisBase {
-		cancel(jobInfo : Object) : void;
-		execute(params : string) : void;
-		getCreditsEstimate(toolName : string, jobParams : Object) : dojo.Deferred<any>; // ESRI doc is wrong (string specified for params
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class AggregatePoints extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : string); // srcNodeRed is a DOMNode
-		constructor(params : Object,domNode : Element);
-		analysisGpServer : string;
-		groupByField : string;
-		keepBoundariesWithNoPoints : boolean;
-		map : esri.Map;
-		outputLayerName : string;
-		pointLayer : esri.layers.FeatureLayer;
-		polygonLayer : esri.layers.FeatureLayer;
-		polygonLayers : esri.layers.FeatureLayer[];
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		showChooseExtent : boolean;
-		showCredits : boolean;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		summaryFields : string[];
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class CreateBuffers extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,domNode : Element); 
-		constructor(params : Object,srcNodeRef : string);
-		analysisGpServer : string;
-		bufferDistance : string;
-		inputLayer : esri.layers.FeatureLayer;
-		map : esri.Map;
-		outputLayerName : string;
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		showChooseExtent : boolean;
-		showCredits : string;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class CreateDriveTimeAreas extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : string); // srcNodeRed is a DOMNode
-		constructor(params : Object,domNode : Element);
-		analysisGpServer : string;
-		breakUnits : string;
-		breakValues : number[];
-		inputLayer : esri.layers.FeatureLayer;
-		inputType : string;
-		map : esri.Map;
-		outputLayerName : string;
-		overlapPolicy : string;
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		showChooseExtent : boolean;
-		showCredits : boolean;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class DissolveBoundaries extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : string); // srcNodeRed is a DOMNode
-		constructor(params : Object,domNode : Element);
-		analysisGpServer : string;
-		dissolveFields : String[];
-		inputLayer : esri.layers.FeatureLayer;
-		map : esri.Map;
-		outputLayerName : string;
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		showChooseExtent : boolean;
-		showCredits : boolean;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		summaryFields : String[];
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class EnrichLayer extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : string);
-		constructor(params : Object,domNode : Element);
-		analysisGpServer : string;
-		distance : number;
-		inputLayer : esri.layers.FeatureLayer;
-		map : esri.Map;
-		outputLayerName : string;
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		showChooseExtent : boolean;
-		showCredits : boolean;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		showTrafficWidget : boolean;
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class ExtractData extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : string);
-		constructor(params : Object,domNode : Element);
-		analysisGpServer : string;
-		clip : boolean;
-		dataFormat : string;
-		featureLayers : esri.layers.FeatureLayer[];
-		inputLayers : esri.layers.FeatureLayer[];
-		map : esri.Map;
-		outputLayerName : string;
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		showChooseExtent : boolean;
-		showCredits : boolean;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class FindHotSpots extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : string);
-		constructor(params : Object,domNode : Element);
-		aggregationPolygonLayers : esri.layers.FeatureLayer[];
-		analysisField : string;
-		analysisGpServer : string;
-		analysisLayer : esri.layers.FeatureLayer;
-		boundingPolygonLayers : esri.layers.FeatureLayer[];
-		map : esri.Map;
-		outputLayerName : string;
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		showChooseExtent : boolean;
-		showCredits : boolean;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class FindNearest extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : string);
-		constructor(params : Object,domNode : Element);
-		analysisGpServer : string;
-		analysisLayer : esri.layers.FeatureLayer;
-		map : esri.Map;
-		maxCount : number;
-		nearLayer : esri.layers.FeatureLayer;
-		nearLayers : esri.layers.FeatureLayer[];
-		outputLayerName : string;
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		searchCutoff : number;
-		searchCutoffUnits : string;
-		showChooseExtent : boolean;
-		showCredits : boolean;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class MergeLayers extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : string);
-		constructor(params : Object,domNode : Element);
-		analysisGpServer : string;
-		inputLayer : esri.layers.FeatureLayer;
-		map : esri.Map;
-		mergeLayers : esri.layers.FeatureLayer[];
-		mergingAttributes : String[];
-		outputLayerName : string;
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		showChooseExtent : boolean;
-		showCredits : boolean;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class OverlayLayers extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : string);
-		constructor(params : Object,domNode : Element);
-		analysisGpServer : string;
-		inputLayer : esri.layers.FeatureLayer;
-		map : esri.Map;
-		outputLayerName : string;
-		overlayLayer : esri.layers.FeatureLayer[];
-		overlayType : string;
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		showChooseExtent : boolean;
-		showCredits : boolean;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		snapToInput : boolean;
-		tolerance : number;
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class SummarizeNearby extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : string);
-		constructor(params : Object,domNode : Element);
-		analysisGpServer : string;
-		distance : number[];
-		groupByField : string;
-		map : esri.Map;
-		nearType : string;
-		outputLayerName : string;
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		shapeUnits : string;
-		showChooseExtent : boolean;
-		showCredits : boolean;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		sumNearbyLayer : esri.layers.FeatureLayer;
-		sumShape : boolean;
-		summaryFields : String[];
-		summaryLayer : esri.layers.FeatureLayer;
-		summaryLayers : esri.layers.FeatureLayer[];
-		units : string;
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-    export class SummarizeWithin extends esri.dijit.analysis.AnalysisBase {
-		constructor(params : Object,srcNodeRef : string);
-		constructor(params : Object,domNode : Element);
-		analysisGpServer : string;
-		groupByField : string;
-		map : esri.Map;
-		outputLayerName : string;
-		portalUrl : string;
-		returnFeatureCollection : boolean;
-		showChooseExtent : boolean;
-		showCredits : boolean;
-		showHelp : boolean;
-		showSelectFolder : boolean;
-		sumWithinLayer : esri.layers.FeatureLayer;
-		summaryFields : string;
-		summaryLayer : esri.layers.FeatureLayer;
-		summaryLayers : esri.layers.FeatureLayer[];
-		cancel(jobInfo : Object) : void;
-		execute(params : Object) : void; // ESRI doc is wrong (string specified for params
-		getCreditsEstimate(toolName : string,jobParams : Object) : dojo.Deferred<any>;
-		//close : void;
-		//drawtool-activate : void;
-		//drawtool-deactivate : void;
-		//job-cancel : <Object> response;
-		//job-fail : <Object> error;
-		//job-result : <Object> result;
-		//job-status : <Object> jobInfo;
-		//job-submit : <Object> params;
-		//job-success : <Object> jobInfo;
-		//start : <Object> params;
-		onClose() : void;
-		onExecute(params : Object) : void;
-		onJobCancel(response : Object) : void;
-		onJobFailed(error : Error) : void;
-		onJobResult(result : Object) : void;
-		onJobStatus(jobInfo : Object) : void;
-		onJobSubmit(params : Object) : void;
-		onJobSuccess(jobInfo : Object) : void;
-		onSave() : void;
-    }
-}
-
-
-declare module esri.dijit.geoenrichment {
-    export class Infographic {
-		constructor(params : Object,srcNodeRef : string); // srcNodeRed is a DOMNode
-		constructor(params : Object,domNode : Element);
-		cacheLimit : number;
-		countryID : string;
-		datasetID : string;
-		expanded : boolean;
-		returnGeometry : boolean;
-		studyArea : esri.tasks.geoenrichment.GeometryStudyArea;
-		studyAreaOptions : esri.tasks.geoenrichment.RingBuffer;
-		subtitle : string;
-		title : string;
-		type : string;
-		variables : string[];
-		setData(data : esri.tasks.FeatureSet, metadata? : Object) : void;
-		startup() : void;
-		//data-error : <Object> error;
-		//data-load : void;
-		//data-ready : <Object> provider;
-		//data-request : void;
-		resize : number[];
-		onDataError(error : Object) : void; // doc says : <Object> error "The error message returned by the GeoEnrichment service."
-		onDataLoad() : void;
-		onDataReady(provider : Object) : void;
-		onDataRequest() : void;
-		onResize(size : number[]) : void;
-    }
-    export class InfographicsOptions {
-        constructor(json?: Object);
-        studyAreaOptions: esri.tasks.geoenrichment.RingBuffer;
-        theme: string;
-        getItems(countryID: string): dojo.Deferred<InfographicsOptionsItem[]>;
-        toJson(): Object;
-    }
-    export class InfographicsCarousel {
-		constructor(params : Object,srcNodeRef : string);
-		constructor(params : Object,domNode : Element);
-		expanded : boolean;
-        options: any; //esri.dijit.geoenrichment.InfographicsOptions;
-		returnGeometry : boolean;
-		selectedIndex : number;
-		studyArea : esri.tasks.geoenrichment.GeometryStudyArea;
-		studyAreaTitle : string;
-		startup() : void;
-		//data-error : <Object> error;
-		//data-load : void;
-		//data-ready : <Object> provider;
-		//resize : <number[]> size;
-		onDataError(error : Object) : void; // doc says : <Object> error "The error message returned by the GeoEnrichment service."
-		onDataLoad() : void;
-		onDataReady(provider : Object) : void;
-        onResize(size: number[]): void;
-    }
-
-    export class InfographicsOptionsItem {
-		constructor(type : string, variables : string[]);
-		datasetID : string;
-		isVisible : boolean;
-		title : string;
-		type : string;
-        variables: string[];
-    }
-
-
-
-}
-
-
 
 declare module esri.geometry {
 
@@ -2438,13 +1508,8 @@ declare module esri.layers {
         getAttributionData(): dojo.Deferred<any>;
         getImageUrl(extent : esri.geometry.Extent, width : number, height : number, callback : Function): string;
         getKeyProperties(): dojo.Deferred<any>;
-		getRasterAttributeTable() : dojo.Deferred<any>;
-		getVisibleRasters() : esri.Graphic[];
-       
         hide(): void;
         isVisibleAtScale(scale : number): boolean;
-		queryVisibleRasters(query : esri.tasks.Query, options? : Object, callback? : Function, errback? : Function) : void;
-       
         refresh(): void;
         resume(): void;
         setBandIds(bandIds : number[], doNotRefresh? : boolean): void;
@@ -2456,8 +1521,6 @@ declare module esri.layers {
         setMinScale(scale : number): void;
         setMosaicRule(mosaicRule: MosaicRule, doNotRefresh?: boolean): MosaicRule;
         setOpacity(valueBetweenZeroAndOne : number): void;
-		setDefinitionExpression(expression : string, doNotRefresh : boolean) : void; // Added at 3.6
-       
         setRenderingRule(renderingRule : RasterFunction, doNotRefresh : boolean): RasterFunction;
         setScaleRange(minScale : number, maxScale : number): void;
         setUseMapTime(update : boolean): void;
@@ -2653,10 +1716,6 @@ declare module esri.layers {
         attributionDataUrl: string;
         capabilities: string;
         copyright: string;
-		credential : esri.Credential;
-		dataAttributes : any; // NEw 3.7 : String or String[];
-     
-
         defaultDefinitionExpression: string;
         defaultVisibility: boolean;
         description: string;
@@ -2695,9 +1754,6 @@ declare module esri.layers {
         applyEdits(adds: esri.Graphic[], updates: esri.Graphic[], deletes: esri.Graphic[], callback?: Function, errback?: Function): dojo.Deferred<any>;
         clearSelection(): FeatureLayer;
         deleteAttachments(objectId: number, attachmentIds: number[], callback?: Function, errback?: Function): dojo.Deferred<any>;
-		disableMouseEvents() : void;
-		enableMouseEvents() : void;
-       
         getAttributionData(): dojo.Deferred<any>;
         getDefinitionExpression(): string;
         getEditCapabilities(options : Object): Object;
@@ -2717,8 +1773,6 @@ declare module esri.layers {
         redraw(): void;
         refresh(): void;
         resume(): void;
-		remove(graphic : esri.Graphic) : esri.Graphic;
-      
         selectFeatures(query: esri.tasks.Query, selectionMethod? : number, callback?: Function, errback?: Function): dojo.Deferred<any>;
         setAutoGeneralize(enable: boolean): FeatureLayer;
         setDefinitionExpression(expression: string): FeatureLayer;
@@ -2743,25 +1797,6 @@ declare module esri.layers {
         onDblClick(event : Object): void;
         onDeleteAttachmentsComplete(results: esri.layers.FeatureEditResult[]): void;
         onEditsComplete(addResults: esri.layers.FeatureEditResult[], updateResults: esri.layers.FeatureEditResult[], deleteResults: esri.layers.FeatureEditResult[]): void;
-
-		/// Check if theres methods are not in the GraphicsLayer ..
-		onError(error : Error) : void;
-		onGraphicAdd(graphic : esri.Graphic) : void;
-		onGraphicDraw(evt : Object) : void;
-		onGraphicNodeAdd(evt : Object) : void;
-		onGraphicNodeRemove(evt : Object) : void;
-		onGraphicRemove(graphic : esri.Graphic) : void;
-		onGraphicsClear() : void;
-		onLoad(layer : esri.layers.Layer) : void;
-		onMouseDown(event : Object) : void;
-		onMouseDrag(event : Object) : void;
-		onMouseMove(event : Object) : void;
-		onMouseOut(event : Object) : void;
-		onMouseOver(event : Object) : void;
-		onMouseUp(event : Object) : void;
-		onOpacityChange(opacity : number) : void; // base Layer ?
-      
-
         onQueryAttachmentInfosComplete(attachmentInfos : Object[]): void;
         onQueryCountComplete(count: number): void;
         onQueryFeaturesComplete(featureSet: esri.tasks.FeatureSet): void;
@@ -2857,8 +1892,6 @@ declare module esri.layers {
         url: string;
         visible: boolean;
         visibleAtMapScale: boolean;
-		dataAttributes : any; // String or String[];
-
         add(graphic: esri.Graphic): Graphic;
         clear(): void;
         disableMouseEvents(): void;
@@ -2884,11 +1917,6 @@ declare module esri.layers {
         onGraphicAdd(graphic: esri.Graphic): void;
         onGraphicRemove(graphic: esri.Graphic): void;
         onGraphicsClear(): void;
-		onGraphicDraw(evt : Object) : void;
-		onGraphicNodeAdd(evt : Object) : void;
-		onGraphicNodeRemove(evt : Object) : void;
-
-
         onLoad(layer : esri.layers.Layer): void;
         onMouseDown(event : Object): void;
         onMouseDrag(event : Object): void;
@@ -2901,10 +1929,7 @@ declare module esri.layers {
         onScaleRangeChange(): void;
         onScaleVisibilityChange(): void;
         onSuspend(): void;
-
-		// this is defined on the layer class
-        // onUpdate(message : Object): void;
-
+        onUpdate(): void;
         onUpdateEnd(error : Error): void;
         onUpdateStart(): void;
         onVisibilityChange(visibility: boolean): void;
@@ -3061,29 +2086,6 @@ declare module esri.layers {
         resolution: number;
         scale: number;
     }
-
-    export class LabelClass {
-        constructor(json?: Object);
-        labelExpression: string;
-        labelPlacement: string;
-        maxScale: number;
-        minScale: number;
-        symbol: esri.symbol.TextSymbol;
-        useCodedValues: boolean;
-        where: string;
-    }
-
-    export class LabelLayer {
-        constructor(json?: Object);
-        addFeatureLayer(featureLayer: esri.layers.FeatureLayer, renderer: esri.renderer.Renderer,
-            textExpression: string, labelOptions?: Object): void;
-        getFeatureLayer(index: number): esri.layers.FeatureLayer;
-    }
-
-
-	//
-	// Base class for all Layers
-	//
     export class Layer {
         constructor(options?: Object);
         attributionDataUrl: string;
@@ -3094,24 +2096,18 @@ declare module esri.layers {
         maxScale: number;
         minScale: number;
         opacity: number;
-		refreshInterval : number;
         showAttribution: boolean;
         suspended: boolean;
         url: string;
         visible: boolean;
         visibleAtMapScale: boolean;
-		attr(name : string, value : any) : Layer;
         getAttributionData(): dojo.Deferred<any>;
-		// added on 3.7
-		getMap() : esri.Map;
-		getNode() : HTMLElement;
         hide(): void;
         isVisibleAtScale(scale: number): boolean;
         resume(): void;
         setMaxScale(scale: number): void;
         setMinScale(scale: number): void;
         setOpacity(valueBetweenZeroAndOne : number): void;
-		setRefreshInterval(interval : number) : esri.layers.Layer;
         setScaleRange(minScale: number, maxScale: number): void;
         setVisibility(isVisible : boolean): void;
         show(): void;
@@ -3119,7 +2115,6 @@ declare module esri.layers {
         onError(error): void;
         onLoad(layer : esri.layers.Layer): void;
         onOpacityChange(opacity: number): void;
-		onRefreshIntervalChange() : void;
         onResume(): void;
         onScaleRangeChange(): void;
         onScaleVisibilityChange(): void;
@@ -3176,8 +2171,8 @@ declare module esri.layers {
     }
     export class LayerTimeOptions {
         timeDataCumulative: boolean;
-        timeOffset: number;
-        timeOffsetUnits: string;
+        timeOffset: void;
+        timeOffsetUnits: void;
         useTime: boolean;
     }
     export class MapImage {
@@ -3203,13 +2198,13 @@ declare module esri.layers {
         url: string;
         visible: boolean;
         visibleAtMapScale: boolean;
-        addImage(mapImage:MapImage): void;
+        addImage(mapImage): void;
+        getAttributionData(): dojo.Deferred<any>;
         getImages(): MapImage[];
         hide(): void;
         isVisibleAtScale(scale): boolean;
         removeAllImages(): void;
         removeImage(mapImage: esri.layers.MapImage): void;
-		// added at 3.1
         resume(): void;
         setMaxScale(scale: number): void;
         setMinScale(scale: number): void;
@@ -3297,208 +2292,6 @@ declare module esri.layers {
         variableName: string;
         toJson(): Object;
     }
-
-  export class StreamLayer extends esri.layers.FeatureLayer { // Class added 3.6
-		constructor(url :string, options? : Object);
-		constructor(featureCollectionObject : Object,options? : Object);
-		allowGeometryUpdates : boolean;
-		attributionDataUrl : string;
-		capabilities : string;
-		className : void;
-		copyright : string;
-		credential : esri.Credential;
-		dataAttributes : any; // String or String[];
-		defaultDefinitionExpression : string;
-		defaultVisibility : boolean;
-		description : string;
-		displayField : string;
-		editFieldsInfo : Object;
-		fields : esri.layers.Field[];
-		fullExtent : esri.geometry.Extent;
-		geometryType : string;
-		globalIdField : string;
-		graphics : esri.Graphic[];
-		hasAttachments : boolean;
-		hasAttributionData : boolean;
-		htmlPopupType : string;
-		id : string;
-		layerId : number;
-		loaded : boolean;
-		maxRecordCount : number;
-		maxScale : number;
-		minScale : number;
-		name : string;
-		objectIdField : string;
-		opacity : number;
-		ownershipBasedAccessControlForFeatures : Object;
-		refreshInterval : number;
-		relationships : Object[];
-		renderer : esri.renderer.Renderer;
-		showAttribution : boolean;
-		socket : Object;
-		socketUrl : string;
-		source : esri.layers.LayerMapSource;
-		styling : boolean;
-		supportsAdvancedQueries : boolean;
-		supportsStatistics : boolean;
-		surfaceType : string;
-		suspended : boolean;
-		templates : esri.layers.FeatureTemplate[];
-		timeInfo : esri.layers.TimeInfo;
-		type : string;
-		typeIdField : string;
-		types : esri.layers.FeatureType[];
-		url : string;
-		version : number;
-		visible : boolean;
-		visibleAtMapScale : boolean;
-		add(graphic : esri.Graphic) : esri.Graphic;
-		addAttachment(objectId : number, formNode : any, callback? : Function, errback? : Function) : dojo.Deferred<any>;
-		applyEdits(adds? : esri.Graphic[],updates? : esri.Graphic[],deletes? : esri.Graphic[], callback? : Function, errback? : Function) : dojo.Deferred<any>;
-		attr(name : string,value : any) : esri.layers.Layer;
-		clear() : void;
-		clearSelection() : esri.layers.FeatureLayer;
-		connect(callback?) : void;
-		deleteAttachments(objectId : number, attachmentIds : number[], callback? : Function,errback? : Function) : dojo.Deferred<any>;
-		disableMouseEvents() : void;
-		disconnect(callback? : Function) : void;
-		enableMouseEvents() : void;
-		getAttributionData() : dojo.Deferred<any>;
-		getDefinitionExpression() : string;
-		getEditCapabilities(options? : Object) : Object;
-		getEditInfo(feature,options? : Object) : any; //Object or Undefined;
-		getEditSummary(feature,options?) : string;
-		getMap() : esri.Map;
-		getMaxAllowableOffset() : number;
-		getSelectedFeatures() : esri.Graphic[];
-		getSelectionSymbol() : esri.symbol.Symbol;
-		getTimeDefinition() : esri.TimeExtent;
-		hide() : void;
-		isEditable() : boolean;
-		// added at 3.1
-		isVisibleAtScale(scale : number) : boolean;
-		queryAttachmentInfos(objectId : number,callback? : Function, errback? : Function) : dojo.Deferred<any>;
-		queryCount(query : esri.tasks.Query, callback? : Function, errback? : Function) : dojo.Deferred<any>;
-		queryFeatures(query : esri.tasks.Query, callback? : Function, errback? : Function) : dojo.Deferred<any>;
-		queryIds(query : esri.tasks.Query, callback? : Function, errback? : Function) : dojo.Deferred<any>;
-		queryRelatedFeatures(relQuery : esri.tasks.RelationshipQuery, callback? : Function,errback? : Function) : dojo.Deferred<any>;
-		redraw() : void;
-		refresh() : void;
-		remove(graphic : esri.Graphic) : esri.Graphic;
-		resume() : void;
-		selectFeatures(query : esri.tasks.Query,selectionMethod? : number, callback? : Function, errback? : Function) : dojo.Deferred<any>;
-		setAutoGeneralize(enable : boolean) : esri.layers.FeatureLayer;
-		setDefinitionExpression(expression : string) : esri.layers.FeatureLayer;
-		setEditable(editable : boolean) : esri.layers.FeatureLayer;
-		setGDBVersion(versionName : string) : esri.layers.FeatureLayer;
-		setInfoTemplate(infoTemplate : esri.InfoTemplate) : void;
-		setMaxAllowableOffset(offset : number) : void;
-		setMaxScale(scale : number) : void;
-		setMinScale(scale : number) : void;
-		setOpacity(opacity : number) : void;
-		setRefreshInterval(interval : number) : esri.layers.Layer;
-		setRenderer(renderer : esri.renderer.Renderer) : void;
-		setScaleRange(minScale : number, maxScale : number) : void;
-		setSelectionSymbol(symbol : esri.symbol.Symbol) : esri.layers.FeatureLayer;
-		setTimeDefinition(definition : esri.TimeExtent) : esri.layers.FeatureLayer;
-		setTimeOffset(offsetValue,offsetUnits) : esri.layers.FeatureLayer;
-		setUseMapTime(update : boolean) : void;
-		setVisibility(isVisible : boolean) : void;
-		show() : void;
-		suspend() : void;
-		toJson() : Object;
-		//add-attachment-complete : FeatureEditResult;
-		//before-apply-edits : Graphic[];
-		//capabilities-change : void;
-		//click : void;
-		//connect : void;
-		//dbl-click : <Object> event;
-		//delete-attachments-complete : <Object[]> results;
-		//disconnect : void;
-		//edits-complete : FeatureEditResult[];
-		//error : <Error> error;
-		//graphic-add : Graphic;
-		//graphic-draw : Graphic;
-		//graphic-node-add : Graphic;
-		//graphic-node-remove : Graphic;
-		//graphic-remove : Graphic;
-		//graphics-clear : void;
-		//load : Layer;
-		//message : <;
-		//mouse-down : <MouseEvent> mouseEvent;
-		//mouse-drag : <MouseEvent> mouseEvent;
-		//mouse-move : <MouseEvent> mouseEvent;
-		//mouse-out : <MouseEvent> mouseEvent;
-		//mouse-over : <MouseEvent> mouseEvent;
-		//mouse-up : <MouseEvent> mouseEvent;
-		//opacity-change : <Number> opacity;
-		//query-attachment-infos-complete : <Object[]> info;
-		//query-count-complete : <Number> count;
-		//query-features-complete : FeatureSet;
-		//query-ids-complete : <Number[]> objectIds;
-		//query-limit-exceeded : void;
-		//query-related-features-complete : <Object> relatedFeatures;
-		//refresh-interval-change : void;
-		//remove : Graphic;
-		//resume : void;
-		//scale-range-change : void;
-		//scale-visibility-change : void;
-		//selection-clear : void;
-		//selection-complete : <;
-		//suspend : void;
-		//update : Graphic;
-		//update-end : <Error> error;
-		//update-start : void;
-		//visibility-change : <Boolean> visible;
-		onAddAttachmentComplete(result : esri.layers.FeatureEditResult) : void;
-		onBeforeApplyEdits(adds : esri.Graphic[], updates : esri.Graphic[], deletes : esri.Graphic[]) : void;
-		onCapabilitiesChange() : void;
-		onClick(event : Object) : void;
-		onConnect() : void;
-		onDblClick(event : Object) : void;
-		onDeleteAttachmentsComplete(results : esri.layers.FeatureEditResult[]) : void;
-		onDisconnect() : void;
-		onEditsComplete(addResults : esri.layers.FeatureEditResult[], updateResults : esri.layers.FeatureEditResult[], deleteResults : esri.layers.FeatureEditResult[]) : void;
-		onError(error : Error) : void;
-		onGraphicAdd(graphic : esri.Graphic) : void;
-		onGraphicDraw(evt : Object) : void;
-		onGraphicNodeAdd(evt : Object) : void;
-		onGraphicNodeRemove(evt : Object) : void;
-		onGraphicRemove(graphic : esri.Graphic) : void;
-		onGraphicsClear() : void;
-		onLoad(layer : esri.layers.Layer) : void;
-		onMessage(message : Object) : void;
-		onMouseDown(event : Object) : void;
-		onMouseDrag(event : Object) : void;
-		onMouseMove(event : Object) : void;
-		onMouseOut(event : Object) : void;
-		onMouseOver(event : Object) : void;
-		onMouseUp(event : Object) : void;
-		onOpacityChange(opacity : number) : void;
-		onQueryAttachmentInfosComplete(attachmentInfos : Object[]) : void;
-		onQueryCountComplete(count : number) : void;
-		onQueryFeaturesComplete(featureSet : esri.tasks.FeatureSet) : void;
-		onQueryIdsComplete(ids : number[]) : void;
-		onQueryLimitExceeded() : void;
-		onQueryRelatedFeaturesComplete(relatedFeatures : Object) : void;
-		onRefreshIntervalChange() : void;
-		onRemove(message : Object) : void;
-		onResume() : void;
-		onScaleRangeChange() : void;
-		onScaleVisibilityChange() : void;
-		onSelectionClear() : void;
-		onSelectionComplete(features : esri.Graphic[], selectionMethod : number) : void;
-		onSuspend() : void;
-		// this is defined on the Layer object
-		// onUpdate(message : Object) : void;
-		onUpdateEnd(error :Error, info? : Object) : void;
-		onUpdateStart() : void;
-		onVisibilityChange(visbility : boolean) : void;
-    }
-
-
-
-
     export class TableDataSource extends DataSource {
         constructor(json?: Object);
         dataSourceName: string;
@@ -3659,8 +2452,8 @@ declare module esri.renderer {
     export class ClassBreaksRenderer extends Renderer {
         constructor(defaultSymbol: Object, attributeField: string);
         constructor(json : Object);
-        attributeField: string;
-        breaks: Object[];
+        attributeField: void;
+        breaks: string;
         classificationMethod: string;
         defaultSymbol: esri.symbol.Symbol;
         infos: Object[];
@@ -3669,81 +2462,24 @@ declare module esri.renderer {
         normalizationType: string;
         addBreak(minValueOrInfo: number, maxValue: number, symbol: esri.symbol.Symbol): void;
         clearBreaks(): void;
-		getBreakIndex(graphic : esri.Graphic) : number;
-		getBreakInfo(graphic : esri.Graphic) : Object;
-		getRotationAngle(graphic : esri.Graphic) : number;
-		getSize(graphic : esri.Graphic) : number;
-
         getSymbol(graphic: esri.Graphic): esri.symbol.Symbol;
         removeBreak(minValue: number, maxValue: number): void;
         setMaxInclusive(enable: boolean): void;
-	setProportionalSymbolInfo(info : Object) : esri.renderer.Renderer;
-		setRotationInfo(info : Object) : esri.renderer.Renderer;
- 
-
         toJson(): Object;
     }
-
-   export class DotDensityRenderer { // extends Renderer ??? Documentation says no : strange...
-		constructor(parameters : Object);
-		backgroundColor : Dojo.Color;
-		dotShape : string;
-		dotSize : number;
-		dotValue : number;
-		fields : Object[];
-		outline : esri.symbol.LineSymbol;
-		setBackgroundColor(color : Dojo.Color) : void;
-		setDotSize(size : number) : void;
-		setDotValue(value : number) : void;
-		setOutline(outline : esri.symbol.LineSymbol) : void;
-    }
-
-
-
     export class Renderer {
         defaultSymbol: esri.symbol.Symbol;
-		proportionalSymbol : Object;
-		rotationInfo : Object;
-		getRotationAngle(graphic : esri.Graphic) : number;
-		getSize(graphic : esri.Graphic) : number;
- 
-
         getSymbol(graphic: esri.Graphic): esri.symbol.Symbol;
-		setProportionalSymbolInfo(info : Object) : Renderer;
-		setRotationInfo(info : Object) : Renderer;
-  
-
         toJson(): Object;
     }
-
-   export class ScaleDependentRenderer { // extends Renderer ??? Documentation says no : strange...
-		constructor(params : Object);
-		rangeType : string;
-		rendererInfos : Object;
-		addRendererInfo(info : Object) : esri.renderer.ScaleDependentRenderer;
-		getRenderInfoByZoom(zoom : number) : Object;
-		getRendererInfo(graphic : esri.Graphic) : Object;
-		getRendererInfoByScale(scale : number) : Object;
-		setRendererInfos(infos : Object) : esri.renderer.ScaleDependentRenderer;
-    }
-
-
-
     export class SimpleRenderer extends Renderer {
         constructor(defaultSymbol: esri.symbol.Symbol);
         constructor(json: Object);
         defaultSymbol: esri.symbol.Symbol;
         description: string;
         label: string;
-		proportionalSymbol : Object;
-		rotationInfo : Object;
         symbol: esri.symbol.Symbol;
-		getRotationAngle(graphic : esri.Graphic) : number;
-		getSize(graphic : esri.Graphic) : number;
         getSymbol(graphic: esri.Graphic): esri.symbol.Symbol;
-		setProportionalSymbolInfo(info : Object) : Renderer;
-		setRotationInfo(info : Object) : Renderer;
-
         toJson(): Object;
     }
     export class SymbolAger {
@@ -4042,7 +2778,7 @@ declare module esri.symbol {
 declare module esri.tasks {
     export class AddressCandidate {
         address: Object;
-        attributes: Object;
+        attributes: void;
         location: esri.geometry.Point;
         score: number;
     }
@@ -4187,23 +2923,9 @@ declare module esri.tasks {
         geometry1: esri.geometry.Geometry;
         geometry2: esri.geometry.Geometry;
     }
-
-	//
-	// information about field
-	//
-	export class Field {
-		name : string;
-		alias : string;
-		type : string;
-	}
-
-
     export class FeatureSet {
         constructor();
         constructor(json : Object);
-		objectIdFieldName : string; // since ??
-		globalIdFieldName : string; // since ??
-		fields : Field[]; 
         displayFieldName: string;
         exceededTransferLimit: number;
         features: Graphic[];
@@ -4419,15 +3141,9 @@ declare module esri.tasks {
         constructor();
         geometry: esri.geometry.Geometry;
         mosaicRule: esri.layers.MosaicRule;
-		noData : any; // String | Number;
-		noDataInterpretation : string; // Added at v3.6
         pixelSize: esri.symbol.Symbol;
         pixelSizeX: number;
         pixelSizeY: number;
-		renderingRule : esri.layers.RasterFunction;
-		returnCatalogItems : boolean;
-    
-
         returnGeometry: boolean;
         timeExtent: TimeExtent;
     }
@@ -4471,7 +3187,7 @@ declare module esri.tasks {
         constructor();
         calculationType: string; // planar, geodesic or preserveShape.
         geodesic: boolean; // Note:If you are using an ArcGIS Server 10.1 or greater then use the calculationType property instead.
-        lengthUnit: string;
+        lengthUnit: esri.tasks.GeometryService;
         polylines: esri.geometry.Geometry[];
     }
     export class LinearUnit {
@@ -4614,7 +3330,7 @@ declare module esri.tasks {
     export class QueryTask {
         constructor(url: string, options?: Object);
         url: string;
-		execute(parameters: esri.tasks.Query, callback?: (result : esri.tasks.FeatureSet) => void , errback?: Function): dojo.Deferred<any>;
+        execute(parameters: esri.tasks.Query, callback?: Function, errback?: Function): dojo.Deferred<any>;
         executeForCount(query: esri.tasks.Query, callback?: Function, errback?: Function): dojo.Deferred<any>;
         executeForIds(parameters: esri.tasks.Query, callback?: Function, errback?: Function): dojo.Deferred<any>;
         executeRelationshipQuery(parameters: esri.tasks.RelationshipQuery, callback?: Function, errback?: Function): dojo.Deferred<any>;
@@ -4659,7 +3375,7 @@ declare module esri.tasks {
         geometryPrecision: number;
         maxAllowableOffset: number;
         objectIds: number[];
-        outFields: string[];    
+        outFields: number[];    
         outSpatialReference: esri.SpatialReference;
         relationshipId: number;
         returnGeometry: boolean;
@@ -4785,70 +3501,6 @@ declare module esri.tasks {
         toJson(): Object;
     }
 }
-
-declare module esri.tasks.geoenrichment {
-    export class DriveBuffer {
-		constructor(params : Object);
-		radius : number[];
-		units : any; // string or DriveUnits;
-    }
-    export class DriveUnits {
-		ACRES : string;
-		ARES : string;
-		CENTIMETERS : string;
-		DECIMAL_DEGREES : string;
-		DECIMETERS : string;
-		DEGREE_MINUTE_SECONDS : string;
-		FEET : string;
-		HECTARES : string;
-		INCHES : string;
-		KILOMETERS : string;
-		METERS : string;
-		MILES : string;
-		MILLIMETERS : string;
-		MINUTES : string;
-		NAUTICAL_MILES : string;
-		POINTS : string;
-		SQUARE_CENTIMETERS : string;
-		SQUARE_DECIMETERS : string;
-		SQUARE_FEET : string;
-		SQUARE_INCHES : string;
-		SQUARE_KILOMETERS : string;
-		SQUARE_METERS : string;
-		SQUARE_MILES : string;
-		SQUARE_MILLIMETERS : string;
-		SQUARE_YARDS : string;
-		UNKNOWN : string;
-		YARDS : string;
-    }
-    export class GeographyLevel { // Class added 3.6
-		constructor(json? : Object);
-		countryID : string;
-		datasetID : string;
-		layerID : string;
-    }
-    export class GeometryStudyArea {
-		constructor(json : Object);
-		attributes : string;
-		comparisonGeographyLevels : esri.tasks.geoenrichment.GeographyLevel[];
-		geometry : esri.geometry.Geometry;
-		options : esri.tasks.geoenrichment.RingBuffer;
-		returnGeometry : boolean;
-		toJson() : Object;
-    }
-    export class IntersectingGeographies {
-		levels : esri.tasks.geoenrichment.GeographyLevel[];
-    }
-    export class RingBuffer {
-		constructor(params : Object);
-		radii : number[];
-		units : esri.Units;
-    }
-}
-
-
-
-
 declare module esri.toolbars {
     export class Draw {
         constructor(map: esri.Map, options: Object);
@@ -5030,11 +3682,6 @@ declare module esri.virtualearth {
 
 }
 
-
-
-
-
-
 //class,esri/IdentityManager,IdentityManager
 declare module "esri/IdentityManager" {
 	var i : esri.IdentityManager;
@@ -5109,6 +3756,11 @@ declare module "esri/arcgis/Portal" {
 	export = i;
 }
 
+/*
+Dijit to do
+
+
+
 //class,esri/dijit/AttributeInspector,AttributeInspector
 declare module "esri/dijit/AttributeInspector" {
 	var i : esri.dijit.AttributeInspector;
@@ -5159,16 +3811,11 @@ declare module "esri/dijit/HistogramTimeSlider" {
 	var i : esri.dijit.HistogramTimeSlider;
 	export = i;
 }
-
-/* does not exists in the model
-
 //class,esri/dijit/InfoView,InfoView
 declare module "esri/dijit/InfoView" {
 	var i : esri.dijit.InfoView;
 	export = i;
 }
-*/
-
 //class,esri/dijit/InfoWindow,InfoWindow
 declare module "esri/dijit/InfoWindow" {
 	var i : esri.dijit.InfoWindow;
@@ -5204,15 +3851,11 @@ declare module "esri/dijit/PopupMobile" {
 	var i : esri.dijit.PopupMobile;
 	export = i;
 }
-
-/*
 //class,esri/dijit/PopupRenderer,PopupRenderer
 declare module "esri/dijit/PopupRenderer" {
 	var i : esri.dijit.PopupRenderer;
 	export = i;
 }
-*/
-
 //class,esri/dijit/PopupTemplate,PopupTemplate
 declare module "esri/dijit/PopupTemplate" {
 	var i : esri.dijit.PopupTemplate;
@@ -5233,104 +3876,88 @@ declare module "esri/dijit/TimeSlider" {
 	var i : esri.dijit.TimeSlider;
 	export = i;
 }
+*/
 
 
 
-/*
+/* new class 
+   not available yet
 
 //class,esri/dijit/analysisAggregateTool,AggregateTool
-declare module "esri/dijit/analysis/AggregateTool" {
-	var i : esri.dijit.analysis.AggregateTool;
+declare module "esri/dijit/analysisAggregateTool" {
+	var i : esri.dijit.analysisAggregateTool;
 	export = i;
 }
-
-*/
-
 //class,esri/dijit/analysisAnalysisBase,AnalysisBase
-declare module "esri/dijit/analysis/AnalysisBase" {
-	var i : esri.dijit.analysis.AnalysisBase;
+declare module "esri/dijit/analysisAnalysisBase" {
+	var i : esri.dijit.analysisAnalysisBase;
 	export = i;
 }
-
-declare module "esri/dijit/analysis/CreateBuffers" {
-	var i : esri.dijit.analysis.CreateBuffers;
-	export = i;
-}
-
-
-
-/*
 //class,esri/dijit/analysisBufferTool,BufferTool
-declare module "esri/dijit/analysis/BufferTool" {
-	var i : esri.dijit.analysis.BufferTool;
+declare module "esri/dijit/analysisBufferTool" {
+	var i : esri.dijit.analysisBufferTool;
 	export = i;
 }
-*/
 //class,esri/dijit/analysisCreateDriveTimeAreas,CreateDriveTimeAreas
-declare module "esri/dijit/analysis/CreateDriveTimeAreas" {
-	var i : esri.dijit.analysis.CreateDriveTimeAreas;
+declare module "esri/dijit/analysisCreateDriveTimeAreas" {
+	var i : esri.dijit.analysisCreateDriveTimeAreas;
 	export = i;
 }
-
-declare module "esri/dijit/analysis/AggregatePoints" {
-	var i : esri.dijit.analysis.AggregatePoints;
-	export = i;
-}
-
 //class,esri/dijit/analysisDissolveBoundaries,DissolveBoundaries
-declare module "esri/dijit/analysis/DissolveBoundaries" {
-	var i : esri.dijit.analysis.DissolveBoundaries;
+declare module "esri/dijit/analysisDissolveBoundaries" {
+	var i : esri.dijit.analysisDissolveBoundaries;
 	export = i;
 }
 //class,esri/dijit/analysisEnrichLayer,EnrichLayer
-declare module "esri/dijit/analysis/EnrichLayer" {
-	var i : esri.dijit.analysis.EnrichLayer;
+declare module "esri/dijit/analysisEnrichLayer" {
+	var i : esri.dijit.analysisEnrichLayer;
 	export = i;
 }
 //class,esri/dijit/analysisExtractData,ExtractData
-declare module "esri/dijit/analysis/ExtractData" {
-	var i : esri.dijit.analysis.ExtractData;
+declare module "esri/dijit/analysisExtractData" {
+	var i : esri.dijit.analysisExtractData;
 	export = i;
 }
 //class,esri/dijit/analysisFindHotSpots,FindHotSpots
-declare module "esri/dijit/analysis/FindHotSpots" {
-	var i : esri.dijit.analysis.FindHotSpots;
+declare module "esri/dijit/analysisFindHotSpots" {
+	var i : esri.dijit.analysisFindHotSpots;
 	export = i;
 }
 //class,esri/dijit/analysisFindNearest,FindNearest
-declare module "esri/dijit/analysis/FindNearest" {
-	var i : esri.dijit.analysis.FindNearest;
+declare module "esri/dijit/analysisFindNearest" {
+	var i : esri.dijit.analysisFindNearest;
 	export = i;
 }
 //class,esri/dijit/analysisMergeLayers,MergeLayers
-declare module "esri/dijit/analysis/MergeLayers" {
-	var i : esri.dijit.analysis.MergeLayers;
+declare module "esri/dijit/analysisMergeLayers" {
+	var i : esri.dijit.analysisMergeLayers;
 	export = i;
 }
 //class,esri/dijit/analysisOverlayLayers,OverlayLayers
-declare module "esri/dijit/analysis/OverlayLayers" {
-	var i : esri.dijit.analysis.OverlayLayers;
+declare module "esri/dijit/analysisOverlayLayers" {
+	var i : esri.dijit.analysisOverlayLayers;
 	export = i;
 }
 //class,esri/dijit/analysisSummarizeNearby,SummarizeNearby
-declare module "esri/dijit/analysis/SummarizeNearby" {
-	var i : esri.dijit.analysis.SummarizeNearby;
+declare module "esri/dijit/analysisSummarizeNearby" {
+	var i : esri.dijit.analysisSummarizeNearby;
 	export = i;
 }
 //class,esri/dijit/analysisSummarizeWithin,SummarizeWithin
-declare module "esri/dijit/analysis/SummarizeWithin" {
-	var i : esri.dijit.analysis.SummarizeWithin;
+declare module "esri/dijit/analysisSummarizeWithin" {
+	var i : esri.dijit.analysisSummarizeWithin;
 	export = i;
 }
 
+*/
 
+/*
 
 //class,esri/dijit/editing/AttachmentEditor,AttachmentEditor
 declare module "esri/dijit/editing/AttachmentEditor" {
 	var i : esri.dijit.editing.AttachmentEditor;
 	export = i;
 }
-
 //class,esri/dijit/editing/Editor,Editor
 declare module "esri/dijit/editing/Editor" {
 	var i : esri.dijit.editing.Editor;
@@ -5341,23 +3968,23 @@ declare module "esri/dijit/editing/TemplatePicker" {
 	var i : esri.dijit.editing.TemplatePicker;
 	export = i;
 }
-
 //class,esri/dijt/geoenrichment/Infographic,Infographic
 declare module "esri/dijt/geoenrichment/Infographic" {
-	var i : esri.dijit.geoenrichment.Infographic;
+	var i : esri.dijt.geoenrichment.Infographic;
 	export = i;
 }
 //class,esri/dijt/geoenrichment/InfographicsCarousel,InfographicsCarousel
 declare module "esri/dijt/geoenrichment/InfographicsCarousel" {
-	var i : esri.dijit.geoenrichment.InfographicsCarousel;
+	var i : esri.dijt.geoenrichment.InfographicsCarousel;
 	export = i;
 }
 //class,esri/dijt/geoenrichment/InfographicsOptions,InfographicsOptions
 declare module "esri/dijt/geoenrichment/InfographicsOptions" {
-	var i : esri.dijit.geoenrichment.InfographicsOptions;
+	var i : esri.dijt.geoenrichment.InfographicsOptions;
 	export = i;
 }
 
+*/
 
 //class,esri/geometry/Extent,Extent
 declare module "esri/geometry/Extent" {
