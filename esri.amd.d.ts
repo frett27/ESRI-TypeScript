@@ -2530,7 +2530,7 @@ declare module esri.symbol {
 
 	interface jsonUtils {
 		fromJson(json : Object): esri.symbol.Symbol;
-		getShapeDescriptors(): Object;
+		getShapeDescriptors(symbol : esri.symbol.Symbol): Object;
 	}
 
     export class CartographicLineSymbol extends SimpleLineSymbol{
