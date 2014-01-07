@@ -49,7 +49,7 @@ declare module esri {
 	interface esriLang {
 	    filter(object: Object, callback: Function, thisObject: Object): Object;
 	    substitute(data : Object, template? : string, first? : boolean): void;
-	    valueOf(array : Array, value : Object): Object;
+	    valueOf(array : Array<Object>, value : Object): Object;
 	    isDefined(value : Object): boolean;
 	}
 
@@ -100,15 +100,8 @@ declare module esri {
         show(): void;
         toJson(): Object;
     }
-    export class IdentityManager extends IdentityManagerBase {
-        esriSignInDialog: string;
-        dialog: any; //dijit.Dialog;
-        onDialogCancel(info : Object): void;
-        onDialogCreate(): void;
-        //dialogcancel: Object; // Event
-        //dialogcreate: void;
-    }
-    export class IdentityManagerBase {
+
+	export class IdentityManagerBase {
         tokenValidity: number;
         findCredential(url : string, userId? : string): Credential;
         findServerInfo(url : string): esri.ServerInfo;
@@ -123,7 +116,20 @@ declare module esri {
         signIn(url : string, serverInfo : esri.ServerInfo, options : Object): dojo.Deferred<any>;
         toJson(): Object;
     }
-    export class InfoTemplate {
+
+
+
+    export class IdentityManager extends IdentityManagerBase {
+        esriSignInDialog: string;
+        dialog: any; //dijit.Dialog;
+        onDialogCancel(info : Object): void;
+        onDialogCreate(): void;
+        //dialogcancel: Object; // Event
+        //dialogcreate: void;
+
+
+    }
+       export class InfoTemplate {
         constructor();
         constructor(title : string, content : string);
         constructor(json : Object);
@@ -580,7 +586,7 @@ declare module esri.arcgis {
         createMap(itemId: string, mapDiv: string, options?: Object): dojo.Deferred<any>;
         createMap(itemInfo: Object, mapDiv: string, options?: Object): dojo.Deferred<any>;
         getItem(itemId : string): dojo.Deferred<any>;
-        getLegendLayers(): Array;   
+        getLegendLayers(): Array<esri.layers.Layer>;   
     }
 
     export class Portal {
@@ -894,9 +900,10 @@ declare module esri.dijit {
         mergedRouteGraphic: Graphic;
         stops: Graphic[];
         theme: string;
-        addStop(stop :Array, index : number): dojo.Deferred<any>;
+		// Array of Strings ??? documentation is not as accurate	
+        addStop(stop :Array<string>, index : number): dojo.Deferred<any>;
         addStop(stop : esri.geometry.Point, index : number): dojo.Deferred<any>;
-        addStops(stops : Array, index: number): dojo.Deferred<any>;
+        addStops(stops : Array<string>, index: number): dojo.Deferred<any>;
         centerAtSegmentStart(index : number): void;
         clearDirections(): void;
         destroy(): void;
@@ -3689,22 +3696,22 @@ declare module "esri/IdentityManager" {
 }
 //class,esri/IdentityManagerBase,IdentityManagerBase
 declare module "esri/IdentityManagerBase" {
-	var i : esri.IdentityManagerBase;
+	var i : typeof esri.IdentityManagerBase;
 	export = i;
 }
 //class,esri/InfoTemplate,InfoTemplate
 declare module "esri/InfoTemplate" {
-	var i : esri.InfoTemplate;
+	var i : typeof esri.InfoTemplate;
 	export = i;
 }
 //class,esri/InfoWindowBase,InfoWindowBase
 declare module "esri/InfoWindowBase" {
-	var i : esri.InfoWindowBase;
+	var i : typeof esri.InfoWindowBase;
 	export = i;
 }
 //class,esri/OperationBase,OperationBase
 declare module "esri/OperationBase" {
-	var i : esri.OperationBase;
+	var i : typeof esri.OperationBase;
 	export = i;
 }
 
@@ -3732,27 +3739,27 @@ declare module "esri/PopupInfo" {
 
 //class,esri/ServerInfo,ServerInfo
 declare module "esri/ServerInfo" {
-	var i : esri.ServerInfo;
+	var i : typeof esri.ServerInfo;
 	export = i;
 }
 //class,esri/SnappingManager,SnappingManager
 declare module "esri/SnappingManager" {
-	var i : esri.SnappingManager;
+	var i : typeof esri.SnappingManager;
 	export = i;
 }
 //class,esri/SpatialReference,SpatialReference
 declare module "esri/SpatialReference" {
-	var i : esri.SpatialReference;
+	var i : typeof esri.SpatialReference;
 	export = i;
 }
 //class,esri/TimeExtent,TimeExtent
 declare module "esri/TimeExtent" {
-	var i : esri.TimeExtent;
+	var i : typeof esri.TimeExtent;
 	export = i;
 }
 //class,esri/arcgis/Portal,esriPortal
 declare module "esri/arcgis/Portal" {
-	var i : esri.arcgis.Portal;
+	var i : typeof esri.arcgis.Portal;
 	export = i;
 }
 
@@ -3988,53 +3995,53 @@ declare module "esri/dijt/geoenrichment/InfographicsOptions" {
 
 //class,esri/geometry/Extent,Extent
 declare module "esri/geometry/Extent" {
-	var i : esri.geometry.Extent;
+	var i : typeof esri.geometry.Extent;
 	export = i;
 }
 //class,esri/geometry/Geometry,Geometry
 declare module "esri/geometry/Geometry" {
-	var i : esri.geometry.Geometry;
+	var i : typeof esri.geometry.Geometry;
 	export = i;
 }
 //class,esri/geometry/Multipoint,Multipoint
 declare module "esri/geometry/Multipoint" {
-	var i : esri.geometry.Multipoint;
+	var i : typeof esri.geometry.Multipoint;
 	export = i;
 }
 //class,esri/geometry/Point,Point
 declare module "esri/geometry/Point" {
-	var i : esri.geometry.Point;
+	var i : typeof esri.geometry.Point;
 	export = i;
 }
 //class,esri/geometry/Polygon,Polygon
 declare module "esri/geometry/Polygon" {
-	var i : esri.geometry.Polygon;
+	var i : typeof esri.geometry.Polygon;
 	export = i;
 }
 //class,esri/geometry/Polyline,Polyline
 declare module "esri/geometry/Polyline" {
-	var i : esri.geometry.Polyline;
+	var i : typeof esri.geometry.Polyline;
 	export = i;
 }
 
 //class,esri/geometry/ScreenPoint,ScreenPoint
 declare module "esri/geometry/ScreenPoint" {
-	var i : esri.geometry.ScreenPoint;
+	var i : typeof esri.geometry.ScreenPoint;
 	export = i;
 }
 //class,esri/graphic,Graphic
 declare module "esri/graphic" {
-	var i : esri.Graphic;
+	var i : typeof esri.Graphic;
 	export = i;
 }
 //class,esri/layers/ArcGISDynamicMapServiceLayer,ArcGISDynamicMapServiceLayer
 declare module "esri/layers/ArcGISDynamicMapServiceLayer" {
-	var i : esri.layers.ArcGISDynamicMapServiceLayer;
+	var i : typeof esri.layers.ArcGISDynamicMapServiceLayer;
 	export = i;
 }
 //class,esri/layers/ArcGISImageServiceLayer,ArcGISImageServiceLayer
 declare module "esri/layers/ArcGISImageServiceLayer" {
-	var i : esri.layers.ArcGISImageServiceLayer;
+	var i : typeof esri.layers.ArcGISImageServiceLayer;
 	export = i;
 }
 
@@ -4048,132 +4055,132 @@ declare module "esri/layers/ArcGISMapServiceLayer" {
 
 //class,esri/layers/ArcGISTiledMapServiceLayer,ArcGISTiledMapServiceLayer
 declare module "esri/layers/ArcGISTiledMapServiceLayer" {
-	var i : esri.layers.ArcGISTiledMapServiceLayer;
+	var i : typeof esri.layers.ArcGISTiledMapServiceLayer;
 	export = i;
 }
 //class,esri/layers/CodedValueDomain,CodedValueDomain
 declare module "esri/layers/CodedValueDomain" {
-	var i : esri.layers.CodedValueDomain;
+	var i : typeof esri.layers.CodedValueDomain;
 	export = i;
 }
 //class,esri/layers/DataSource,DataSource
 declare module "esri/layers/DataSource" {
-	var i : esri.layers.DataSource;
+	var i : typeof esri.layers.DataSource;
 	export = i;
 }
 //class,esri/layers/Domain,Domain
 declare module "esri/layers/Domain" {
-	var i : esri.layers.Domain;
+	var i : typeof esri.layers.Domain;
 	export = i;
 }
 //class,esri/layers/DynamicLayerInfo,DynamicLayerInfo
 declare module "esri/layers/DynamicLayerInfo" {
-	var i : esri.layers.DynamicLayerInfo;
+	var i : typeof esri.layers.DynamicLayerInfo;
 	export = i;
 }
 //class,esri/layers/DynamicMapServiceLayer,DynamicMapServiceLayer
 declare module "esri/layers/DynamicMapServiceLayer" {
-	var i : esri.layers.DynamicMapServiceLayer;
+	var i : typeof esri.layers.DynamicMapServiceLayer;
 	export = i;
 }
 //class,esri/layers/FeatureEditResult,FeatureEditResult
 declare module "esri/layers/FeatureEditResult" {
-	var i : esri.layers.FeatureEditResult;
+	var i : typeof esri.layers.FeatureEditResult;
 	export = i;
 }
 //class,esri/layers/FeatureLayer,FeatureLayer
 declare module "esri/layers/FeatureLayer" {
-	var i : esri.layers.FeatureLayer;
+	var i : typeof esri.layers.FeatureLayer;
 	export = i;
 }
 //class,esri/layers/FeatureTemplate,FeatureTemplate
 declare module "esri/layers/FeatureTemplate" {
-	var i : esri.layers.FeatureTemplate;
+	var i : typeof esri.layers.FeatureTemplate;
 	export = i;
 }
 //class,esri/layers/FeatureType,FeatureType
 declare module "esri/layers/FeatureType" {
-	var i : esri.layers.FeatureType;
+	var i : typeof esri.layers.FeatureType;
 	export = i;
 }
 //class,esri/layers/Field,Field
 declare module "esri/layers/Field" {
-	var i : esri.layers.Field;
+	var i : typeof esri.layers.Field;
 	export = i;
 }
 //class,esri/layers/GeoRSSLayer,GeoRSSLayer
 declare module "esri/layers/GeoRSSLayer" {
-	var i : esri.layers.GeoRSSLayer;
+	var i : typeof esri.layers.GeoRSSLayer;
 	export = i;
 }
 //class,esri/layers/GraphicsLayer,GraphicsLayer
 declare module "esri/layers/GraphicsLayer" {
-	var i : esri.layers.GraphicsLayer;
+	var i : typeof esri.layers.GraphicsLayer;
 	export = i;
 }
 //class,esri/layers/ImageParameters,ImageParameters
 declare module "esri/layers/ImageParameters" {
-	var i : esri.layers.ImageParameters;
+	var i : typeof esri.layers.ImageParameters;
 	export = i;
 }
 //class,esri/layers/ImageServiceParameters,ImageServiceParameters
 declare module "esri/layers/ImageServiceParameters" {
-	var i : esri.layers.ImageServiceParameters;
+	var i : typeof esri.layers.ImageServiceParameters;
 	export = i;
 }
 //class,esri/layers/InheritedDomain,InheritedDomain
 declare module "esri/layers/InheritedDomain" {
-	var i : esri.layers.InheritedDomain;
+	var i : typeof esri.layers.InheritedDomain;
 	export = i;
 }
 //class,esri/layers/JoinDataSource,JoinDataSource
 declare module "esri/layers/JoinDataSource" {
-	var i : esri.layers.JoinDataSource;
+	var i : typeof esri.layers.JoinDataSource;
 	export = i;
 }
 //class,esri/layers/KMLFolder,KMLFolder
 declare module "esri/layers/KMLFolder" {
-	var i : esri.layers.KMLFolder;
+	var i : typeof esri.layers.KMLFolder;
 	export = i;
 }
 //class,esri/layers/KMLGroundOverlay,KMLGroundOverlay
 declare module "esri/layers/KMLGroundOverlay" {
-	var i : esri.layers.KMLGroundOverlay;
+	var i : typeof esri.layers.KMLGroundOverlay;
 	export = i;
 }
 //class,esri/layers/KMLLayer,KMLLayer
 declare module "esri/layers/KMLLayer" {
-	var i : esri.layers.KMLLayer;
+	var i : typeof esri.layers.KMLLayer;
 	export = i;
 }
 //class,esri/layers/LOD,LOD
 declare module "esri/layers/LOD" {
-	var i : esri.layers.LOD;
+	var i : typeof esri.layers.LOD;
 	export = i;
 }
 //class,esri/layers/Layer,Layer
 declare module "esri/layers/Layer" {
-	var i : esri.layers.Layer;
+	var i : typeof esri.layers.Layer;
 	export = i;
 }
 //class,esri/layers/LayerDataSource,LayerDataSource
 declare module "esri/layers/LayerDataSource" {
-	var i : esri.layers.LayerDataSource;
+	var i : typeof esri.layers.LayerDataSource;
 	export = i;
 }
 //class,esri/layers/LayerDrawingOptions,LayerDrawingOptions
 declare module "esri/layers/LayerDrawingOptions" {
-	var i : esri.layers.LayerDrawingOptions;
+	var i : typeof esri.layers.LayerDrawingOptions;
 	export = i;
 }
 //class,esri/layers/LayerInfo,LayerInfo
 declare module "esri/layers/LayerInfo" {
-	var i : esri.layers.LayerInfo;
+	var i : typeof esri.layers.LayerInfo;
 	export = i;
 }
 //class,esri/layers/LayerMapSource,LayerMapSource
 declare module "esri/layers/LayerMapSource" {
-	var i : esri.layers.LayerMapSource;
+	var i : typeof esri.layers.LayerMapSource;
 	export = i;
 }
 
@@ -4192,42 +4199,42 @@ declare module "esri/layers/LayerSource" {
 
 //class,esri/layers/LayerTimeOptions,LayerTimeOptions
 declare module "esri/layers/LayerTimeOptions" {
-	var i : esri.layers.LayerTimeOptions;
+	var i : typeof esri.layers.LayerTimeOptions;
 	export = i;
 }
 //class,esri/layers/MapImage,MapImage
 declare module "esri/layers/MapImage" {
-	var i : esri.layers.MapImage;
+	var i : typeof esri.layers.MapImage;
 	export = i;
 }
 //class,esri/layers/MapImageLayer,MapImageLayer
 declare module "esri/layers/MapImageLayer" {
-	var i : esri.layers.MapImageLayer;
+	var i : typeof esri.layers.MapImageLayer;
 	export = i;
 }
 //class,esri/layers/MosaicRule,MosaicRule
 declare module "esri/layers/MosaicRule" {
-	var i : esri.layers.MosaicRule;
+	var i : typeof esri.layers.MosaicRule;
 	export = i;
 }
 //class,esri/layers/OpenStreetMapLayer,OpenStreetMapLayer
 declare module "esri/layers/OpenStreetMapLayer" {
-	var i : esri.layers.OpenStreetMapLayer;
+	var i : typeof esri.layers.OpenStreetMapLayer;
 	export = i;
 }
 //class,esri/layers/QueryDataSource,QueryDataSource
 declare module "esri/layers/QueryDataSource" {
-	var i : esri.layers.QueryDataSource;
+	var i : typeof esri.layers.QueryDataSource;
 	export = i;
 }
 //class,esri/layers/RangeDomain,RangeDomain
 declare module "esri/layers/RangeDomain" {
-	var i : esri.layers.RangeDomain;
+	var i : typeof esri.layers.RangeDomain;
 	export = i;
 }
 //class,esri/layers/RasterDataSource,RasterDataSource
 declare module "esri/layers/RasterDataSource" {
-	var i : esri.layers.RasterDataSource;
+	var i : typeof esri.layers.RasterDataSource;
 	export = i;
 }
 
@@ -4243,222 +4250,222 @@ declare module "esri/layers/StreamLayer" {
 
 //class,esri/layers/TableDataSource,TableDataSource
 declare module "esri/layers/TableDataSource" {
-	var i : esri.layers.TableDataSource;
+	var i : typeof esri.layers.TableDataSource;
 	export = i;
 }
 //class,esri/layers/TileInfo,TileInfo
 declare module "esri/layers/TileInfo" {
-	var i : esri.layers.TileInfo;
+	var i : typeof esri.layers.TileInfo;
 	export = i;
 }
 //class,esri/layers/TiledMapServiceLayer,TiledMapServiceLayer
 declare module "esri/layers/TiledMapServiceLayer" {
-	var i : esri.layers.TiledMapServiceLayer;
+	var i : typeof esri.layers.TiledMapServiceLayer;
 	export = i;
 }
 //class,esri/layers/TimeInfo,TimeInfo
 declare module "esri/layers/TimeInfo" {
-	var i : esri.layers.TimeInfo;
+	var i : typeof esri.layers.TimeInfo;
 	export = i;
 }
 //class,esri/layers/TimeReference,TimeReference
 declare module "esri/layers/TimeReference" {
-	var i : esri.layers.TimeReference;
+	var i : typeof esri.layers.TimeReference;
 	export = i;
 }
 //class,esri/layers/WMSLayer,WMSLayer
 declare module "esri/layers/WMSLayer" {
-	var i : esri.layers.WMSLayer;
+	var i : typeof esri.layers.WMSLayer;
 	export = i;
 }
 //class,esri/layers/WMSLayerInfo,WMSLayerInfo
 declare module "esri/layers/WMSLayerInfo" {
-	var i : esri.layers.WMSLayerInfo;
+	var i : typeof esri.layers.WMSLayerInfo;
 	export = i;
 }
 //class,esri/layers/WMTSLayer,WMTSLayer
 declare module "esri/layers/WMTSLayer" {
-	var i : esri.layers.WMTSLayer;
+	var i : typeof esri.layers.WMTSLayer;
 	export = i;
 }
 //class,esri/layers/WMTSLayerInfo,WMTSLayerInfo
 declare module "esri/layers/WMTSLayerInfo" {
-	var i : esri.layers.WMTSLayerInfo;
+	var i : typeof esri.layers.WMTSLayerInfo;
 	export = i;
 }
 //class,esri/layers/WebTiledLayer,WebTiledLayer
 declare module "esri/layers/WebTiledLayer" {
-	var i : esri.layers.WebTiledLayer;
+	var i : typeof esri.layers.WebTiledLayer;
 	export = i;
 }
 //class,esri/map,Map
 declare module "esri/map" {
-	var i : esri.Map;
+	var i : typeof esri.Map;
 	export = i;
 }
 //class,esri/renderer/ClassBreaksRenderer,ClassBreaksRenderer
 declare module "esri/renderers/ClassBreaksRenderer" {
-	var i : esri.renderer.ClassBreaksRenderer;
+	var i : typeof esri.renderer.ClassBreaksRenderer;
 	export = i;
 }
 //class,esri/renderer/Renderer,Renderer
 declare module "esri/renderers/Renderer" {
-	var i : esri.renderer.Renderer;
+	var i : typeof esri.renderer.Renderer;
 	export = i;
 }
 //class,esri/renderer/SimpleRenderer,SimpleRenderer
 declare module "esri/renderers/SimpleRenderer" {
-	var i : esri.renderer.SimpleRenderer;
+	var i : typeof esri.renderer.SimpleRenderer;
 	export = i;
 }
 //class,esri/renderer/SymbolAger,SymbolAger
 declare module "esri/renderers/SymbolAger" {
-	var i : esri.renderer.SymbolAger;
+	var i : typeof esri.renderer.SymbolAger;
 	export = i;
 }
 //class,esri/renderer/TemporalRenderer,TemporalRenderer
 declare module "esri/renderers/TemporalRenderer" {
-	var i : esri.renderer.TemporalRenderer;
+	var i : typeof esri.renderer.TemporalRenderer;
 	export = i;
 }
 //class,esri/renderer/TimeClassBreaksAger,TimeClassBreaksAger
 declare module "esri/renderers/TimeClassBreaksAger" {
-	var i : esri.renderer.TimeClassBreaksAger;
+	var i : typeof esri.renderer.TimeClassBreaksAger;
 	export = i;
 }
 //class,esri/renderer/TimeRampAger,TimeRampAger
 declare module "esri/renderers/TimeRampAger" {
-	var i : esri.renderer.TimeRampAger;
+	var i : typeof esri.renderer.TimeRampAger;
 	export = i;
 }
 //class,esri/renderer/UniqueValueRenderer,UniqueValueRenderer
 declare module "esri/renderers/UniqueValueRenderer" {
-	var i : esri.renderer.UniqueValueRenderer;
+	var i : typeof esri.renderer.UniqueValueRenderer;
 	export = i;
 }
 //class,esri.symbol.CartographicLineSymbol,CartographicLineSymbol
 declare module "esri/symbols/CartographicLineSymbol" {
-	var i : esri.symbol.CartographicLineSymbol;
+	var i : typeof esri.symbol.CartographicLineSymbol;
 	export = i;
 }
 //class,esri.symbol.FillSymbol,FillSymbol
 declare module "esri/symbols/FillSymbol" {
-	var i : esri.symbol.FillSymbol;
+	var i : typeof esri.symbol.FillSymbol;
 	export = i;
 }
 //class,esri.symbol.Font,Font
 declare module "esri/symbols/Font" {
-	var i : esri.symbol.Font;
+	var i : typeof esri.symbol.Font;
 	export = i;
 }
 //class,esri.symbol.LineSymbol,LineSymbol
 declare module "esri/symbols/LineSymbol" {
-	var i : esri.symbol.LineSymbol;
+	var i : typeof esri.symbol.LineSymbol;
 	export = i;
 }
 //class,esri.symbol.MarkerSymbol,MarkerSymbol
 declare module "esri/symbols/MarkerSymbol" {
-	var i : esri.symbol.MarkerSymbol;
+	var i : typeof esri.symbol.MarkerSymbol;
 	export = i;
 }
 //class,esri.symbol.PictureFillSymbol,PictureFillSymbol
 declare module "esri/symbols/PictureFillSymbol" {
-	var i : esri.symbol.PictureFillSymbol;
+	var i : typeof esri.symbol.PictureFillSymbol;
 	export = i;
 }
 //class,esri.symbol.PictureMarkerSymbol,PictureMarkerSymbol
 declare module "esri/symbols/PictureMarkerSymbol" {
-	var i : esri.symbol.PictureMarkerSymbol;
+	var i : typeof esri.symbol.PictureMarkerSymbol;
 	export = i;
 }
 //class,esri.symbol.SimpleFillSymbol,SimpleFillSymbol
 declare module "esri/symbols/SimpleFillSymbol" {
-	var i : esri.symbol.SimpleFillSymbol;
+	var i : typeof esri.symbol.SimpleFillSymbol;
 	export = i;
 }
 //class,esri.symbol.SimpleLineSymbol,SimpleLineSymbol
 declare module "esri/symbols/SimpleLineSymbol" {
-	var i : esri.symbol.SimpleLineSymbol;
+	var i : typeof esri.symbol.SimpleLineSymbol;
 	export = i;
 }
 //class,esri.symbol.SimpleMarkerSymbol,SimpleMarkerSymbol
 declare module "esri/symbols/SimpleMarkerSymbol" {
-	var i : esri.symbol.SimpleMarkerSymbol;
+	var i : typeof esri.symbol.SimpleMarkerSymbol;
 	export = i;
 }
 //class,esri.symbol.Symbol,Symbol
 declare module "esri/symbols/Symbol" {
-	var i : esri.symbol.Symbol;
+	var i : typeof esri.symbol.Symbol;
 	export = i;
 }
 //class,esri.symbol.TextSymbol,TextSymbol
 declare module "esri/symbols/TextSymbol" {
-	var i : esri.symbol.TextSymbol;
+	var i : typeof esri.symbol.TextSymbol;
 	export = i;
 }
 //class,esri/tasks/AddressCandidate,AddressCandidate
 declare module "esri/tasks/AddressCandidate" {
-	var i : esri.tasks.AddressCandidate;
+	var i : typeof esri.tasks.AddressCandidate;
 	export = i;
 }
 //class,esri/tasks/AlgorithmicColorRamp,AlgorithmicColorRamp
 declare module "esri/tasks/AlgorithmicColorRamp" {
-	var i : esri.tasks.AlgorithmicColorRamp;
+	var i : typeof esri.tasks.AlgorithmicColorRamp;
 	export = i;
 }
 //class,esri/tasks/AreasAndLengthsParameters,AreasAndLengthsParameters
 declare module "esri/tasks/AreasAndLengthsParameters" {
-	var i : esri.tasks.AreasAndLengthsParameters;
+	var i : typeof esri.tasks.AreasAndLengthsParameters;
 	export = i;
 }
 //class,esri/tasks/BufferParameters,BufferParameters
 declare module "esri/tasks/BufferParameters" {
-	var i : esri.tasks.BufferParameters;
+	var i : typeof esri.tasks.BufferParameters;
 	export = i;
 }
 //class,esri/tasks/ClassBreaksDefinition,ClassBreaksDefinition
 declare module "esri/tasks/ClassBreaksDefinition" {
-	var i : esri.tasks.ClassBreaksDefinition;
+	var i : typeof esri.tasks.ClassBreaksDefinition;
 	export = i;
 }
 //class,esri/tasks/ClassificationDefinition,ClassificationDefinition
 declare module "esri/tasks/ClassificationDefinition" {
-	var i : esri.tasks.ClassificationDefinition;
+	var i : typeof esri.tasks.ClassificationDefinition;
 	export = i;
 }
 //class,esri/tasks/ClosestFacilityParameters,ClosestFacilityParameters
 declare module "esri/tasks/ClosestFacilityParameters" {
-	var i : esri.tasks.ClosestFacilityParameters;
+	var i : typeof esri.tasks.ClosestFacilityParameters;
 	export = i;
 }
 //class,esri/tasks/ClosestFacilitySolveResult,ClosestFacilitySolveResult
 declare module "esri/tasks/ClosestFacilitySolveResult" {
-	var i : esri.tasks.ClosestFacilitySolveResult;
+	var i : typeof esri.tasks.ClosestFacilitySolveResult;
 	export = i;
 }
 //class,esri/tasks/ClosestFacilityTask,ClosestFacilityTask
 declare module "esri/tasks/ClosestFacilityTask" {
-	var i : esri.tasks.ClosestFacilityTask;
+	var i : typeof esri.tasks.ClosestFacilityTask;
 	export = i;
 }
 //class,esri/tasks/ColorRamp,ColorRamp
 declare module "esri/tasks/ColorRamp" {
-	var i : esri.tasks.ColorRamp;
+	var i : typeof esri.tasks.ColorRamp;
 	export = i;
 }
 //class,esri/tasks/DataFile,DataFile
 declare module "esri/tasks/DataFile" {
-	var i : esri.tasks.DataFile;
+	var i : typeof esri.tasks.DataFile;
 	export = i;
 }
 //class,esri/tasks/DataLayer,DataLayer
 declare module "esri/tasks/DataLayer" {
-	var i : esri.tasks.DataLayer;
+	var i : typeof esri.tasks.DataLayer;
 	export = i;
 }
 //class,esri/tasks/Date,EsriDate
 declare module "esri/tasks/Date" {
-	var i : esri.tasks.Date;
+	var i : typeof esri.tasks.Date;
 	export = i;
 }
 
@@ -4473,267 +4480,267 @@ declare module "esri/tasks/DensifyParameters" {
 
 //class,esri/tasks/DirectionsFeatureSet,DirectionsFeatureSet
 declare module "esri/tasks/DirectionsFeatureSet" {
-	var i : esri.tasks.DirectionsFeatureSet;
+	var i : typeof esri.tasks.DirectionsFeatureSet;
 	export = i;
 }
 //class,esri/tasks/DistanceParameters,DistanceParameters
 declare module "esri/tasks/DistanceParameters" {
-	var i : esri.tasks.DistanceParameters;
+	var i : typeof esri.tasks.DistanceParameters;
 	export = i;
 }
 //class,esri/tasks/FeatureSet,FeatureSet
 declare module "esri/tasks/FeatureSet" {
-	var i : esri.tasks.FeatureSet;
+	var i : typeof esri.tasks.FeatureSet;
 	export = i;
 }
 //class,esri/tasks/FindParameters,FindParameters
 declare module "esri/tasks/FindParameters" {
-	var i : esri.tasks.FindParameters;
+	var i : typeof esri.tasks.FindParameters;
 	export = i;
 }
 //class,esri/tasks/FindResult,FindResult
 declare module "esri/tasks/FindResult" {
-	var i : esri.tasks.FindResult;
+	var i : typeof esri.tasks.FindResult;
 	export = i;
 }
 //class,esri/tasks/FindTask,FindTask
 declare module "esri/tasks/FindTask" {
-	var i : esri.tasks.FindTask;
+	var i: typeof esri.tasks.FindTask;
 	export = i;
 }
 //class,esri/tasks/GPMessage,GPMessage
 declare module "esri/tasks/GPMessage" {
-	var i : esri.tasks.GPMessage;
+	var i: typeof esri.tasks.GPMessage;
 	export = i;
 }
 //class,esri/tasks/GeneralizeParameters,GeneralizeParameters
 declare module "esri/tasks/GeneralizeParameters" {
-	var i : esri.tasks.GeneralizeParameters;
+	var i: typeof esri.tasks.GeneralizeParameters;
 	export = i;
 }
 //class,esri/tasks/GenerateRendererParameters,GenerateRendererParameters
 declare module "esri/tasks/GenerateRendererParameters" {
-	var i : esri.tasks.GenerateRendererParameters;
+	var i: typeof esri.tasks.GenerateRendererParameters;
 	export = i;
 }
 //class,esri/tasks/GenerateRendererTask,GenerateRendererTask
 declare module "esri/tasks/GenerateRendererTask" {
-	var i : esri.tasks.GenerateRendererTask;
+	var i: typeof esri.tasks.GenerateRendererTask;
 	export = i;
 }
 //class,esri/tasks/GeometryService,GeometryService
 declare module "esri/tasks/GeometryService" {
-	var i : esri.tasks.GeometryService;
+	var i: typeof esri.tasks.GeometryService;
 	export = i;
 }
 //class,esri/tasks/Geoprocessor,Geoprocessor
 declare module "esri/tasks/Geoprocessor" {
-	var i : esri.tasks.Geoprocessor;
+	var i: typeof esri.tasks.Geoprocessor;
 	export = i;
 }
 //class,esri/tasks/IdentifyParameters,IdentifyParameters
 declare module "esri/tasks/IdentifyParameters" {
-	var i : esri.tasks.IdentifyParameters;
+	var i: typeof esri.tasks.IdentifyParameters;
 	export = i;
 }
 //class,esri/tasks/IdentifyResult,IdentifyResult
 declare module "esri/tasks/IdentifyResult" {
-	var i : esri.tasks.IdentifyResult;
+	var i: typeof esri.tasks.IdentifyResult;
 	export = i;
 }
 //class,esri/tasks/IdentifyTask,IdentifyTask
 declare module "esri/tasks/IdentifyTask" {
-	var i : esri.tasks.IdentifyTask;
+	var i: typeof esri.tasks.IdentifyTask;
 	export = i;
 }
 //class,esri/tasks/ImageServiceIdentifyParameters,ImageServiceIdentifyParameters
 declare module "esri/tasks/ImageServiceIdentifyParameters" {
-	var i : esri.tasks.ImageServiceIdentifyParameters;
+	var i: typeof esri.tasks.ImageServiceIdentifyParameters;
 	export = i;
 }
 //class,esri/tasks/ImageServiceIdentifyResult,ImageServiceIdentifyResult
 declare module "esri/tasks/ImageServiceIdentifyResult" {
-	var i : esri.tasks.ImageServiceIdentifyResult;
+	var i: typeof esri.tasks.ImageServiceIdentifyResult;
 	export = i;
 }
 //class,esri/tasks/ImageServiceIdentifyTask,ImageServiceIdentifyTask
 declare module "esri/tasks/ImageServiceIdentifyTask" {
-	var i : esri.tasks.ImageServiceIdentifyTask;
+	var i: typeof esri.tasks.ImageServiceIdentifyTask;
 	export = i;
 }
 //class,esri/tasks/JobInfo,JobInfo
 declare module "esri/tasks/JobInfo" {
-	var i : esri.tasks.JobInfo;
+	var i: typeof esri.tasks.JobInfo;
 	export = i;
 }
 //class,esri/tasks/LegendLayer,LegendLayer
 declare module "esri/tasks/LegendLayer" {
-	var i : esri.tasks.LegendLayer;
+	var i: typeof esri.tasks.LegendLayer;
 	export = i;
 }
 //class,esri/tasks/LengthsParameters,LengthsParameters
 declare module "esri/tasks/LengthsParameters" {
-	var i : esri.tasks.LengthsParameters;
+	var i: typeof esri.tasks.LengthsParameters;
 	export = i;
 }
 //class,esri/tasks/LinearUnit,LinearUnit
 declare module "esri/tasks/LinearUnit" {
-	var i : esri.tasks.LinearUnit;
+	var i: typeof esri.tasks.LinearUnit;
 	export = i;
 }
 //class,esri/tasks/Locator,Locator
 declare module "esri/tasks/Locator" {
-	var i : esri.tasks.Locator;
+	var i: typeof esri.tasks.Locator;
 	export = i;
 }
 //class,esri/tasks/MultipartColorRamp,MultipartColorRamp
 declare module "esri/tasks/MultipartColorRamp" {
-	var i : esri.tasks.MultipartColorRamp;
+	var i: typeof esri.tasks.MultipartColorRamp;
 	export = i;
 }
 //class,esri/tasks/NAMessage,NAMessage
 declare module "esri/tasks/NAMessage" {
-	var i : esri.tasks.NAMessage;
+	var i: typeof esri.tasks.NAMessage;
 	export = i;
 }
 //class,esri/tasks/OffsetParameters,OffsetParameters
 declare module "esri/tasks/OffsetParameters" {
-	var i : esri.tasks.OffsetParameters;
+	var i: typeof esri.tasks.OffsetParameters;
 	export = i;
 }
 //class,esri/tasks/ParameterValue,ParameterValue
 declare module "esri/tasks/ParameterValue" {
-	var i : esri.tasks.ParameterValue;
+	var i: typeof esri.tasks.ParameterValue;
 	export = i;
 }
 //class,esri/tasks/PrintParameters,PrintParameters
 declare module "esri/tasks/PrintParameters" {
-	var i : esri.tasks.PrintParameters;
+	var i: typeof esri.tasks.PrintParameters;
 	export = i;
 }
 //class,esri/tasks/PrintTask,PrintTask
 declare module "esri/tasks/PrintTask" {
-	var i : esri.tasks.PrintTask;
+	var i: typeof esri.tasks.PrintTask;
 	export = i;
 }
 //class,esri/tasks/PrintTemplate,PrintTemplate
 declare module "esri/tasks/PrintTemplate" {
-	var i : esri.tasks.PrintTemplate;
+	var i: typeof esri.tasks.PrintTemplate;
 	export = i;
 }
 //class,esri/tasks/ProjectParameters,ProjectParameters
 declare module "esri/tasks/ProjectParameters" {
-	var i : esri.tasks.ProjectParameters;
+	var i: typeof esri.tasks.ProjectParameters;
 	export = i;
 }
 //class,esri/tasks/QueryTask,QueryTask
 declare module "esri/tasks/QueryTask" {
-	var i : esri.tasks.QueryTask;
+	var i: typeof esri.tasks.QueryTask;
 	export = i;
 }
 //class,esri/tasks/RasterData,RasterData
 declare module "esri/tasks/RasterData" {
-	var i : esri.tasks.RasterData;
+	var i: typeof esri.tasks.RasterData;
 	export = i;
 }
 //class,esri/tasks/RelationParameters,RelationParameters
 declare module "esri/tasks/RelationParameters" {
-	var i : esri.tasks.RelationParameters;
+	var i: typeof esri.tasks.RelationParameters;
 	export = i;
 }
 //class,esri/tasks/RelationshipQuery,RelationshipQuery
 declare module "esri/tasks/RelationshipQuery" {
-	var i : esri.tasks.RelationshipQuery;
+	var i: typeof esri.tasks.RelationshipQuery;
 	export = i;
 }
 //class,esri/tasks/RouteParameters,RouteParameters
 declare module "esri/tasks/RouteParameters" {
-	var i : esri.tasks.RouteParameters;
+	var i: typeof esri.tasks.RouteParameters;
 	export = i;
 }
 //class,esri/tasks/RouteResult,RouteResult
 declare module "esri/tasks/RouteResult" {
-	var i : esri.tasks.RouteResult;
+	var i: typeof esri.tasks.RouteResult;
 	export = i;
 }
 //class,esri/tasks/RouteTask,RouteTask
 declare module "esri/tasks/RouteTask" {
-	var i : esri.tasks.RouteTask;
+	var i: typeof esri.tasks.RouteTask;
 	export = i;
 }
 //class,esri/tasks/ServiceAreaParameters,ServiceAreaParameters
 declare module "esri/tasks/ServiceAreaParameters" {
-	var i : esri.tasks.ServiceAreaParameters;
+	var i: typeof esri.tasks.ServiceAreaParameters;
 	export = i;
 }
 //class,esri/tasks/ServiceAreaSolveResult,ServiceAreaSolveResult
 declare module "esri/tasks/ServiceAreaSolveResult" {
-	var i : esri.tasks.ServiceAreaSolveResult;
+	var i: typeof esri.tasks.ServiceAreaSolveResult;
 	export = i;
 }
 //class,esri/tasks/ServiceAreaTask,ServiceAreaTask
 declare module "esri/tasks/ServiceAreaTask" {
-	var i : esri.tasks.ServiceAreaTask;
+	var i: typeof esri.tasks.ServiceAreaTask;
 	export = i;
 }
 //class,esri/tasks/StatisticDefinition,StatisticDefinition
 declare module "esri/tasks/StatisticDefinition" {
-	var i : esri.tasks.StatisticDefinition;
+	var i: typeof esri.tasks.StatisticDefinition;
 	export = i;
 }
 //class,esri/tasks/TrimExtendParameters,TrimExtendParameters
 declare module "esri/tasks/TrimExtendParameters" {
-	var i : esri.tasks.TrimExtendParameters;
+	var i: typeof esri.tasks.TrimExtendParameters;
 	export = i;
 }
 //class,esri/tasks/UniqueValueDefinition,UniqueValueDefinition
 declare module "esri/tasks/UniqueValueDefinition" {
-	var i : esri.tasks.UniqueValueDefinition;
+	var i: typeof esri.tasks.UniqueValueDefinition;
 	export = i;
 }
 //class,esri/tasks/query,Query
 declare module "esri/tasks/query" {
-	var i : esri.tasks.Query;
+	var i: typeof esri.tasks.Query;
 	export = i;
 }
 //class,esri/toolbars/draw,Draw
 declare module "esri/toolbars/draw" {
-	var i : esri.toolbars.Draw;
+	var i: typeof esri.toolbars.Draw;
 	export = i;
 }
 //class,esri/toolbars/edit,Edit
 declare module "esri/toolbars/edit" {
-	var i : esri.toolbars.Edit;
+	var i: typeof esri.toolbars.Edit;
 	export = i;
 }
 //class,esri/toolbars/navigation,Navigation
 declare module "esri/toolbars/navigation" {
-	var i : esri.toolbars.Navigation;
+	var i: typeof esri.toolbars.Navigation;
 	export = i;
 }
 //class,esri/undoManager,UndoManager
 declare module "esri/undoManager" {
-	var i : esri.UndoManager;
+	var i: typeof esri.UndoManager;
 	export = i;
 }
 //class,esri/virtualearth/VEAddress,VEAddress
 declare module "esri/virtualearth/VEAddress" {
-	var i : esri.virtualearth.VEAddress;
+	var i: typeof esri.virtualearth.VEAddress;
 	export = i;
 }
 //class,esri/virtualearth/VEGeocodeResult,VEGeocodeResult
 declare module "esri/virtualearth/VEGeocodeResult" {
-	var i : esri.virtualearth.VEGeocodeResult;
+	var i: typeof esri.virtualearth.VEGeocodeResult;
 	export = i;
 }
 //class,esri/virtualearth/VEGeocoder,VEGeocoder
 declare module "esri/virtualearth/VEGeocoder" {
-	var i : esri.virtualearth.VEGeocoder;
+	var i: typeof esri.virtualearth.VEGeocoder;
 	export = i;
 }
 //class,esri/virtualearth/VETiledLayer,VETiledLayer
 declare module "esri/virtualearth/VETiledLayer" {
-	var i : esri.virtualearth.VETiledLayer;
+	var i: typeof esri.virtualearth.VETiledLayer;
 	export = i;
 }
 
