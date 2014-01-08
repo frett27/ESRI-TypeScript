@@ -49,7 +49,7 @@ declare module esri {
 	interface esriLang {
 	    filter(object: Object, callback: Function, thisObject: Object): Object;
 	    substitute(data : Object, template? : string, first? : boolean): void;
-	    valueOf(array : Array, value : Object): Object;
+	    valueOf(array : Array<Object>, value : Object): Object;
 	    isDefined(value : Object): boolean;
 	}
 
@@ -307,6 +307,7 @@ declare module esri {
         //click : <MouseEvent> <MouseEvent>;
         //dbl-click : <MouseEvent> <MouseEvent>;
         //extent-change : esri.geometry.Extent;
+        on(name: "dbl-click", listener: (mev: MouseEvent) => void): Dojo.RemovableHandle;
 		on(name : "extent-change", listener : (ev:ExtentEvent) =>void):Dojo.RemovableHandle;
         //key-down : <KeyboardEvent> <KeyboardEvent>;
         //key-up : <KeyboardEvent> <KeyboardEvent>;
@@ -557,7 +558,7 @@ declare module "esri/geometry/normalizeUtils" {
 	export = i;
 }
 
-declare module "esri/symbols/jsonUtils" {
+declare module "esri.symbol.jsonUtils" {
 	var i : esri.symbol.jsonUtils;
 	export = i;
 }
@@ -580,7 +581,7 @@ declare module esri.arcgis {
         createMap(itemId: string, mapDiv: string, options?: Object): dojo.Deferred<any>;
         createMap(itemInfo: Object, mapDiv: string, options?: Object): dojo.Deferred<any>;
         getItem(itemId : string): dojo.Deferred<any>;
-        getLegendLayers(): Array;   
+        getLegendLayers(): Array<Object>;   
     }
 
     export class Portal {
@@ -894,9 +895,9 @@ declare module esri.dijit {
         mergedRouteGraphic: Graphic;
         stops: Graphic[];
         theme: string;
-        addStop(stop :Array, index : number): dojo.Deferred<any>;
-        addStop(stop : esri.geometry.Point, index : number): dojo.Deferred<any>;
-        addStops(stops : Array, index: number): dojo.Deferred<any>;
+        addStop(stop: esri.geometry.Point, index: number): dojo.Deferred<any>;
+        addStops(stops: Array<string>, index: number): dojo.Deferred<any>; // An array of strings or point that defines the input stops.
+        addStops(stops: Array<esri.geometry.Point>, index: number): dojo.Deferred<any>; // An array of strings or point that defines the input stops.
         centerAtSegmentStart(index : number): void;
         clearDirections(): void;
         destroy(): void;
@@ -1271,7 +1272,7 @@ declare module esri.geometry {
     export class Extent extends Geometry {
         constructor(xmin: number, ymin: number, xmax: number, ymax: number, spatialReference : esri.SpatialReference);
         constructor(json : Object);
-        spatialReference: SpatialReference;
+        spatialReference: esri.SpatialReference;
         type: string;
         xmax: number;
         xmin: number;
@@ -1318,7 +1319,7 @@ declare module esri.geometry {
         constructor(long: number, lat: number);
         constructor(pointXY : number[]);
         constructor(point: esri.geometry.Point);
-        spatialReference: SpatialReference;
+        spatialReference: esri.SpatialReference;
         type: string;
         x: number;
         y: number;
@@ -2364,17 +2365,17 @@ declare module esri.layers {
         //visibility-change : <boolean> visible;
     }
     export class TimeInfo {
-        esriTimeUnitsCenturies: string;
-        esriTimeUnitsDays: string;
-        esriTimeUnitsDecades: string;
-        esriTimeUnitsHours: string;
-        esriTimeUnitsMilliseconds: string;
-        esriTimeUnitsMinutes: string;
-        esriTimeUnitsMonths: string;
-        esriTimeUnitsSeconds: string;
-        esriTimeUnitsUnknown: string;
-        esriTimeUnitsWeeks: string;
-        esriTimeUnitsYears: string;
+        static esriTimeUnitsCenturies: string;
+        static esriTimeUnitsDays: string;
+        static esriTimeUnitsDecades: string;
+        static esriTimeUnitsHours: string;
+        static esriTimeUnitsMilliseconds: string;
+        static esriTimeUnitsMinutes: string;
+        static esriTimeUnitsMonths: string;
+        static esriTimeUnitsSeconds: string;
+        static esriTimeUnitsUnknown: string;
+        static esriTimeUnitsWeeks: string;
+        static esriTimeUnitsYears: string;
         endTimeField: string;
         exportOptions: LayerTimeOptions;
         startTimeField: string;
@@ -2530,7 +2531,7 @@ declare module esri.symbol {
 
 	interface jsonUtils {
 		fromJson(json : Object): esri.symbol.Symbol;
-		getShapeDescriptors(symbol : esri.symbol.Symbol): Object;
+		getShapeDescriptors(): Object;
 	}
 
     export class CartographicLineSymbol extends SimpleLineSymbol{
@@ -3574,7 +3575,7 @@ declare module esri.toolbars {
         constructor(map: esri.Map);
         static ZOOM_IN: string;
         static ZOOM_OUT: string;
-        PAN: string;
+        static PAN: string;
         activate(navType: string): void;
         deactivate(): void;
         isFirstExtent(): boolean;
