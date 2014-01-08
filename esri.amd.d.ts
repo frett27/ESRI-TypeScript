@@ -736,14 +736,16 @@ declare module esri.arcgis {
 
 declare module esri.dijit.editing {
     export class AttachmentEditor {
-        constructor(params : Object, srcNodeRef : string);
+        constructor(params: Object, srcNodeRef: string);
+        constructor(params: Object, srcNodeRef: HTMLElement);
         showAttachments(graphic : esri.Graphic, featureLayer : esri.layers.FeatureLayer): void;
         startup(): void;
     }
 }
 declare module esri.dijit {
     export class AttributeInspector {
-        constructor(params : Object, srcNodeRef : string);
+        constructor(params: Object, srcNodeRef: string);
+        constructor(params: Object, srcNodeRef: HTMLElement);
         static STRING_FIELD_OPTION_TEXTBOX: string;
         static STRING_FIELD_OPTION_TEXTAREA: string;
         static STRING_FIELD_OPTION_RICHTEXT: string;
@@ -839,7 +841,8 @@ declare module esri.dijit {
         onRemove(): void;
     }
     export class Directions {
-        constructor(params : Object, srcNodeRef : string);
+        constructor(params: Object, srcNodeRef: string);
+        constructor(params: Object, srcNodeRef: HTMLElement);
         esriDirectionsContainer: string;
         esriStopsContainer: string;
         esriStopsReverse: string;
@@ -966,7 +969,7 @@ declare module esri.dijit {
     }
     export class Geocoder {
         constructor(params: Object, srcNodeRef: string);
-        constructor(params: Object, srcNodeRef: Node);
+        constructor(params: Object, srcNodeRef: HTMLElement);
         esriGeocoder: string;
         esriGeocoderMultiple: string;
         esriGeocoderContainer: string;
@@ -1021,7 +1024,7 @@ declare module esri.dijit {
     }
     export class InfoWindow extends InfoWindowBase {
         constructor(params: Object, srcNodeRef: string);
-        constructor(params: Object, srcNodeRef: Node);
+        constructor(params: Object, srcNodeRef: HTMLElement);
         static ANCHOR_UPPERRIGHT: string;
         static ANCHOR_LOWERRIGHT: string;
         static ANCHOR_LOWERLEFT: string;
@@ -1062,7 +1065,8 @@ declare module esri.dijit {
         startup(): void;
     }
     export class Measurement {
-        constructor(params : Object, srcNodeRef : string);
+        constructor(params: Object, srcNodeRef: string);
+        constructor(params: Object, srcNodeRef: HTMLElement);
         distanceIcon: string;
         areaIcon: string;
         locationIcon: string;
