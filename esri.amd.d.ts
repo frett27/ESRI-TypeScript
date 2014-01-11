@@ -234,10 +234,10 @@ declare module esri {
         enableShiftDoubleClickZoom(): void;
         enableSnapping(snapOptions : Object): SnappingManager;
         getBasemap(): string;
-        getInfoWindowAnchor(screenCoords : esri.geometry.Point): void;
+        getInfoWindowAnchor(screenCoords : esri.geometry.Point): string;
         getLayer(id : string): esri.layers.Layer ;
         getLayersVisibleAtScaleRange(scale : number): esri.layers.Layer[];
-        getLevel(): void;
+        getLevel(): number;
         getMaxScale(): number;
         getMaxZoom(): number;
         getMinScale(): number;
@@ -747,6 +747,26 @@ declare module esri.dijit.editing {
         showAttachments(graphic : esri.Graphic, featureLayer : esri.layers.FeatureLayer): void;
         startup(): void;
     }
+    export class TemplatePicker {
+        constructor(params : Object, srcNodeRef : Object);
+        templatePicker: string;
+        // grid : string; // TODO FLE : remove all CSS stuff !!!
+        groupLabel: string;
+        item: string;
+        itemLabel: string;
+        itemSymbol: string;
+        selectedItem: string;
+        // tooltip : string; // TODO FLE : remove all CSS stuff !!!
+        // grid: Dojo.grid.DataGrid;
+        tooltip: any; //div;
+        attr(name : string, value? : Object): void;
+        clearSelection(): void;
+        destroy(): void;
+        getSelected(): Object;
+        startup(): void;
+        update(): void;
+        onSelectionChange(): void;
+    }
 }
 declare module esri.dijit {
     export class AttributeInspector {
@@ -1062,7 +1082,8 @@ declare module esri.dijit {
         onShow(): void;
     }
     export class Legend {
-        constructor(srcNodeRef : string, params : Object); // TO CHECK : in esri code sample parameters are inversed..??
+        constructor(params : Object,srcNodeRef : string ); 
+        constructor(params : Object,srcNodeRef : HTMLElement ); 
         esriLegendService: string;
         esriLegendServiceLabel: string;
         esriLegendGroupLayer: string;
@@ -1188,27 +1209,7 @@ declare module esri.dijit {
         hide(): void;
         show(): void;
     }
-    export class TemplatePicker {
-        constructor(params : Object, srcNodeRef : Object);
-        templatePicker: string;
-        // grid : string; // TODO FLE : remove all CSS stuff !!!
-        groupLabel: string;
-        item: string;
-        itemLabel: string;
-        itemSymbol: string;
-        selectedItem: string;
-        // tooltip : string; // TODO FLE : remove all CSS stuff !!!
-        // grid: Dojo.grid.DataGrid;
-        tooltip: any; //div;
-        attr(name : string, value? : Object): void;
-        clearSelection(): void;
-        destroy(): void;
-        getSelected(): Object;
-        startup(): void;
-        update(): void;
-        onSelectionChange(): void;
-    }
-    export class TimeSlider {
+      export class TimeSlider {
         constructor(params: string, srcNodeRef: Object);
         loop: boolean;
         playing: boolean;
@@ -2588,6 +2589,8 @@ declare module esri.symbol {
     export class Font {
         constructor();
         constructor(size: number, style: string, variant: string, weight: string, family: string);
+		// string for the size, to allow 20pt or 5em size definition
+        constructor(size: string, style: string, variant: string, weight: string, family: string);
         constructor(json : Object);
         static STYLE_NORMAL: string;
         static STYLE_ITALIC: string;
