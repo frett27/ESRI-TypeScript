@@ -321,8 +321,8 @@ declare module esri {
         //click : <MouseEvent> <MouseEvent>;
         //dbl-click : <MouseEvent> <MouseEvent>;
         //extent-change : esri.geometry.Extent;
-        on(name: "dbl-click", listener: (mev: MouseEvent2) => void): Dojo.RemovableHandle;
-		on(name : "extent-change", listener : (ev:ExtentEvent) =>void):Dojo.RemovableHandle;
+        on(name: "dbl-click", listener: EventListener<MouseEvent2>): Dojo.RemovableHandle;
+		on(name : "extent-change", listener : EventListener<ExtentEvent>):Dojo.RemovableHandle;
         //key-down : <KeyboardEvent> <KeyboardEvent>;
         //key-up : <KeyboardEvent> <KeyboardEvent>;
         //layer-add : Layer;
@@ -357,6 +357,7 @@ declare module esri {
         //zoom-end : esri.geometry.Extent;
         //zoom-start : esri.geometry.Extent;
 		on(type: string, listener: Dojo.Action): Dojo.RemovableHandle;
+		on(type: string, listener: EventListener): Dojo.RemovableHandle;
     }
     export class OperationBase {
         constructor(params : Object);
@@ -755,6 +756,7 @@ declare module esri.dijit.editing {
         showAttachments(graphic : esri.Graphic, featureLayer : esri.layers.FeatureLayer): void;
         startup(): void;
     }
+
     export class Editor {
         constructor(params: Object, srcNodeRef: Object);
         static CREATE_TOOL_FREEHAND_POLYGON: string;
