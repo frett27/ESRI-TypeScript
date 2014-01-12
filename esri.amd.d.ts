@@ -236,10 +236,10 @@ declare module esri {
         enableShiftDoubleClickZoom(): void;
         enableSnapping(snapOptions : Object): SnappingManager;
         getBasemap(): string;
-        getInfoWindowAnchor(screenCoords : esri.geometry.Point): void;
+        getInfoWindowAnchor(screenCoords : esri.geometry.Point): string;
         getLayer(id : string): esri.layers.Layer ;
         getLayersVisibleAtScaleRange(scale : number): esri.layers.Layer[];
-        getLevel(): void;
+        getLevel(): number;
         getMaxScale(): number;
         getMaxZoom(): number;
         getMinScale(): number;
@@ -566,7 +566,7 @@ declare module "esri/geometry/normalizeUtils" {
 	export = i;
 }
 
-declare module "esri.symbol.jsonUtils" {
+declare module "esri/symbols/jsonUtils" {
 	var i : esri.symbol.jsonUtils;
 	export = i;
 }
@@ -1918,7 +1918,17 @@ declare module esri.dijit.geoenrichment {
         theme: string;
         getItems(countryID: string): dojo.Deferred<any>;
         toJson(): Object;
+	}
+	
+    export class Item {
+        constructor(type : string, variables : string[]);
+        datasetID : string;
+        isVisible : boolean;
+        title : string;
+        type : string;
+        variables: string[];
     }
+
     export class InfographicsCarousel {
         constructor(params: Object, srcNodeRef: string);
         constructor(params: Object, domNode: Element);
@@ -1937,16 +1947,6 @@ declare module esri.dijit.geoenrichment {
 		onDataLoad() : void;
 		onDataReady(provider : Object) : void;
         onResize(size: number[]): void;
-    }
-}
-declare module esri.dijit.geoenrichment.InfographicsOptions {
-    export class Item {
-		constructor(type : string, variables : string[]);
-		datasetID : string;
-		isVisible : boolean;
-		title : string;
-		type : string;
-        variables: string[];
     }
 }
 
@@ -3632,7 +3632,7 @@ declare module esri.symbol {
 
 	interface jsonUtils {
 		fromJson(json : Object): esri.symbol.Symbol;
-		getShapeDescriptors(): Object;
+		getShapeDescriptors(symbol : esri.symbol.Symbol): Object;
 	}
 
     export class CartographicLineSymbol extends SimpleLineSymbol{
@@ -5098,20 +5098,29 @@ declare module "esri/dijit/editing/TemplatePicker" {
 	var i : esri.dijit.editing.TemplatePicker;
 	export = i;
 }
-//class,esri/dijt/geoenrichment/Infographic,Infographic
+
+//class,esri/dijit/geoenrichment/Infographic,Infographic
 declare module "esri/dijit/geoenrichment/Infographic" {
 	var i : esri.dijit.geoenrichment.Infographic;
 	export = i;
 }
-//class,esri/dijt/geoenrichment/InfographicsCarousel,InfographicsCarousel
-declare module "esri/dijt/geoenrichment/InfographicsCarousel" {
+
+//class,esri/dijit/geoenrichment/InfographicsCarousel,InfographicsCarousel
+declare module "esri/dijit/geoenrichment/InfographicsCarousel" {
 	var i : esri.dijit.geoenrichment.InfographicsCarousel;
 	export = i;
 }
-//class,esri/dijt/geoenrichment/InfographicsOptions,InfographicsOptions
-declare module "esri/dijt/geoenrichment/InfographicsOptions" {
+
+//class,esri/dijit/geoenrichment/InfographicsOptions,InfographicsOptions
+declare module "esri/dijit/geoenrichment/InfographicsOptions" {
 	var i : esri.dijit.geoenrichment.InfographicsOptions;
 	export = i;
+}
+
+//class,esri/dijit/geoenrichment/Item,Item
+declare module "esri/dijit/geoenrichment/Item" {
+    var i : esri.dijit.geoenrichment.Item;
+    export = i;
 }
 
 //class,esri/geometry/Extent,Extent
