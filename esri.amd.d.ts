@@ -572,7 +572,7 @@ declare module "esri/geometry/normalizeUtils" {
 	export = i;
 }
 
-declare module "esri.symbol.jsonUtils" {
+declare module "esri/symbols/jsonUtils" {
 	var i : esri.symbol.jsonUtils;
 	export = i;
 }
