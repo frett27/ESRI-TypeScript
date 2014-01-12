@@ -755,7 +755,6 @@ declare module esri.dijit.editing {
         showAttachments(graphic : esri.Graphic, featureLayer : esri.layers.FeatureLayer): void;
         startup(): void;
     }
-
     export class Editor {
         constructor(params: Object, srcNodeRef: Object);
         static CREATE_TOOL_FREEHAND_POLYGON: string;
@@ -3640,7 +3639,7 @@ declare module esri.symbol {
 
 	interface jsonUtils {
 		fromJson(json : Object): esri.symbol.Symbol;
-		getShapeDescriptors(): Object;
+		getShapeDescriptors(symbol : esri.symbol.Symbol): Object;
 	}
 
     export class CartographicLineSymbol extends SimpleLineSymbol{
