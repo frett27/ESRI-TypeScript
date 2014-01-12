@@ -321,8 +321,8 @@ declare module esri {
         //click : <MouseEvent> <MouseEvent>;
         //dbl-click : <MouseEvent> <MouseEvent>;
         //extent-change : esri.geometry.Extent;
-        on(name: "dbl-click", listener: EventListener<MouseEvent2>): Dojo.RemovableHandle;
-		on(name : "extent-change", listener : EventListener<ExtentEvent>):Dojo.RemovableHandle;
+        on(name: "dbl-click", listener: Dojo.EventListener<MouseEvent2>): Dojo.RemovableHandle;
+		on(name : "extent-change", listener : Dojo.EventListener<ExtentEvent>):Dojo.RemovableHandle;
         //key-down : <KeyboardEvent> <KeyboardEvent>;
         //key-up : <KeyboardEvent> <KeyboardEvent>;
         //layer-add : Layer;
