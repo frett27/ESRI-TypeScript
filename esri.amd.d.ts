@@ -13,22 +13,59 @@
 declare module esri {
 
     class esriNS {
-		constructor();    
+        /**
+        * esri Namespace
+        */
+        constructor();  
+        /**
+        * Version number.
+        */          
 	    version: number;
     }
 
+    /**
+    * Utility methods for working with graphics.
+    */
     interface graphicsUtils {
-	    getGeometries(graphics : esri.Graphic[]): esri.geometry.Geometry[];
+        /**
+        * Converts an array of graphics to an array of geometries. This is primarily used by GeometryService. Beginning with version 2.0, GeometryService accepts only geometries and not graphics. (Added at v2.0)
+        * @param graphics Array of graphics to convert to geometries
+        */
+        getGeometries(graphics: esri.Graphic[]): esri.geometry.Geometry[];
+        /**
+        * Utility function that returns the extent of an array of graphics. If the extent height and width are 0, null is returned. (Added at v1.3)
+        * @param graphics The input graphics array.
+        */
 	    graphicsExtent(graphics: esri.Graphic[]): esri.geometry.Extent;
     }
 
-
+    /**
+    * Retrieve data from a remote server or upload a file.
+    */
     interface request {
-		url : string;
-		content? : Object;
-		form? : Object;
-		handleAs? : string;
-		callbackParamName? : string;
+        /** 
+        *Request URL. (required)
+        */
+        url: string;
+        /**
+        *If the request url points to a web server that requires parameters, specify them here. The default value is null. 
+        */
+		content?: Object;
+        /**
+        *If the request is to upload a file, specify the form element that contains the file input control here. The default value is null. Starting at version 3.3, the form parameter can be an instance of FormData. Using FormData you can send a "multipart/form-data" request to the server without having to create an HTML form element in markup. Note that the FormData api is not available in all browsers.
+        */
+        form?: Object;
+        /**
+        *Response format. Valid values are 'json', 'xml', 'text'. The default value is 'json'.
+        */
+        handleAs?: string;
+        /**
+        *Name of the callback parameter (a special service parameter) to be specified when requesting data in JSONP format. It is ignored for all other data formats. For ArcGIS services the value is always 'callback'.
+        */
+        callbackParamName?: string;
+        /**
+        *Indicates the amount of time to wait for a response from the server. The default is 60000 milliseconds (one minute). Set to 0 to wait indefinitely.
+        */
 		timeout? : number;			    
     }
 
