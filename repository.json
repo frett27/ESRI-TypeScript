@@ -23,7 +23,7 @@
                 "key": "5b7bb6d8-37fb-4681-bbad-c79bb8d9d4c4",
                 "dependencies": [
                     {
-                        "name": "dojo-amd",
+                        "name": "esri-dojo-amd",
                         "version": "latest"
                     }
                 ],
