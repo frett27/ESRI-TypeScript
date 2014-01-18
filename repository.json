@@ -1,6 +1,6 @@
 [
 	{
-        "name": "esri_dojo_amd",
+        "name": "esri-dojo-amd",
         "description": "Dojo Modified api",
         "versions": [
             {
@@ -15,7 +15,7 @@
         ]
     },
     {
-        "name": "esri_javascripapi_amd",
+        "name": "esri-javascriptapi-amd",
         "description": "ESRI - Javascript API AMD",
         "versions": [
             {
