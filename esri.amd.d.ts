@@ -610,7 +610,7 @@ declare module "esri/geometry/normalizeUtils" {
 	export = i;
 }
 
-declare module "esri.symbol.jsonUtils" {
+declare module "esri/symbols/jsonUtils" {
 	var i : esri.symbol.jsonUtils;
 	export = i;
 }
@@ -3678,7 +3678,7 @@ declare module esri.symbol {
 
 	interface jsonUtils {
 		fromJson(json : Object): esri.symbol.Symbol;
-		getShapeDescriptors(): Object;
+		getShapeDescriptors(symbol : esri.symbol.Symbol): Object;
 	}
 
     export class CartographicLineSymbol extends SimpleLineSymbol{
@@ -5363,6 +5363,7 @@ declare module "esri/layers/LayerSource" {
 	var i : esri.layers.LayerSource;
 	export = i;
 }
+*/
 
 //class,esri/layers/LayerTimeOptions,LayerTimeOptions
 declare module "esri/layers/LayerTimeOptions" {
@@ -5639,6 +5640,7 @@ declare module "esri/tasks/DensifyParameters" {
 	var i : esri.tasks.DensifyParameters;
 	export = i;
 }
+*/
 
 //class,esri/tasks/DirectionsFeatureSet,DirectionsFeatureSet
 declare module "esri/tasks/DirectionsFeatureSet" {
