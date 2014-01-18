@@ -610,7 +610,7 @@ declare module "esri/geometry/normalizeUtils" {
 	export = i;
 }
 
-declare module "esri/symbols/jsonUtils" {
+declare module "esri.symbol.jsonUtils" {
 	var i : esri.symbol.jsonUtils;
 	export = i;
 }
@@ -3678,7 +3678,7 @@ declare module esri.symbol {
 
 	interface jsonUtils {
 		fromJson(json : Object): esri.symbol.Symbol;
-		getShapeDescriptors(symbol : esri.symbol.Symbol): Object;
+		getShapeDescriptors(): Object;
 	}
 
     export class CartographicLineSymbol extends SimpleLineSymbol{
@@ -5354,6 +5354,16 @@ declare module "esri/layers/LayerMapSource" {
 	export = i;
 }
 
+/*
+    not found
+	TODO
+
+//class,esri/layers/LayerSource,LayerSource
+declare module "esri/layers/LayerSource" {
+	var i : esri.layers.LayerSource;
+	export = i;
+}
+
 //class,esri/layers/LayerTimeOptions,LayerTimeOptions
 declare module "esri/layers/LayerTimeOptions" {
 	var i : typeof esri.layers.LayerTimeOptions;
@@ -5619,6 +5629,14 @@ declare module "esri/tasks/DataLayer" {
 //class,esri/tasks/Date,EsriDate
 declare module "esri/tasks/Date" {
 	var i : typeof esri.tasks.Date;
+	export = i;
+}
+
+/* new class TODO
+
+//class,esri/tasks/DensifyParameters,DensifyParameters
+declare module "esri/tasks/DensifyParameters" {
+	var i : esri.tasks.DensifyParameters;
 	export = i;
 }
 
