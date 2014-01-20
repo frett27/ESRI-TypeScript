@@ -1842,32 +1842,49 @@ Once registered with the identity manager, the access token will be passed along
     }
 }
 
+/**
+*Utility methods for retrieving API version.
+*/
 declare module "esri/kernel" {
 	var i : esri.esriNS;
 	export = i;
 }
 
-
+/**
+*Utility methods for working with strings, arrays and objects.
+*/
 declare module "esri/lang" {
 	var i : esri.esriLang;
 	export = i;
 }
 
+/**
+*Utility methods for working with graphics.
+*/
 declare module "esri/graphicsUtils" {
 	var i : esri.graphicsUtils;
 	export = i;
 }
 
+/**
+*Utility methods for working with URLs.
+*/
 declare module "esri/urlUtils" {
 	var i : esri.urlUtils;
 	export = i;
 }
 
+/**
+*Retrieve data from a remote server or upload a file.
+*/
 declare module "esri/request" {
 	var i : esri.esriRequest;
 	export = i;
 }
 
+/**
+*Utility methods related to working with a DOM.
+*/
 declare module "esri/domUtils" {
 	var i : esri.domUtils;
 	export = i;
@@ -1876,46 +1893,118 @@ declare module "esri/domUtils" {
 
 declare module esri {
 
-	interface esriConfigIo {
-		alwaysUseProxy : boolean;
-		corsDetection : boolean;
-		corsEnabledServers : Array<string>;
-		proxyRules : Array<ProxyRule>;
-		proxyUrl : string;
-		timeout : number;
-		useCors : boolean;
-		
+    /**
+    * IO default configurations.
+    */
+    interface esriConfigIo {
+        /**
+        *Whether or not to always use the proxy for communication to a REST endpoint. 
+        Default: False
+        */
+        alwaysUseProxy: boolean;
+        /**
+        *Whether or not to detect support for cross-origin resource sharing (CORS). Setting this to false will stop the API from sending requests that result in "XMLHttpRequest cannot load http://some.url.com/ArcGIS/rest/info?f=json. Origin http://yourapp.com is not allowed by Access-Control-Allow-Origin." messages in browser developer tools but it will also prevent the API from discovering that a resource supports CORS if it is not explicitly added to. Default: True
+        */
+        corsDetection: boolean;
+        /**
+        *Add URLs for servers with cross-origin resource sharing enabled to this array. Cross-Origin Resource Sharing (CORS) allows web applications to bypass the browser's same origin policy file and access resources or services on different servers/domains. When both the web server and browser support CORS, esri.request will not use a proxy to perform cross-domain requests. The API includes some Esri servers by default so it's important to push items on to this array rather than overwriting it. 
+        */
+        corsEnabledServers: Array<string>;
+        /**
+        *A proxy rule defines a proxy for set of resources with identical URL prefix. When using esri/request, if a target URL matches a rule, then the request will be sent to the specified proxy. Rather than populating this array directly, use the API's addProxyRule method. Rule objects have the following properties:
+            - proxyUrl: URL for the proxy.
+            - urlPrefix: URL prefix for resources that need to be accessed through a specific proxy.
+        */
+        proxyRules: Array<ProxyRule>;
+        /**
+        *The location of the proxy url that should be used when posting large payloads to an endpoint. This must reside on the same domain as the HTML application. 
+        Default: null
+        */
+        proxyUrl: string;
+        /**
+        *Each request through esri.request is allowed up to 60 seconds to respond. If no response is returned or a server-side error is returned, the esri.Error and error back handlers are called, in that order. (As of 1.3). 
+        Default: 60 seconds
+        */
+        timeout: number;
+        /**
+        *Whether or not requests made via esri/request should try to use CORS. 
+        Default: True
+        */
+        useCors: boolean;
 	}
 
-	interface esriConfigMap {
-		basemaps : any;
-		panDuration : number;
-		panRate : number;
-		slider : Object;
-		sliderLabel : Object;
-		zoomDuration : number;
-		zoomRate : number;
-		zoomSymbol : esri.symbol.SimpleFillSymbol;
+    /**
+    * Map default configurations.
+    */
+    interface esriConfigMap {
+        /**
+        *Object with name and information for default basemaps available in the API. Inspect this object in your browser's developer tools for more information.
+        */
+        basemaps: any;
+        /**
+        *The length of time in milliseconds that the map will take to pan from one extent to another. 
+        Default: 350
+        */
+        panDuration: number;
+        /**
+        *The length of time in milliseconds that the map will refresh as it pans to the next extent. 
+        Default: 50
+        */
+        panRate: number;
+        /**
+        *The parameters that define the location, size, and orientation of the slider. 
+        Default: {left:"30px",top:"30px",width:null,height:"200px"}
+        */
+        slider: Object;
+        /**
+        *The parameters that define the slider tick and accompanying tick label. If this is null then the slider will not show tick marks.
+            Default: {tick:5,labels:null,style:"width:2em; font-family:Verdana; font-size:75%;"}
+        */
+        sliderLabel: Object;
+        /**
+        *The length of time in milliseconds that the map will take to zoom from one extent to another.
+        Default: 500
+        */
+        zoomDuration: number;
+        /**
+        *The length of time in milliseconds that the map will refresh as it zooms to the next extent.
+        Default: 50
+        */
+        zoomRate: number;
+        /**
+        *The SimpleFillSymbol to use to represent the color, fill, and outline properties of the RubberBand zoom. This is the JSON representation of the SimpleFillSymbol.
+        Default: {color:[0,0,0,64],outline:{color:[255,0,0,255],width:1.5,style:"esriSLSSolid"},style:"esriSFSSolid"}
+        */
+        zoomSymbol: esri.symbol.SimpleFillSymbol;
 	}
 
+    /**
+    * Esri default configurations.
+    */
 	interface esriConfigDefaults {
-		
-		geometryService : esri.tasks.GeometryService;
-		io : esriConfigIo;
-		map : esriConfigMap;
-	
+        /**
+        * GeometryService default configurations.
+        */
+        geometryService: esri.tasks.GeometryService;
+        /**
+        * IO default configurations.
+        */
+        io: esriConfigIo;
+        /**
+        * Map default configurations.
+        */
+        map: esriConfigMap;	
 	}
 
-
-
+    /**
+    * Esri configurations.
+    */
 	interface esriConfig {
-
-		defaults : esriConfigDefaults;
-
+        /**
+        * Default configurations.
+        */
+        defaults: esriConfigDefaults;
 	}
-
-
-
 }
 
 
@@ -1981,165 +2070,674 @@ declare module "esri/arcgis/utils" {
 
 }
 
+/**
+* ArcGIS Namespace.
+*/
 declare module esri.arcgis {
+
+    /**
+    *Utility methods to work with content from ArcGIS.com.
+    */
     export class utils {
+        /**
+        *
+        */
         arcgisUrl: string;
+        /**
+        *Create a map using information from an ArcGIS.com item. The information included in the response object returned to the callback depends on the version. 
+        *@param itemId An itemId for an ArcGIS.com item. You can discover the item's unique ID by browsing to the item in ArcGIS.com then extracting the id from the item's URL.
+        *@param mapDiv Container ID for referencing map.
+        *@param options Optional parameters that define the map functionality:
+            <Object> mapOptions 	See the optional parameters for the esri.map constructor for more details.
+            <String> bingMapsKey 	The Bing Maps Key, required if working with Microsoft Bing Maps.
+            <Boolean> ignorePopups 	When true, webmap defined popups will not display.
+            <String> geometryServiceURL 	URL to the ArcGIS Server REST resource that represents a geometry service. For more information on constructing a URL, see The Services Directory and the REST API. 
+		*@returns dojo.Deferred
+        */
         createMap(itemId: string, mapDiv: string, options?: Object): dojo.Deferred<any>;
+        /**
+        *Create a map using information from an ArcGIS.com item. The information included in the response object returned to the callback depends on the version. 
+        *@param itemId The response object obtained from calling the esri.arcgis.utils.getItem method. You can discover the item's unique ID by browsing to the item in ArcGIS.com then extracting the id from the item's URL.
+        *@param mapDiv Container ID for referencing map.
+        *@param options Optional parameters that define the map functionality:
+            <Object> mapOptions 	See the optional parameters for the esri.map constructor for more details.
+            <String> bingMapsKey 	The Bing Maps Key, required if working with Microsoft Bing Maps.
+            <Boolean> ignorePopups 	When true, webmap defined popups will not display.
+            <String> geometryServiceURL 	URL to the ArcGIS Server REST resource that represents a geometry service. For more information on constructing a URL, see The Services Directory and the REST API. 
+		*@returns dojo.Deferred
+        */
         createMap(itemInfo: Object, mapDiv: string, options?: Object): dojo.Deferred<any>;
-        getItem(itemId : string): dojo.Deferred<any>;
-        getLegendLayers(): Array<esri.layers.Layer>;   
+        /**
+        *Get details about the input ArcGIS.com item. An object with the following specification is passed to the callback:
+            {
+                item: <Object>,
+                itemData: <Object>
+            }
+        *@param itemId The itemId for a publicly shared ArcGIS.com item. You can discover the item's unique ID by browsing to the item in ArcGIS.com then extracting the id from the item's URL.
+		*@returns dojo.Deferred
+        */
+        getItem(itemId: string): dojo.Deferred<any>;
+        /**
+        *Can be used with esri.dijit.Legend to get the layerInfos list to be passed into the Legend constructor. It will honor show/hide legend settings of each layer and will not include the basemap layers. (Added at v3.4)
+        *@returns Layer[]
+        */
+        getLegendLayers(): Array<esri.layers.Layer>;
     }
 
+    /**
+    *The Portal class is part of the ArcGIS Portal API which provides a way to build applications that work with content from ArcGIS Online or an ArcGIS Portal. ArcGIS Portal is software technology from Esri that customers can deploy either on premise or in the cloud. 
+    */
     export class Portal {
-        constructor(url:  string);
+        /**
+        *Creates a new Portal object.
+        *@param url The url to the ArcGIS.com site or in-house portal.
+        */
+        constructor(url: string);
+        /**
+        *The access level of the organization. When public, anonymous users can access the organization. When private access is restricted to only members of the organization.
+        Known values: public | private
+        */
         access: string;
+        /**
+        *When true, access to the organization's Portal resources must occur over SSL.
+        */
         allSSL: boolean;
+        /**
+        *The query that defines the basemaps that are displayed in the Basemap Gallery.
+        */
         basemapGalleryGroupQuery: string;
+        /**
+        *When true, the organization's public items, groups and users are included in search queries. When false, no public items outside of the organization are included. However, public items which are part of the organization are included.
+        */
         canSearchPublic: boolean;
+        /**
+        *When true, members of the organization can share resources outside the organization.
+        */
         canSharePublic: boolean;
+        /**
+        *Date the organization was created.
+        */
         created: Date;
+        /**
+        *The default locale (language and country) information.
+        */
         culture: string;
+        /**
+        *The default basemap the portal displays in the map viewer. Returns an object that provides the url and title to the default basemap service.
+        */
         defaultBasemap: Object;
+        /**
+        *The default extent for the map the portal displays in the map viewer. The extent will be in the default basemap's spatial reference.
+        */
         defaultExtent: Object;
+        /**
+        *A description of the organization / portal.
+        */
         description: string;
+        /**
+        *The featured groups for the portal. Returns an array of objects that provide access to the owner and title for each featured group.
+        */
         featuredGroups: Object[];
+        /**
+        *The query that defines the featured group. If null, then the most viewed items in the organization will be the featured items.
+        */
         featuredItemsGroupQuery: string;
+        /**
+        *The id of the organization that owns this portal. If null then this is the default portal for anonymous and non organizational users.
+        */
         id: string;
+        /**
+        *Indicates if the portal is an organization.
+        */
         isOrganization: boolean;
+        /**
+        *The query that defines the collection of editable layer templates.
+        */
         layerTemplatesGroupQuery: string;
+        /**
+        *Date the organization was last modified.
+        */
         modified: Date;
+        /**
+        *The Name of the organization / portal.
+        */
         name: string;
+        /**
+        *Denotes multitenant or singletenant.
+        */
         portalMode: string;
+        /**
+        *The name of the portal i.e. ArcGIS Online.
+        */
         portalName: string;
+        /**
+        *The query that defines the symbols sets used by the map viewer.
+        */
         symbolSetsGroupQuery: string;
+        /**
+        *The query that defines the collection of templates that will appear in the template gallery.
+        */
         templatesGroupQuery: string;
+        /**
+        *The url to the thumbnail of the organization.
+        */
         thumbnailUrl: string;
+        /**
+        *The portal url.
+        */
         url: string;
+        /**
+        *Returns a PortalUser object that describes the user currently signed in to the portal.  (Added at v3.3)
+		*@returns PortalUser
+        */
         getPortalUser(): PortalUser;
-        queryGroups(queryParams : esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
-        queryItems(queryParams : esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
-        queryUsers(queryParams : esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
+        /**
+        *Execute a query against the Portal to return a deferred that when resolved returns PortalQueryResult that contain a results array of PortalGroup objects for all the groups that match the input query.
+        *@param queryParams The input query parameters.
+		*@returns dojo.Deferred
+        */
+        queryGroups(queryParams: esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
+        /**
+        *Execute a query against the Portal to return a deferred that when resolved returns PortalQueryResult that contain a results array of PortalItem objects that match the input query.
+        *@param queryParams The input query parameters.
+		*@returns dojo.Deferred
+        */
+        queryItems(queryParams: esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
+        /**
+        *Execute a query against the Portal to return a deferred that when resolved returns PortalQueryResult that contain a results array of PortalUser objects that match the input query.
+        *@param queryParams The input query parameters.
+		*@returns dojo.Deferred
+        */
+        queryUsers(queryParams: esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
+        /**
+        *Prompts the user using the IdentityManager and returns a deferred that when resolved returns the PortalUser for the input credentials.
+		*@returns dojo.Deferred
+        */
         signIn(): dojo.Deferred<any>;
+        /**
+        *Sign out of the Portal which resets the Portal and disables identity checking.
+		*@returns Portal
+        */
         signOut(): Portal;
+        /**
+        *Fired when the portal has loaded. Once the portal has loaded the properties and methods of the Portal class are available.
+		*@returns void
+        */
         onLoad(): void;
     }
+
+    /**
+    *Details about a comment on a Portal item.View the ArcGIS Portal API REST documentation for the item comment for more details.
+    */
     export class PortalComment {
+        /**
+        *The comment text
+        */
         comment: string;
+        /**
+        *The date and time the comment was created
+        */
         created: string;
+        /**
+        *The comment id
+        */
         id: string;
+        /**
+        *The user name of the user who created the comment
+        */
         owner: string;
     }
+
+    /**
+    *The PortalFolder class provides information about folders used to organize content in a portal. Folders are only visible to the user and are used for organizing content within the user's content space.
+    */
     export class PortalFolder {
+        /**
+        *The date the folder was created
+        */
         created: Date;
+        /**
+        *The id of the folder
+        */
         id: string;
+        /**
+        *The portal for the folder
+        */
         portal: Portal;
+        /**
+        *The title of the folder
+        */
         title: string;
+        /**
+        *The url to to the folder
+        */
         url: string;
+        /**
+        *Find all the items in the folder.
+		*@returns dojo.Deferred
+        */
         getItems(): dojo.Deferred<any>;
     }
+
+    /**
+    *The group resource represents a group within the Portal. A group resource represents a group (e.g., "San Bernardino Fires"). The visibility of the group to other users is deteremined by the access property. If the group is private no one except the administrators and the members of the group will be able to see it. If the group is shared with an organization, then all members of the organization will be able to find the group. View the ArcGIS Portal API REST documentation for the Group for more details. 
+    */
     export class PortalGroup {
+        /**
+        *The access privileges on the group which determines who can see and access the group.
+        */
         access: string;
+        /**
+        *The date the group was created
+        */
         created: Date;
+        /**
+        *A detailed description of the group
+        */
         description: string;
+        /**
+        *The id for the group
+        */
         id: string;
+        /**
+        *If this is set to true, then users will not be able to apply to join the group
+        */
         isInvitationOnly: boolean;
+        /**
+        *Denotes a view only group where members are not able to share items.
+        */
         isViewOnly: boolean;
+        /**
+        *The date the group was last modified
+        */
         modified: Date;
+        /**
+        *The username of the group's owner
+        */
         owner: Portal;
+        /**
+        *The portal for the group
+        */
         portal: Portal;
+        /**
+        *A short summary that describes the group
+        */
         snippet: string;
+        /**
+        *User defined tags that describe the group
+        */
         tags: string;
+        /**
+        *The url to the thumbnail used for the group
+        */
         thumbnailUrl: string;
+        /**
+        *The title for the group.
+        */
         title: string;
+        /**
+        *The url to the group
+        */
         url: string;
+        /**
+        *Get the current members for the group.
+		*@returns dojo.Deferred
+        */
         getMembers(): dojo.Deferred<any>;
-		queryItems(queryParams ? : esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
+        /**
+        *Execute a query against the group to return a deferred that when resolved returns PortalQueryResults that contain a results array of PortalItem objects that match the input query
+        *@param queryParams The input query parameters.
+		*@returns dojo.Deferred
+        */
+        queryItems(queryParams?: esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
     }
+
+    /**
+    *List the users, owner and administrator of a group. Only available to members or administrators of the group. View the ArcGIS Portal API REST documentation for the Group Users for more details.
+    */
     export class PortalGroupMembers {
+        /**
+        *An array containing the user names for each administrator of the group
+        */
         admins: string[];
+        /**
+        *The user name of the owner of the group
+        */
         owner: string;
+        /**
+        *An array containing the user names for each user in the group
+        */
         users: string[];
     }
+
+    /**
+    *An item (a unit of content) in the Portal. Each item has a unique identifier and a well known url that is independent of the user owning the item. An item may have associated binary or textual data which is available via the item data resource. View the ArcGIS Portal API REST documentation for the item for more details. 
+    */
     export class PortalItem {
+        /**
+        *Indicates the level of access: private, shared, org, or public
+        */
         access: string;
+        /**
+        *Information on the source of the item
+        */
         accessInformation: string;
+        /**
+        *Average rating.
+        */
         avgRating: number;
+        /**
+        *The date the item was created
+        */
         created: Date;
+        /**
+        *The item locale information (language and country)
+        */
         culture: string;
+        /**
+        *The detailed description of the item
+        */
         description: string;
+        /**
+        *The bounding rectangle of the item returned as an extent object with the following format:
+            "extent": [  [ minX, minY ], [ maxX, maxY ] ]
+        */
         extent: Object;
+        /**
+        *The unique id for this item
+        */
         id: string;
+        /**
+        *The url to the data resource associated with the item
+        */
         itemDataUrl: string;
+        /**
+        *The url to the item
+        */
         itemUrl: string;
+        /**
+        *Any license information or restrictions
+        */
         licenseInfo: string;
+        /**
+        *Date the item was last modified
+        */
         modified: Date;
+        /**
+        *The name of the item
+        */
         name: string;
+        /**
+        *Number of comments on the item
+        */
         numComments: number;
+        /**
+        *Number of ratings on the item
+        */
         numRatings: number;
+        /**
+        *Number of views on the item
+        */
         numViews: number;
+        /**
+        *The username of the user who owns this item
+        */
         owner: string;
+        /**
+        *The portal that contains the item
+        */
         portal: Portal;
+        /**
+        *The size of the item
+        */
         size: number;
+        /**
+        *A summary description of the item
+        */
         snippet: string;
+        /**
+        *The item's coordinate system
+        */
         spatialReference: string;
+        /**
+        *User defined tags that describe the item
+        */
         tags: string[];
+        /**
+        *The url to the thumbnail used for the item
+        */
         thumbnailUrl: string;
+        /**
+        *The title for the item.
+        */
         title: string;
+        /**
+        *The gis content type of this item.
+        */
         type: string;
+        /**
+        *A set of keywords that further describes the type of this item.
+        */
         typeKeywords: string[];
+        /**
+        *The url for the resource represented by the item
+        */
         url: string;
+        /**
+        *The url to the user item
+        */
         userItemUrl: string;
-        addComment(comment : string): dojo.Deferred<any>;
-        addRating(rating : number): void;
+        /**
+        *Add a comment to the item.Only available for authenticated users who have access to the item.
+        *@param comment The text for the comment.
+		*@returns dojo.Deferred
+        */
+        addComment(comment: string): dojo.Deferred<any>;
+        /**
+        *Add a rating to an item that you have access to. Only 1 rating can be given to an item per user. If this call is made on an already rated item, the new rating will overwrite the current one. A user cannot rate their own item. Available only to authenticated users. Returns a deferred that when resolved provides access to a PortalRating object.
+        *@param rating Rating to set for the item. Rating must be a number between 1.0 and 5.0.
+		*@returns void
+        */
+        addRating(rating: number): void;
+        /**
+        *Deletes an item comment. Only available to the authenticated user who created the comment.
+        *@param comment The PortalComment to delete.
+		*@returns dojo.Deferred
+        */
         deleteComment(comment: string): void;
-        deleteRating(rating : esri.arcgis.PortalRating): dojo.Deferred<any>;
+        /**
+        *Delete a rating that you created for the specified item. Returns a deferred that when resolved provides access to a PortalRating object.
+        *@param rating Rating to delete.
+		*@returns dojo.Deferred
+        */
+        deleteRating(rating: esri.arcgis.PortalRating): dojo.Deferred<any>;
+        /**
+        *Get the comments associated with the item. Returns a deferred that when resolved provides access to an array of PortalComment objects.
+		*@returns dojo.Deferred
+        */
         getComments(): dojo.Deferred<any>;
+        /**
+        *Returns the rating (if any) given to the item. Returns a deferred that when resolved provides access to a PortalRating object.
+		*@returns dojo.Deferred
+        */
         getRating(): dojo.Deferred<any>;
-        updateComment(comment : esri.arcgis.PortalComment): void;
+        /**
+        *Updates an item comment. Only available to the authenticated user who created the comment.
+        *@param comment A PortalComment that contains the comment updates.
+		*@returns void
+        */
+        updateComment(comment: esri.arcgis.PortalComment): void;
     }
+
+    /**
+    *Define parameters to use when querying. View the ArcGIS Portal API REST documentation for details. 
+    */
     export class PortalQueryParams {
+        /**
+        *The maximum number of results to be included in the result set response. The default value is 10 and the maximum allowed value is 100. The start parameter combined with the num parameter can be used to paginate the search results. Note that the actual number of returned results may be less than num if the number of results remaining after start is less than num
+        */
         num: string;
+        /**
+        *The query string to search with.
+        */
         q: string;
+        /**
+        *A comma seperated list of field(s) to sort by. Valid fields are: title, created, type, owner, avgRating, numRatings, numComments and numViews.
+        */
         sortField: string;
+        /**
+        *The number of the first entry in the result set response. The index number is 1-based. The start parameter, along with the num parameter can be used to paginate the search results.
+        */
         start: string;
     }
+
+    /**
+    *Details about the result of a query.
+    */
     export class PortalQueryResult {
+        /**
+        *The query parameters for the next set of results
+        */
         nextQueryParams: esri.arcgis.PortalQueryParams;
+        /**
+        *The query parameters for the first set of results
+        */
         queryParams: esri.arcgis.PortalQueryParams;
+        /**
+        *An array of result item objects
+        */
         results: Object[];
+        /**
+        *The total number of results. The maximum number of results is limited to 1000.
+        */
         total: number;
     }
+
+    /**
+    *Details about the rating associated with a Portal item. View the ArcGIS Portal API REST documentation for the Item Rating for more details. 
+    */
     export class PortalRating {
+        /**
+        *Date the rating was added to the item
+        */
         created: Date;
+        /**
+        *A rating between 1.0 and 5.0 for the item.
+        */
         rating: number;
     }
+
+    /**
+    *Represents a registered user of the Portal. Personal details of the user, such as email and groups, are returned only to the user or the administrator of the user's organization. A user is not visible to any other users (except their organization's administrator) if their access setting is set to 'private'.View the ArcGIS Portal API REST documentation for the user for more details.
+    */
     export class PortalUser {
+        /**
+        *The access level for the user: private, org or public. If private, the users descriptive information will not be available and the user name will not be searchable. Available only if the user is signed-in. Known values: private | org | public
+        */
         access: string;
+        /**
+        *The date the user was created.
+        */
         created: Date;
+        /**
+        *The default culture for the user.
+        */
         culture: string;
+        /**
+        *Description of the user.
+        */
         description: string;
+        /**
+        *The user's email address. Available only if the user is signed-in.
+        */
         email: string;
+        /**
+        *The user's full name.
+        */
         fullName: string;
+        /**
+        *The date the user was modified.
+        */
         modified: Date;
+        /**
+        *The id of the organization the user belongs to.
+        */
         orgId: string;
+        /**
+        *The portal.
+        */
         portal: Portal;
+        /**
+        *The user's preferred view for content, either Web or GIS. Available only if the user is signed-in.
+        */
         preferredView: string;
+        /**
+        *The user's preferred region, used to set the featured maps on the portal home page, content in the gallery and the default extent for new maps in the Viewer.
+        */
         region: string;
+        /**
+        *The user's role in the organization: administrator (org_admin), publisher (org_publisher), or user (org_user).
+        */
         role: string;
+        /**
+        *User-defined tags that describe the user.
+        */
         tags: string[];
+        /**
+        *The url to the thumbnail image for the user.
+        */
         thumbnailUrl: string;
+        /**
+        *The url for the user content. (Added at v3.2)
+        */
         userContentUrl: string;
+        /**
+        *The username for the user.
+        */
         username: string;
+        /**
+        *Find folders for the portal user. Returns a deferred that when resolved provides access to an array of PortalFolder objects.
+		*@returns dojo.Deferred
+        */
         getFolders(): dojo.Deferred<any>;
+        /**
+        *Provides access to the group invitations for the portal user. Returns a deferred that when resolved provides access to the results as json. View the REST API documentation for details on the result format.
+		*@returns dojo.Deferred
+        */
         getGroupInvitations(): dojo.Deferred<any>;
+        /**
+        *Find all the groups that the portal user has permissions to access. Returns a deferred that when resolved provides access to an array of PortalGroup objects.
+		*@returns dojo.Deferred
+        */
         getGroups(): dojo.Deferred<any>;
+        /**
+        *Get the portal item along with folder info for the input item id. (Added at v3.4)
+        *@param itemId The id of the item.
+		*@returns PortalItem
+        */
         getItem(itemId): PortalItem;
+        /**
+        *Retrieve all the items in the specified folder. Returns a deferred that when resolved provides access to an array of PortalItem objects
+        *@param folderId The id of the folder that contains the items to retrieve.
+		*@returns dojo.Deferred
+        */
         getItems(folderId): dojo.Deferred<any>;
+        /**
+        *Get information about any notifications for the portal user. Returns a deferred that when resolved provides access to the results as json. View the REST API documentation for details on the result format.
+		*@returns dojo.Deferred
+        */
         getNotifications(): dojo.Deferred<any>;
+        /**
+        *Access the tag objects that have been created by the portal user. Returns a deferred that when resolved provides access to an array of tag objects used by the user. Each tag object contains a tag property with the name of the tag along with a count that reports the number of times the tag was used.
+		*@returns dojo.Deferred
+        */
         getTags(): dojo.Deferred<any>;
     }
 }
 
+/**
+* Dijit.Editing Namespace.
+*/
 declare module esri.dijit.editing {
     export class AttachmentEditor {
         constructor(params: Object, srcNodeRef: string);
@@ -2184,6 +2782,10 @@ declare module esri.dijit.editing {
         onSelectionChange(): void;
     }
 }
+
+/**
+* Dijit Namespace.
+*/
 declare module esri.dijit {
     export class AttributeInspector {
         constructor(params: Object, srcNodeRef: string);
@@ -2782,6 +3384,10 @@ declare module esri.dijit {
         onTimeExtentChange(timeExtent : esri.TimeExtent): void;
     }
 }
+
+/**
+* Dijit.Analysis Namespace.
+*/
 declare module esri.dijit.analysis {
     export class AnalysisBase {
 		cancel(jobInfo : Object) : void;
@@ -3284,6 +3890,10 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
 }
+
+/**
+* Dijit.GeoEnrichment Namespace.
+*/
 declare module esri.dijit.geoenrichment {
     export class Infographic {
         constructor(params: Object, srcNodeRef: string);
@@ -3350,6 +3960,9 @@ declare module esri.dijit.geoenrichment {
     }
 }
 
+/**
+* Geometry Namespace.
+*/
 declare module esri.geometry {
 
 	interface webMercatorUtils {
@@ -3502,6 +4115,10 @@ declare module esri.geometry {
     export class ScreenPoint extends Point {
     }
 }
+
+/**
+* Layers Namespace.
+*/
 declare module esri.layers {
     export class ArcGISDynamicMapServiceLayer extends DynamicMapServiceLayer {
         constructor(url : string, options? : Object);
@@ -4891,6 +5508,9 @@ declare module esri.layers {
     }
 }
 
+/**
+* Renderer Namespace.
+*/
 declare module esri.renderer {
 
 	interface jsonUtils {
@@ -5028,6 +5648,9 @@ declare module esri.renderer {
     }
 }
 
+/**
+* Symbol Namespace.
+*/
 declare module esri.symbol {
 
 	interface jsonUtils {
@@ -5279,6 +5902,9 @@ declare module esri.symbol {
     }
 }
 
+/**
+* Tasks Namespace.
+*/
 declare module esri.tasks {
     export class AddressCandidate {
         address: Object;
@@ -6009,6 +6635,10 @@ declare module esri.tasks {
         toJson(): Object;
     }
 }
+
+/**
+* Tasks.GeoEnrichment Namespace.
+*/
 declare module esri.tasks.geoenrichment {
     export class DriveBuffer {
 		constructor(params : Object);
@@ -6068,6 +6698,10 @@ declare module esri.tasks.geoenrichment {
 		units : esri.Units;
     }
 }
+
+/**
+* Toolbars Namespace.
+*/
 declare module esri.toolbars {
     export class Draw {
         constructor(map: esri.Map, options: Object);
@@ -6153,6 +6787,10 @@ declare module esri.toolbars {
         onExtentHistoryChange(): void;
     }
 }
+
+/**
+* VirtualEarth Namespace.
+*/
 declare module esri.virtualearth {
     export class VEAddress {
         addressLine: string;
