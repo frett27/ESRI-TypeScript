@@ -2739,46 +2739,211 @@ declare module esri.arcgis {
 * Dijit.Editing Namespace.
 */
 declare module esri.dijit.editing {
+
+    /**
+    * Widget that supports viewing attachments for feature layers that have attachments enabled. If the feature layers are from a feature service then the attachment editor will include the ability to create, view and delete attachments.
+    */
     export class AttachmentEditor {
+        /**
+		* Creates a new AttachmentEditor object.
+		*@params params No parameter options.
+		*@params srcNodeRef HTML element where the widget is rendered.
+		*/
         constructor(params: Object, srcNodeRef: string);
-        constructor(params: Object, domNode : HTMLElement);
-        showAttachments(graphic : esri.Graphic, featureLayer : esri.layers.FeatureLayer): void;
+        /**
+		* Creates a new AttachmentEditor object.
+		*@params params No parameter options.
+		*@params domNode DOM element.
+		*/
+        constructor(params: Object, domNode: HTMLElement);
+        /**
+		* Display the attachment editor.
+		*@params graphic Graphic, with attachments, to display in the attachment editor.
+		*@params featureLayer The feature layer to display attachments for. The feature layer must have attachments enabled.
+		*/
+        showAttachments(graphic: esri.Graphic, featureLayer: esri.layers.FeatureLayer): void;
+        /**
+		* Finalizes the creation of the attachment editor. Call startup() after creating the widget when you are ready for user interaction.
+		*@returns void
+		*/
         startup(): void;
     }
 
+    /**
+    * Load the Editor using one of the dojo.require statements below.
+        dojo.require("esri.dijit.editing.Editor-all");
+        or
+        dojo.require("esri.dijit.editing.Editor");
+    */
     export class Editor {
+        /**
+		* Creates a new Editor object.
+		*@params params Parameters that define the functionality of the editor widget. Create a new settings object to pass to the widget (see options).
+        <Object> settings 	Create a new settings object that defines the capabilities of the widget.
+            <Object> createOptions: Specify the polygon and polyline draw tools to include on the toolbar. Only applicable when toolbarVisible is true. This object has following properties:
+                <String[]> polylineDrawTools: See the constants list for valid options.
+                <String[]> polygonDrawTools: See the constants list for valid options.
+            <Boolean> enableUndoRedo: Default is false. When true enable undo/redo behavior.
+            <String> geometryService: Reference to the geometry service. Alternatively, you can set the geometry service using esri.config.defaults.geometryService (Required).
+            <Map> map: Reference to the map (Required).
+            <Number> maxUndoRedoOperations: When undo/redo is enabled, specify the maximum number of undo/redo operations to maintain. The default value is 10.
+            <TemplatePicker> templatePicker: Reference to the TemplatePicker. Use this option if you want to modify the appearance of the template picker, for example set the number of rows and columns.
+            <Object> toolbarOptions: Specify the tools to include on the toolbar. Only applicable when toolbarVisible is true. This object has following properties:
+                <Boolean> mergeVisible: If true show the merge tool.
+                <Boolean> cutVisible: If true show the cut tool.
+                <Boolean> reshapeVisible: If true show the reshape tool.
+            <Boolean> toolbarVisible: If true display the editing toolbar.
+            <UndoManager> undoManager: Specify an instance of the UndoManager for the Editor.
+            <Object> layerInfos: Feature layer information. This object has following properties:
+                <FeatureLayer> featureLayer: Reference to the feature layer.
+                <String> userId: Provide a userId for the currently logged-in user. If the application is using the IdentityManager it is not necessary to specify a userId since the feature layer has access to the credential object which contains this information. Requires ArcGIS Server feature service version 10.1 or greater. (As of 2.6)
+                <Boolean> disableGeometryUpdate: When true,the geometry is not editable. The default value is false. Requires ArcGIS Server feature service version 10.1 or greater. (As of 2.6)
+                <Boolean> showObjectID: Default is false. When true display the ObjectID field in the attribute inspector.
+                <Boolean> showGlobalID: Default is false. When true display the GlobalID field in the attribute inspector.
+                <Object[]> fieldInfos: Customize how fields appear in the attribute inspector. If nothing is specified all fields, except the ObjectId and GlobalId are displayed. Specify FieldInfos to explicitly define the fields that are displayed and the field order. Added at version 2.2. See the sample section below for properties.
+                <Boolean> disableAttributeUpdate: If true, attributeInspector won't pop up when features in this featureLayer are selected. When adding a new feature, attributeInspector won't pop up either.
+            <String[]> htmlFields: Specify which fields to display as a rich text editor.
+		*@params srcNodeRef HTML element where the widget should be rendered.
+		*/
         constructor(params: Object, srcNodeRef: Object);
+        /**
+		* Freehand polygon tool
+		*/
         static CREATE_TOOL_FREEHAND_POLYGON: string;
+        /**
+		* Polygon tool
+		*/
         static CREATE_TOOL_POLYGON: string;
+        /**
+		* Autocomplete polygon tool
+		*/
         static CREATE_TOOL_AUTOCOMPLETE: string;
+        /**
+		* Freehand polyline tool
+		*/
         static CREATE_TOOL_FREEHAND_POLYLINE: string;
+        /**
+		* Polyline tool
+		*/
         static CREATE_TOOL_POLYLINE: string;
+        /**
+		* Arrow tool
+		*/
         static CREATE_TOOL_ARROW: string;
+        /**
+		* Triangle tool
+		*/
         static CREATE_TOOL_TRIANGLE: string;
+        /**
+		* Rectangle tool
+		*/
         static CREATE_TOOL_RECTANGLE: string;
+        /**
+		* Circle tool
+		*/
         static CREATE_TOOL_CIRCLE: string;
+        /**
+		* Ellipse tool
+		*/
         static CREATE_TOOL_ELLIPSE: string;
     }
 
-   export class TemplatePicker {
-       constructor(params: Object, srcNodeRef: string);
-       constructor(params: Object, domNode: HTMLElement);
+    /**
+    * Load the TemplatePicker using one of the dojo.require statements below. See the Coding Guidelines help topic for details.
+        dojo.require("esri.dijit.editing.TemplatePicker-all");
+        or
+        dojo.require("esri.dijit.editing.TemplatePicker");
+    * CSS Elements:
+    grid	Define styles for the grid node that displays the templates.
+    groupLabel	Define styles for the group labels. Only applicable when grouping is enabled.
+    item	Define styles for the node that contains the template label and symbol.
+    itemLabel	Define styles for the template labels.    
+        .itemLabel{color:#266A2E;}
+    itemSymbol	Define styles for the node that contains the template symbol.
+    selectedItem	Define styles for the node that contains the template symbol.
+    templatePicker	Define styles for the template picker.
+    tooltip	Define styles for the template tooltips. Only applicable when tooltips are enabled.
+    */
+    export class TemplatePicker {
+        /**
+		* Creates a new TemplatePicker object that displays a gallery of templates from the input feature layers or items. A symbol and label is displayed for each template. The symbol is defined by the template's feature type. The label is the template's name.
+		*@params params FeatureLayers or items are required all other parameters are optional. See options list.
+		*@params srcNodeRef HTML element where the TemplatePicker will be rendered. Specify the HTML element using the "id" or a reference to the element.
+		*/
+        constructor(params: Object, srcNodeRef: string);
+        /**
+		* Creates a new TemplatePicker object that displays a gallery of templates from the input feature layers or items. A symbol and label is displayed for each template. The symbol is defined by the template's feature type. The label is the template's name.
+		*@params params FeatureLayers or items are required all other parameters are optional. See options list.
+		*@params domNode HTML element where the TemplatePicker will be rendered. Specify the HTML element using a reference to the element.
+		*/
+        constructor(params: Object, domNode: HTMLElement);
+        /**
+		* 
+		*/
         templatePicker: string;
         // grid : string; // TODO FLE : remove all CSS stuff !!!
+        /**
+		* 
+		*/
         groupLabel: string;
+        /**
+		* 
+		*/
         item: string;
+        /**
+		* 
+		*/
         itemLabel: string;
+        /**
+		* 
+		*/
         itemSymbol: string;
+        /**
+		* 
+		*/
         selectedItem: string;
         // tooltip : string; // TODO FLE : remove all CSS stuff !!!
         // grid: Dojo.grid.DataGrid;
+        /**
+		* 
+		*/
         tooltip: any; //div;
-        attr(name : string, value? : Object): void;
+        /**
+		* Get or set the properties of the template picker. See the dojo documentation for more details about this method.
+		*@params name Name of the attribute of interest.
+		*@params value Value for the specified attribute.
+		*@returns void
+		*/
+        attr(name: string, value?: Object): void;
+        /**
+		* Clears the current selection.
+		*@returns void
+		*/
         clearSelection(): void;
+        /**
+		* Destroys the template picker. Call destroy() when the widget is no longer needed by the application.
+		*@returns void
+		*/
         destroy(): void;
+        /**
+		* Gets the selected item picked by the user. 
+		*@returns Object
+		*/
         getSelected(): Object;
+        /**
+		* Finalizes the creation of the template picker. Call startup() after creating the widget when you are ready for user interaction.
+		*@returns void
+		*/
         startup(): void;
+        /**
+		* Updates the templatePicker after modifying the properties of the widget.
+		*@returns void
+		*/
         update(): void;
+        /**
+		* Fires when an item is selected or unselected in the template picker. You can retrieve the selected item using the getSelected() method.
+		*@returns void
+		*/
         onSelectionChange(): void;
     }
 }
