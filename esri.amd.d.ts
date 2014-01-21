@@ -6,6 +6,7 @@
 // Email : frett27(at)gmail(dot)com
 // Copyright (c) 2013 Fabrice Leray, Patrice Freydiere 
 
+// significant contributors : AmrEldib
 
 /// <reference path="../Dojo-TypeScript/dojo.d.ts" />
 /// <reference path="../Dojo-TypeScript/dijit.d.ts" />
@@ -2715,13 +2716,13 @@ declare module esri.arcgis {
         *@param itemId The id of the item.
 		*@returns PortalItem
         */
-        getItem(itemId): PortalItem;
+        getItem(itemId : string): PortalItem;
         /**
         *Retrieve all the items in the specified folder. Returns a deferred that when resolved provides access to an array of PortalItem objects
         *@param folderId The id of the folder that contains the items to retrieve.
 		*@returns dojo.Deferred
         */
-        getItems(folderId): dojo.Deferred<any>;
+        getItems(folderId : string): dojo.Deferred<any>;
         /**
         *Get information about any notifications for the portal user. Returns a deferred that when resolved provides access to the results as json. View the REST API documentation for details on the result format.
 		*@returns dojo.Deferred
