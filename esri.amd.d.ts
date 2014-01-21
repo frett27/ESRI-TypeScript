@@ -69,132 +69,562 @@ declare module esri {
 		timeout? : number;			    
     }
 
+    /**
+    *Retrieve data from a remote server or upload a file.
+    */
     interface esriRequest {
-	    (request: request, options?: Object): dojo.Deferred<any>;
+        /**
+        *Retrieve data from a remote server or upload a file from a user's computer.
+        *@param request request argument is an object with the following properties that describe the request.
+        *@param options argument is an object with the following properties representing various options supported by this function.
+        */
+        (request: request, options?: Object): dojo.Deferred<any>;
+        /**
+        *Define a callback function that will be called just before esri.request calls into dojo IO functions such as dojo.rawXhrPost and dojo.io.script.get. It provides developers an opportunity to modify the request.
+        *@param callbackFunction 
+        *@returns void
+        */
 	    setRequestPreCallback(callbackFunction : Function): void;
     }
 
+    /**
+    *Utility methods related to working with a DOM.
+    */
 	class domUtils {
-	    constructor();    
-		documentBox: Object;
-	    hide(element : Element): void;
-	    toggle(element : Element): void;
+        constructor();    
+        /**
+        *Represents the size of the client side window or document at first load. The size contains width and height properties, and these do not change on window resize. (Added at v1.3)
+        */
+        documentBox: Object;
+        /**
+        *Hides an HTML element such as a DIV or TABLE.
+        *@param element The name of the HTML element.
+        *@returns void
+        */
+        hide(element: Element): void;
+        /**
+        *If an HTML element is currently visible, the element is hidden. If the element is hidden, it becomes visible.
+        *@param element The name of the HTML element.
+        *@returns void
+        */
+        toggle(element: Element): void;
+        /**
+        *Shows an HTML element such as a DIV or TABLE.
+        *@param element The name of the HTML element.
+        *@returns void
+        */
 	    show(element : Element): void;
 	}
 
-
-	interface esriLang {
+    /**
+    *Utility methods for working with strings, arrays and objects.
+    */
+    interface esriLang {
+        /**
+        *Creates a new object with all properties that pass the test implemented by the filter provided in the function
+        *@param object Object to filter.
+        *@param callback Function or string implementing the filtering.
+        *@param thisObject Optional object used to scope the call to the callback.
+        */
 	    filter(object: Object, callback: Function, thisObject: Object): Object;
-	    substitute(data : Object, template? : string, first? : boolean): void;
-	    valueOf(array : Array<Object>, value : Object): Object;
+        /**
+        *A wrapper around dojo.string.substitute that can also handle wildcard substitution. A wildcard uses the format of ${*}. If no template is provided, it is assumed to be a wildcard. This method is useful if you are not using Graphic or an InfoTemplate, but you want to embed result values in HTML, for example.
+        *@param data The data object used in the substitution.
+        *@param template The template used for the substitution. Can be any valid HTML. If no template is included, the wildcard template is used.
+        *@param first When true, returns only the first property found in the data object. The default is false.
+        *@returns void
+        */
+        substitute(data: Object, template?: string, first?: boolean): void;
+        /**
+        *Iterates through the argument array and searches for the identifier to which the argument value matches. Returns null if no matching identifier is found.
+        *@param array The argument array for testing.
+        *@param value The value used in the search. If the value is a String, the value is case sensitive.
+        */
+        valueOf(array: Array<Object>, value: Object): Object;
+        /**
+        *Returns true when the value is neither null or undefined. Otherwise false. (Added at v3.3)
+        *@param value The value to test. 
+        */
 	    isDefined(value : Object): boolean;
 	}
 
-	interface ProxyRule {
+    interface ProxyRule {
+        /**
+        *URL for the proxy.
+        */
 		proxyUrl : string;
-		urlPrefix : string;
+        /**
+        *URL prefix for resources that need to be accessed through the given proxy.
+        */
+        urlPrefix: string;
 	}
 
-
-	interface urlUtils {
-	    urlToObject(url : string): Object;
-	    addProxyRule(rule : ProxyRule): number;
+	/**
+    *Utility methods for working with URLs.
+    */
+    interface urlUtils {
+        /**
+        *Converts the URL arguments to an object representation. The object format is: {path: <String>, query:{key:<Object>}}
+        *@param url The input URL.
+        */
+        urlToObject(url: string): Object;
+        /**
+        *Adds the given proxy rule to the proxy rules list: esri.config.defaults.io.proxyRules (Added at v3.4)
+        *@param rule Proxy rule.
+        */
+        addProxyRule(rule: ProxyRule): number;
+        /**
+        *Returns the proxy rule that matches the given url. (Added at v3.4)
+        *@param url URL to return its proxy rule.
+        */
 	    getProxyRule(url : string): ProxyRule;
 	}
 
-
+    /**
+    *The Credential class represents a credential object used to access a secure ArcGIS resource.
+    */
     export class Credential {
+        /**
+        *Token expiration time specified as number of milliseconds since 1 January 1970 00:00:00 UTC
+        */
         expires: string;
+        /**
+        *Indicates whether this credential belongs to a user with admin privileges
+        */
         isAdmin: boolean;
+        /**
+        *The server url
+        */
         server: string;
+        /**
+        *Indicates whether the resources accessed using this credential should be fetched over HTTPS protocol
+        */
         ssl: boolean;
+        /**
+        *Token generated by the token service using the specified userId and password
+        */
         token: string;
+        /**
+        *	User associated wth the Credential object
+        */
         userId: string;
+        /**
+        *Destroy a credential.
+        *@returns void
+        */
         destroy(): void;
+        /**
+        *Generate a new token and update the Credential's token property with the newly acquired token.
+        */
         refreshToken(): dojo.Deferred<any>;
+        /**
+        *Return the properties of this object in JSON
+        */
         toJson(): Object;
+        /**
+        *Fired when a credential object is destroyed.
+        *@returns void
+        */
         onDestroy(): void;
+        /**
+        *Fired when the token associated with the credential is updated or changed
+        *@returns void
+        */
         onTokenChange(): void;
     }
+
+    /**
+    *A Graphic can contain geometry, a symbol, attributes, or an infoTemplate. A Graphic is displayed in the GraphicsLayer. The GraphicsLayer allows you to listen for events on Graphics.
+    */
     export class Graphic {
-        constructor(geometry : esri.geometry.Geometry, symbol : esri.symbol.Symbol, attributes : Object, infoTemplate : esri.InfoTemplate);
-        constructor(json : Object);
+        /**
+        *Creates a new Graphic object. Specify parameters in the given order using null if you aren't providing a value for an option.
+        *@param geometry The geometry that defines the graphic.
+        *@param symbol Symbol used for drawing the graphic.
+        *@param attributes Name value pairs of fields and field values associated with the graphic.
+        *@param infoTemplate The content for display in an InfoWindow.
+        */
+        constructor(geometry: esri.geometry.Geometry, symbol: esri.symbol.Symbol, attributes: Object, infoTemplate: esri.InfoTemplate);
+        /**
+        *Creates a new Graphic object using a JSON object.
+        *@param json JSON object representing the graphic.
+        */
+        constructor(json: Object);
+        /**
+        *Name value pairs of fields and field values associated with the graphic
+        */
         attributes: Object;
+        /**
+        *The geometry that defines the graphic
+        */
         geometry: esri.geometry.Geometry;
+        /**
+        *The content for display in an InfoWindow
+        */
         infoTemplate: InfoTemplate;
+        /**
+        *The symbol for the graphic
+        */
         symbol: esri.symbol.Symbol;
+        /**
+        *Indicate the visibility of the graphic.
+        */
         visible: boolean;
+        /**
+        *Returns the content string based on attributes and infoTemplate values
+        */
         getContent(): string;
         // getDojoShape(): Dojo.gfx.shape.Shape;
+        /**
+        *Returns the info template associated with the graphic.
+        */
         getInfoTemplate(): esri.InfoTemplate;
+        /**
+        *Returns the graphics layer that contains the graphic.
+        */
         getLayer(): esri.layers.GraphicsLayer;
+        /**
+        *Returns the title string based on attributes and infoTemplate values
+        */
         getTitle(): string;
+        /**
+        *Hides the graphic
+        *@returns void
+        */
         hide(): void;
-        setAttributes(attributes : Object): Graphic;
-        setGeometry(geometry : esri.geometry.Geometry): Graphic;
-        setInfoTemplate(infoTemplate : esri.InfoTemplate): Graphic;
-        setSymbol(symbol : esri.symbol.Symbol): Graphic;
+        /**
+        *Defines the attributes of the graphic
+        */
+        setAttributes(attributes: Object): Graphic;
+        /**
+        *Defines the geometry of the graphic
+        */
+        setGeometry(geometry: esri.geometry.Geometry): Graphic;
+        /**
+        *Defines the InfoTemplate for the InfoWindow of the graphic.
+        */
+        setInfoTemplate(infoTemplate: esri.InfoTemplate): Graphic;
+        /**
+        *Sets the symbol of the graphic
+        */
+        setSymbol(symbol: esri.symbol.Symbol): Graphic;
+        /**
+        *Shows the graphic
+        *@returns void
+        */
         show(): void;
+        /**
+        *Converts object to its ArcGIS Server JSON representation
+        */
         toJson(): Object;
     }
 
-	export class IdentityManagerBase {
+	/**
+    *This class provides the framework and helper methods required to implement a solution for managing user credentials for the following resources:
+    - ArcGIS Server resources secured using token-based authentication. Note that only ArcGIS Server versions 10 SP 1 and greater are supported.
+    - Secured ArcGIS.com resources (i.e. web maps).
+    This class is not typically used by itself and does not include a user interface to obtain user input. The esri.IdentityManager class provides a complete out-of-the-box implementation.
+    */
+    export class IdentityManagerBase {
+        /**
+        *The suggested lifetime of the token in minutes.
+        */
         tokenValidity: number;
-        findCredential(url : string, userId? : string): Credential;
-        findServerInfo(url : string): esri.ServerInfo;
-        generateToken(serverInfo : esri.ServerInfo, userInfo : Object, options? : Object): dojo.Deferred<any>;
-        getCredential(url : string, options? : Object): dojo.Deferred<any>;
-        initialize(json : Object): Object;
+        /**
+        *Returns the credential for the resource identified by the specified url. Optionally you can provide a userId to find credentials for a specific user.
+        *@param url The url to a server.
+        *@param userId The userId for which you want to obtain credentials.
+        */
+        findCredential(url: string, userId?: string): Credential;
+        /**
+        *Returns information about the server that is hosting the specified url.
+        *@param url The url to a server.
+        */
+        findServerInfo(url: string): esri.ServerInfo;
+        /**
+        *Returns an object containing a token and its expiration time. You need to provide the ServerInfo object that contains token service URL and a user info object containing username and password. This is a helper method typically called by sub-classes to generate tokens.
+        *@param serverInfo A ServerInfo object that contains a token service URL.
+        *@param userInfo A user info object containing a user name and password.
+        *@param options Optional parameters. (As of 3.0). 
+        <Boolean> isAdmin 	Indicate that the token should be generated using the token service deployed with the ArcGIS Server Admin API. The default value is false.
+        */
+        generateToken(serverInfo: esri.ServerInfo, userInfo: Object, options?: Object): dojo.Deferred<any>;
+        /**
+        *Returns a Credential object that can be used to access the secured resource identified by the input url. If required the user will be challenged for a username and password which is used to generate a token. Note: The IdentityManager sets up a timer to update the Credential object with a new token prior to the expiration time. This method is typically called by esri.request when a request fails due to an "invalid credentials" error.
+        *@param url The url for the secure resource.
+        *@param options Optional parameters. (As of 3.0). 
+        <Boolean> retry 	Determines if the method should make additional attempts to get the credentials after a failure.
+        <String> token 	Token used for a previous unsuccessful attempt to fetch the given url
+        <Error> error 	Error object returned by the server from a previous attempt to fetch the given url.
+        */
+        getCredential(url: string, options?: Object): dojo.Deferred<any>;
+        /**
+        *Call this method (during your application initialization) with JSON previously obtained from toJson method to re-hydrate the state of identity manager. (Added at v2.8)
+        *@param json The JSON obtained from the toJson method.
+        */
+        initialize(json: Object): Object;
+        /**
+        *Returns true if the identity manager is busy accepting user input, i.e. the user has invoked signIn and is waiting for a response.
+        */
         isBusy(): boolean;
-        registerServers(serverInfos : esri.ServerInfo[]): void;
-        registerToken(properties : Object): void;
-        setProtocolErrorHandler(handlerFunction : Function): void;
-        setRedirectionHandler(handler : Object): void;
-        signIn(url : string, serverInfo : esri.ServerInfo, options : Object): dojo.Deferred<any>;
+        /**
+        *Register secure servers and the token endpoints.
+        *@param serverInfos A ServerInfos object that defines the secure service and token endpoint. The Identity Manager makes its best guess to determine the locatation of the secure server and token endpoint so in most cases calling registerServers is not necessary. However if the location of your server or token endpoint is non-standard use this method to register the location.
+        *@returns void
+        */
+        registerServers(serverInfos: esri.ServerInfo[]): void;
+        /**
+        *Registers the given OAuth2 access token with the identity manager.
+An access token can be obtained after the user logs in to ArcGIS Online through your application. This process is described in the User logins via JavaScript apps help topic and demonstrated in this sample application.
+Once registered with the identity manager, the access token will be passed along with all AJAX requests made by the application (on behalf of the logged in user) to access WebMaps and other items stored in ArcGIS Online. (Added at v3.4)
+        *@param properties An object with the following properties:
+        <String> server	This is the root URL for the ArcGIS Online REST API http://www.arcgis.com/sharing/rest
+        <String> token	The access token.
+        <String> userId	The id for the user who owns the access token.
+        <Number> expires	Token expiration time specified as number of milliseconds since 1 January 1970 00:00:00 URC.
+        <Boolean> ssl	Set this to true if the user has an ArcGIS Online Organizational Account and the organization is configured to allow access to resources only through SSL. 
+        *@returns void
+        */
+        registerToken(properties: Object): void;
+        /**
+        * When accessing secured resources, identity manager may prompt for username and password and send them to the server using a secure connection. Due to browser limitations under certain conditions, it may not be possible to establish a secure connection with the server if the application is being run over HTTP protocol (you can identify the protocol by looking at the URL bar in any browser). In such cases, the Identity Manager will abort the request to fetch the secured resource. Read the documentation for more info.
+        *@param handlerFunction The function to call when the protocol is mismatched. This function will be called with an object with the following properties:
+        <String> resourceUrl 	The secure resource URL.
+        <ServerInfo>ServerInfo 	Object describing the server where the secure resource is hosted. 
+        *@returns void
+        */
+        setProtocolErrorHandler(handlerFunction: Function): void;
+        /**
+        * When accessing secure resources from ArcGIS.com or one of its sub-domains the IdentityManager redirects the user to the ArcGIS.com sign-in page. Once the user successfully logs-in they are redirected back to the application. Use this method if the application needs to execute custom logic before the page is redirected by creating a custom redirection handler. The IdentityManager calls the custom handler function with an object containing the redirection properties. (Added at v2.6)
+        *@param handler An object containing the following redirection properties: 
+        <String> resourceUrl 	The URL of the secure resource that triggers the redirection to the ArcGIS.com sign-in page.
+        <ServerInfo> serverInfo 	ServerInfo object describing the server where the secure resource is hosted.
+        <String> signInPage 	URL of the sign-in page where users will be redirected.
+        <String> returnUrlParamName 	The application URL where the sign-in page redirects after a successful log-in. To create the return URL append the application's URL to signInPage as a parameter. returnUrlParamName contains the name of the parameter. 
+        *@returns void
+        */
+        setRedirectionHandler(handler: Object): void;
+        /**
+        * Sub-classes must implement this method to create and manager the user interface that is used to obtain a username and password from the end-user. It should perform the following tasks:
+        Challenge the user for a username and password.
+        Generate a token and return it to the caller via Deferred object.
+        *@param url Url for the secure resource.
+        *@param serverInfo A ServerInfo object that contains the token service url.
+        *@param options Optional parameters. (As of 3.0). 
+        <Error> error 	Error object returned by the server from a previous attempt to fetch the given url.
+        <Boolean> isAdmin 	Indicate that the token should be generated using the token service deployed with the ArcGIS Server Admin API. The default value is false.
+        <String> token 	Token used for previous unsuccessful attempts to fetch the given url
+        */
+        signIn(url: string, serverInfo: esri.ServerInfo, options: Object): dojo.Deferred<any>;
+        /**
+        * Return properties of this object in JSON.It can be stored in a Cookie or persisted in HTML5 LocalStorage and later used to:
+        Initialize the IdentityManager the next time user opens your application.
+        Share the state of identity manager between multiple web pages of your website.
+        This way your users won't be asked to sign in repeatedly when they launch your app multiple times or when navigating between multiple web pages in your website.
+        */
         toJson(): Object;
     }
 
 
-
+    /**
+    *This singleton class is automatically instantiated into esri.id when the module containing this class is imported into the application. This class extends esri.IdentityManagerBase and inherits the base class properties and methods. This class provides the framework and helper methods required to implement a solution for managing user credentials for the following resources:
+        ArcGIS Server resources secured using token-based authentication. Note that only ArcGIS Server versions 10 SP 1 and greater are supported.
+        Secured ArcGIS.com resources (i.e. web maps).
+    */
     export class IdentityManager extends IdentityManagerBase {
+        /**
+        *
+        */
         esriSignInDialog: string;
+        /**
+        *Dialog box widget used to challenge the user for their credentials when the application attempts to access a secure resource.
+        */
         dialog: any; //dijit.Dialog;
-        onDialogCancel(info : Object): void;
+        /**
+        *Fired when the user clicks the cancel button on the dialog box widget.
+        *@param info An object with the following properties: <String> resourceUrl URL of the secured resource for which the sign-in process was cancelled. <ServerInfo> serverInfo A ServerInfo object describing the server where the secure resource is hosted.
+        *@returns void
+        */
+        onDialogCancel(info: Object): void;
+        /**
+        *Fired when the dialog box widget, used to prompt users for their credentials, is created
+        *@returns void
+        */
         onDialogCreate(): void;
         //dialogcancel: Object; // Event
         //dialogcreate: void;
 
 
     }
-       export class InfoTemplate {
+
+    /**
+    *An InfoTemplate contains a title and content template string used to transform Graphic.attributes into an HTML representation. The Dojo syntax ${<key>} performs the parameter substitution. In addition, a wildcard ${*} can be used as the template string. The wildcard prints out all of the attribute's name value pairs. The default behavior on a Graphic is to show the Map's InfoWindow after a click on the Graphic. An InfoTemplate is required for this default behavior. 
+    */
+    export class InfoTemplate {
+        /**
+        * Creates a new empty InfoTemplate object.
+        */
         constructor();
-        constructor(title : string, content : string);
-        constructor(json : Object);
+        /** 
+        * Creates a new InfoTemplate object.
+        *@param title The template for defining how to format the title used in an InfoWindow.
+        *@param content The template for defining how to format the content used in an InfoWindow.
+        */
+        constructor(title: string, content: string);
+        /**
+        * Creates a new InfoTemplate object using a JSON object.
+        *@param json JSON object representing the InfoTemplate.
+        {title:"Test Title", content:"Test Content"}
+        */
+        constructor(json: Object);
+        /**
+        * The template for defining how to format the content used in an InfoWindow.
+        */
         content: any; // String|Function
+        /**
+        * The template for defining how to format the title used in an InfoWindow.You can format the title by specifying either a string value or a function.
+        */
         title: any; // String|Function
+        /**
+        * Sets the content template. View the Format Info Window Content help topic for more details.
+        *@param template The template for the content.
+        */
         setContent(template: string): esri.InfoTemplate;
+        /**
+        * Sets the content template. View the Format Info Window Content help topic for more details.
+        *@param template The template for the content.
+        */
         setContent(template: Function): esri.InfoTemplate;
+        /**
+        * Sets the title template. View the Format Info Window Content help topic for more details.
+        *@param template 
+        */
         setTitle(template: string): esri.InfoTemplate;
+        /**
+        * Sets the title template. View the Format Info Window Content help topic for more details.
+        *@param template 
+        */
         setTitle(template: Function): esri.InfoTemplate;
+        /**
+        * Converts object to its ArcGIS Server JSON representation.
+        */
         toJson(): Object;
     }
+
+	/**
+    *The base class for the out-of-the-box InfoWindow. To create a custom info window, extend this class and adhere to the following requirements:
+    Provide implementation for the listed methods
+    Expose listed properties
+    Fire listed events
+    */
     export class InfoWindowBase {
+        /**
+        *The reference to a DOM node where the info window is constructed.
+        */
         domNode: Object;
+        /**
+        *Indicates if the info window is visible.
+        */
         isShowing: boolean;
+        /**
+        *Helper method. Call destroy on dijits that are embedded into the specified node. Sub-classes may need to call this method before executing setContent logic to finalize the destruction of any embedded dijits in the previous content.
+        *@returns void
+        */
         destroyDijits(): void;
+        /**
+        *Hide the info window. Fire the onHide event at the end of your implementation of this method to hide the info window.
+        Sub-classes should implement this method.
+        *@returns void
+        */
         hide(): void;
+        /**
+        *Helper method. Place the HTML value as a child of the specified parent node.
+        *@param value A string with HTML tags.
+        *@param parentNode The parent node where the value will be placed.
+        *@returns void
+        */
         place(value: string, parentNode: any): void;
+        /**
+        *Helper method. Place the HTML value as a child of the specified parent node.
+        *@param value A DOM node.
+        *@param parentNode The parent node where the value will be placed.
+        *@returns void
+        */
         place(value: any, parentNode: any): void;
-        resize(width : number, height : number): void;
+        /**
+        *Resize the info window to the specified width and height (in pixels).
+        Sub-classes should implement this method.
+        *@param width The new width of the InfoWindow in pixels.
+        *@param height The new height of the InfoWindow in pixels.
+        *@returns void
+        */
+        resize(width: number, height: number): void;
+        /**
+        *Define the info window content. Sub-classes should implement this method.
+        *@param content Text to display in the info window, can include HTML tags to format and organize the content.
+        *@returns void
+        */
         setContent(content: string): void;
+        /**
+        *Define the info window content. Sub-classes should implement this method.
+        *@param content The content argument can be any of the following. See the Info Template content property for details.
+        - Reference to an HTML element
+        See the Info Window content property for details.
+        - Deferred object
+        A deferred object represents a value that may not be immediately available. Your implementation should wait for the results to become available by assigning a callback function to the deferred object.
+        *@returns void
+        */
         setContent(content: Object): void;
-        setMap(map : esri.Map): void;
+        /**
+        *This method is called by the map when the object is set as its info window. The default implementation provided by InfoWindowBase stores the argument to this object in a property named map and is sufficient for most use cases.
+        *@param map The map object.
+        *@returns void
+        */
+        setMap(map: esri.Map): void;
+        /**
+        *Set the input value as the title for the info window. Sub-classes should implement this method.
+        *@param title string value.
+        *@returns void
+        */
         setTitle(title: string): void;
+        /**
+        *Set the input value as the title for the info window. Sub-classes should implement this method.
+        *@param title The title argument can be any of the following. See the Info Template content property for details.
+        - Reference to an HTML element
+        See the Info Window content property for details.
+        - Deferred object
+        A deferred object represents a value that may not be immediately available. Your implementation should wait for the results to become available by assigning a callback function to the deferred object.
+        *@returns void
+        */
         setTitle(title: Object): void;
-        show(location : esri.geometry.Point): void;
+        /**
+        *Display the info window at the specified location. Location is an instance of esri.geometry.Point. Fire the onShow event at the end of your implementation of this method to display the info window.
+        It is entirely up to you, the developer, how to display the info window. You can emulate the out-of-the-box behavior of displaying the entire info window at once. Or you can create a custom implementation that displays a portion of the window, perhaps the title, initially then animates the content area.
+        Subclasses should implement this method.
+        *@param location Location is an instance of esri.geometry.Point. If the location has a spatial reference, it is assumed to be in map coordinates otherwise screen coordinates are used. Screen coordinates are measured in pixels from the top-left corner of the map control. To convert between map and screen coordinates use Map.toMap and Map.toScreen.
+        *@returns void
+        */
+        show(location: esri.geometry.Point): void;
+        /**
+        *Helper method. Call startup on dijits that are embedded into the specified node. Sub-classes may need to call this method right after displaying the info window, passing in a reference to the content node.
+        *@returns void
+        */
         startupDijits(): void;
-        unsetMap(map : esri.Map): void;
+        /**
+        *This method is called by the map when the object is no longer the map's info window. The default implementation provided by InfoWindowBase clears the argument property "map" from the object and is sufficient for most use cases.
+        *@param map The map object.
+        *@returns void
+        */
+        unsetMap(map: esri.Map): void;
+        /**
+        *Fires after the info window is hidden. Sub-classes typically fire this event at the end of the hide method logic.
+        *@returns void
+        */
         onHide(): void;
+        /**
+        *Fires after the info window becomes visible. Sub-classes typically fire this event at the end of the show method logic. If your implementation of the info window animates the DOM node into visibility, fire this event at the end of the animation.
+        *@returns void
+        */
         onShow(): void;
     }
 
@@ -219,140 +649,760 @@ declare module esri {
     }
 
 
+    /**
+    *The esri.Map class creates a container and required DOM structure for adding layers, graphics, an info window, and other navigation controls.
+    Typically, a map is added to a page using a DIV. The map's width and height are initialized to those of the DIV container. 
 
+    CSS Classes
+    esriAttribution: Represents the map attribution node.
+    esriAttributionOpen: Represents the map attribution node when it is open i.e., it is clicked. Use this class to define CSS rules that apply to the attribution only when it is open.
+    */
     export class Map { // we can't extends the dijit._Widget because of a compiler bug, see : https://github.com/schungx/Dojo-TypeScript/issues/2
 		// in that case, we have to define the base methods
+        /**
+        *Creates a new map inside of the given HTML container, which is often a DIV element.
+        *@param divId Container id for the referencing map. Required.
+        *@param options Optional parameters. See options list.
+        <Number> attributionWidth 	
+        <Boolean> autoResize 	
+        <String> basemap 	Specify a basemap for the map. The following are valid options: "streets" , "satellite" , "hybrid", "topo", "gray", "oceans", "national-geographic", "osm".
+        <Number[] | Point> center 	
+        <Boolean> displayGraphicsOnPan 	
+        <Extent> extent 	
+        <Boolean> fadeOnZoom 	
+        <Boolean> fitExtent 	
+        <Boolean> force3DTransforms 	
+        <InfoWindowBase> infoWindow 	
+        <LOD[]> lods 	
+        <Boolean> logo 	Display the esri logo on the map.
+        <Number> maxScale 	
+        <Number> maxZoom 	
+        <Number> minScale 	
+        <Number> minZoom 	
+        <Boolean> nav 	
+        <String> navigationMode 	
+        <Boolean> optimizePanAnimation 	
+        <Number> resizeDelay 	
+        <Number> scale 	Initial map scale.
+        <Boolean> showAttribution
+        <Boolean> showInfoWindowOnClick
+        <Boolean> slider
+        <String[]> sliderLabels
+        <String> sliderOrientation
+        <String> sliderPosition
+        <String> sliderStyle
+        <Boolean> wrapAround180
+        <Number> zoom
+        */
         constructor(divId, options?: Object);
+        /**
+        *Reference to the attribution widget created by the map when map attribution is enabled. (Added at v3.1)
+        */
         esriAttribution: string;
+        /**
+        *Reference to the attribution widget created by the map when map attribution is enabled. (Added at v3.1)
+        */
         esriAttributionOpen: string;
+        /**
+        *Reference to the attribution widget created by the map when map attribution is enabled. (Added at v3.1)
+        */
         attribution: esri.dijit.Attribution;
+        /**
+        *Value is true when the map automatically resizes if the browser window or ContentPane widget enclosing the map is resized. Otherwise false. Added at v.3.3.
+        */
         autoResize: boolean;
+        /**
+        *The current extent of the map in map units. See Setting and using extents in a map for more information about extents.
+        */
         extent: esri.geometry.Extent;
+        /**
+        *Indicates if the fade effect is enabled while zooming. Only applicable when navigationMode is set to 'css-transforms'. The default value is true. (Added at v2.6)
+        */
         fadeOnZoom: boolean;
+        /**
+        *When the mapNavigation mode is set to 'css-transforms', CSS3 transforms will be used for map navigation when supported by the browser. It is recommended that you let the map determine when to enable transformations to avoid running into a known issue (http://code.google.com/p/chromium/issues/detail?id=105227) with scrollbar rendering on Chrome on Windows XP. (Added at v2.6)
+        */
         force3DTransforms: boolean;
+        /**
+        *The extent (or bounding box) of the map in geographic coordinates. Available only when the map's spatial reference is Web Mercator or Geographic (wkid 4326).  (Added at v3.3)
+        */
         geographicExtent: esri.geometry.Extent;
+        /**
+        *Provides access to the Map's GraphicsLayer. The graphics object is available to use after the Map.onLoad event.
+        */
         graphics: esri.layers.GraphicsLayer;
+        /**
+        *An array of the current GraphicsLayers in the map. (Added at v1.4)
+        */
         graphicsLayerIds: string[];
+        /**
+        *Current height of the map in screen pixels. This property is read-only. The height and width of the map are normally set in the HTML DIV or other HTML element containing the map container.
+        */
         height: number;
+        /**
+        *Reference to HTML DIV or other element where the map is placed on the page. This property is set in the Map constructor.
+        */
         id: string;
+        /**
+        *Displays the InfoWindow on a map.
+        */
         infoWindow: esri.dijit.Popup;
+        /**
+        *When true, the key sequence of shift then click to recenter the map is enabled. See Map navigation for more details.
+        */
         isClickRecenter: boolean;
+        /**
+        *When true, double click zoom is enabled. This allows a user to zoom and recenter the map by double clicking the mouse. See Map navigation for more details.
+        */
         isDoubleClickZoom: boolean;
+        /**
+        *When true, keyboard navigation is enabled. This allows users to pan the keyboard using the arrow keys and to zoom using the + and - keys. See Map navigation for more details.
+        */
         isKeyboardNavigation: boolean;
+        /**
+        *When true, map panning is enabled using the mouse. See Map navigation for more details.
+        */
         isPan: boolean;
+        /**
+        *When true, pan arrows are displayed around the edge of the map. See Map navigation for more details.
+        */
         isPanArrows: boolean;
+        /**
+        *When true, rubberband zoom is enabled. This allows users to draw a bounding box zoom area using the mouse. See Map navigation for more details.
+        */
         isRubberBandZoom: boolean;
+        /**
+        *When true, the mouse scroll wheel zoom is enabled. See Map navigation for more details.
+        */
         isScrollWheelZoom: boolean;
+        /**
+        *When true, shift double click zoom is enabled. This allows a user to zoom and recenter the map by shift + double clicking the mouse. See Map navigation for more details. (Added at v1.2)
+        */
         isShiftDoubleClickZoom: boolean;
+        /**
+        *When true, the zoom slider is displayed on the map. See Map navigation for more details.
+        */
         isZoomSlider: boolean;
+        /**
+        *Array of current TiledMapServiceLayers and DynamicMapServiceLayers added to the map.
+        */
         layerIds: string[];
+        /**
+        *After the first layer is loaded, the value is set to true.
+        */
         loaded: boolean;
+        /**
+        *Indicates whether the map uses CSS3 transformations when panning and zooming. In 'css-transform' mode the map will use CSS3 transformations, if supported by the browser, to provide a smoother experience while panning and zooming the map. (Added at v2.6)
+        */
         navigationMode: string;
+        /**
+        *This point geometry in screen coordinates represent the top-left corner of the map container. This coordinate also acts as the origin for all screen coordinates returned by Map and GraphicsLayer events. (Added at v1.3)
+        */
         position: esri.geometry.Point;
+        /**
+        *The DOM node that contains the container of layers, build-in info window, logo and slider. (Added at v2.2)
+        */
         root: any; //DOMNode;
+        /**
+        *When true, map attribution is enabled. (Added at v3.1)
+        */
         showAttribution: boolean;
+        /**
+        *If snapping is enabled on the map using map.enableSnapping() this property provides access to the SnappingManager. The snapping manager's setLayerInfo method can be used to modify the target snapping layers. (Added at v2.3)
+        */
         snappingManager: esri.SnappingManager;
+        /**
+        *The spatial reference of the map. See Projected Coordinate Systems and Geographic Coordinate Systems for the list of supported spatial references.
+        */
         spatialReference: esri.SpatialReference;
+        /**
+        *The current TimeExtent for the map. Use the setTimeExtent method to modify the time extent. (Added at v2.0)
+        */
         timeExtent: esri.TimeExtent;
+        /**
+        *Current width of the map in screen pixels. This property is read-only. The height and width of the map are normally set in the HTML DIV or other HTML element containing the map container.
+        */
         width: number;
-        addLayer(layer : esri.layers.Layer, index?: number): esri.layers.Layer;
+        /**
+        *Adds an ESRI Layer to the map.
+        *@param layer Layer to be added to the map.
+        *@param index A layer can be added at a specified index in the map. If no index is specified or the index specified is greater than the current number of layers, the layer is automatically appended to the list of layers in the map and the index is normalized. (As of v1.3) 
+        * @returns The 0 return object of Layer was added at v1.4. This is a new method.
+        */
+        addLayer(layer: esri.layers.Layer, index?: number): esri.layers.Layer;
+        /**
+        *Adds multiple layers to a map. The array order corresponds to the layer order in the client side map. The onLayerAddResult event fires for each layer that is added. Once all the layers are added to the map the onLayersAddResult fires.
+        *@param layers Layers to be added to the map.
+        *@returns void
+        */
         addLayers(layers: esri.layers.Layer[]): void;
-        centerAndZoom(mapPoint : esri.geometry.Point, levelOrFactor : number): dojo.Deferred<any>;
-        centerAt(mapPoint : esri.geometry.Point): dojo.Deferred<any>;
+        /**
+        *Centers and zooms the map. 
+        *@param mapPoint Centers the map on the specified x,y location. Starting at version 3.3, the mapPoint can be an array of longitude/latitude pairs. 
+        *@param levelOrFactor When using an ArcGISTiledMapServiceLayer, the map is zoomed to the level specified. When using a DynamicMapServiceLayer, the map is zoomed in or out by the specified factor. For example, use 0.5 to zoom in twice as far and 2.0 to zoom out twice as far.
+        * @returns At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the operation is completed. (Added at v1.2)
+        */
+        centerAndZoom(mapPoint: esri.geometry.Point, levelOrFactor: number): dojo.Deferred<any>;
+        /**
+        *Centers the map based on map coordinates as the center point. 
+        *@param mapPoint Centers the map on the specified x,y location. Starting at version 3.3 this value can be an array of longitude/latitude pairs. 
+        * @returns At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the map has been re-centered to the given point.
+        */
+        centerAt(mapPoint: esri.geometry.Point): dojo.Deferred<any>;
+        /**
+        *Destroys the map instance. After the map is destroyed it is no longer valid however you can re-use the div element of the map to create a new map instance. (Added at v2.0)
+        *@returns void
+        */
         destroy(): void;
+        /**
+        *Disallows clicking on a map to center it. See Map navigation for more details.
+        *@returns void
+        */
         disableClickRecenter(): void;
+        /**
+        *Disallows double clicking on a map to zoom in a level and center the map. See Map navigation for more details.
+        *@returns void
+        */
         disableDoubleClickZoom(): void;
+        /**
+        *Disallows panning and zooming using the keyboard. See Map navigation for more details.
+        *@returns void
+        */
         disableKeyboardNavigation(): void;
+        /**
+        *Disallows all map navigation except the slider and pan arrows. See Map navigation for more details.
+        *@returns void
+        */
         disableMapNavigation(): void;
+        /**
+        *Disallows panning a map using the mouse. See Map navigation for more details.
+        *@returns void
+        */
         disablePan(): void;
+        /**
+        *Disallows zooming in or out on a map using a bounding box. See Map navigation for more details.
+        *@returns void
+        */
         disableRubberBandZoom(): void;
+        /**
+        *Disallows zooming in or out on a map using the mouse scroll wheel. See Map navigation for more details.
+        *@returns void
+        */
         disableScrollWheelZoom(): void;
+        /**
+        *Disallows shift double clicking on a map to zoom in a level and center the map. See Map navigation for more details. (Added at v1.2)
+        *@returns void
+        */
         disableShiftDoubleClickZoom(): void;
+        /**
+        *Disables snapping on the map. (Added at v2.3)
+        *@returns void
+        */
         disableSnapping(): void;
+        /**
+        *Permits users to click on a map to center it. See Map navigation for more details.
+        *@returns void
+        */
         enableClickRecenter(): void;
+        /**
+        *Permits users to double click on a map to zoom in a level and center the map. See Map navigation for more details.
+        *@returns void
+        */
         enableDoubleClickZoom(): void;
+        /**
+        *Permits users to pan and zoom using the keyboard. See Map navigation for more details.
+        *@returns void
+        */
         enableKeyboardNavigation(): void;
+        /**
+        *Allows all map navigation. See Map navigation for more details.
+        *@returns void
+        */
         enableMapNavigation(): void;
+        /**
+        *Permits users to pan a map using the mouse. See Map navigation for more details.
+        *@returns void
+        */
         enablePan(): void;
+        /**
+        *Permits users to zoom in or out on a map using a bounding box. See Map navigation for more details.
+        *@returns void
+        */
         enableRubberBandZoom(): void;
+        /**
+        *Permits users to zoom in or out on a map using the mouse scroll wheel. See Map navigation for more details.
+        *@returns void
+        */
         enableScrollWheelZoom(): void;
+        /**
+        *Permits users to shift double click on a map to zoom in a level and center the map. See Map navigation for more details. (Added at v1.2)
+        *@returns void
+        */
         enableShiftDoubleClickZoom(): void;
-        enableSnapping(snapOptions : Object): SnappingManager;
+        /**
+        *Enable snapping on the map when working with the Editor, Measurement widget or the Draw and Edit toolbars. If no snapOptions are provided all graphics layers, including feature layers, will be set as snap targets. Call this method after the layers are loaded. (Added at v2.3)
+        *@param snapOptions Options object include:
+            <Number> tolerance 	Specify the radius of the snapping circle in pixels. The default value is 15 pixels.
+            <Object> layerInfos 	An array of layerInfo objects that define the snapping target layers. All values are optional. If no snapping options are set the default values will be used.
+                <Layer> layer 	Reference to a feature or graphics layer that will be a target snapping layer. The default option is to set all feature and graphics layers in the map to be target snapping layers.
+                <Boolean> snapToPoint 	Default is true. When true snapping to points will be enabled for layers with point geometry.
+                <Boolean> snapToVertex 	Default is true. When true snapping to vertices will be enabled for layers with polyline or polygon geometry.
+                <Boolean> snapToEdge 	Default is true. When true snapping to edges will be enabled for layers with polyline or polygon geometry.
+            <SimpleMarkerSymbol> snapPointSymbol 	Define a symbol for the snapping location. The default symbol is a simple marker symbol with the following properties: size:15px,color:cyan,style:STYLE_CROSS.
+            <Boolean> alwaysSnap 	When true, snapping is always enabled. When false users press the snapKey to enable snapping. The default value is false.
+            <dojo.key> snapKey 	When alwaysSnap is set to false use this option to define the key users press to enable snapping. The default values is the CTRL key. 
+        * @returns SnappingManager
+        */
+        enableSnapping(snapOptions: Object): SnappingManager;
+        /**
+        *Returns the name of the current basemap.  (Added at v3.3)
+        * @returns String 
+        */
         getBasemap(): string;
-        getInfoWindowAnchor(screenCoords : esri.geometry.Point): string;
-        getLayer(id : string): esri.layers.Layer ;
-        getLayersVisibleAtScaleRange(scale : number): esri.layers.Layer[];
+        /**
+        *
+        *@param screenCoords 
+        * @returns 
+        */
+        getInfoWindowAnchor(screenCoords: esri.geometry.Point): string;
+        /**
+        *Returns an individual layer of a map.
+        *@param id ID assigned to the layer.
+        * @returns Layer
+        */
+        getLayer(id: string): esri.layers.Layer;
+        /**
+        *Return an array of layers visible at the current scale. (Added at v3.1)
+        *@param scale Scale at which to return list of layers.
+        * @returns Layer[]
+        */
+        getLayersVisibleAtScaleRange(scale: number): esri.layers.Layer[];
+        /**
+        *Gets the current level of detail for the map. Valid only with an ArcGISTiledMapService layer.
+        * @returns Number
+        */
         getLevel(): number;
+        /**
+        *Returns the maximum visible scale of the map. You cannot zoom-in beyond this scale. A value of 0 indicates that the map does not have a maximum scale constraint.  (Added at v3.3)
+        * @returns Number
+        */
         getMaxScale(): number;
+        /**
+        *Returns the maximum zoom level of the map. You cannot zoom in beyond this value. A value of -1 indicates that the map does not have pre-defined zoom levels. (Added at v3.3)
+        * @returns Number
+        */
         getMaxZoom(): number;
+        /**
+        *Returns the minimum visible scale of the map. You cannot zoom out beyond this scale. A value of 0 indicates that the map does not have a maximum scale constraint.  (Added at v3.3)
+        * @returns Number
+        */
         getMinScale(): number;
+        /**
+        *Returns the minimum zoom level of the map.You cannot zoom out beyond this value.  A value of -1 indicates that the map does not have pre-defined zoom levels.  (Added at v3.3)
+        * @returns Number
+        */
         getMinZoom(): number;
+        /**
+        *Returns the current map scale. (Added at v3.1)
+        * @returns Number
+        */
         getScale(): number;
+        /**
+        *Returns the current zoom level of the map. A value of -1 indicates that the map does not have pre-defined zoom levels. (Added at v3.3)
+        * @returns Number
+        */
         getZoom(): number;
+        /**
+        *Hides the pan arrows from the map. See Map navigation for more details.
+        *@returns void
+        */
         hidePanArrows(): void;
+        /**
+        *Hides the zoom slider from the map. See Map navigation for more details.
+        *@returns void
+        */
         hideZoomSlider(): void;
+        /**
+        *Pans the map south. At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the pan operation is completed.
+        * @returns Deferred
+        */
         panDown(): dojo.Deferred<any>;
+        /**
+        *Pans the map west. At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the pan operation is completed. 
+        * @returns Deferred
+        */
         panLeft(): dojo.Deferred<any>;
+        /**
+        *Pans the map southwest. At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the pan operation is completed.
+        * @returns Deferred
+        */
         panLowerLeft(): dojo.Deferred<any>;
+        /**
+        *Pans the map southeast. At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the pan operation is completed.
+        * @returns Deferred
+        */
         panLowerRight(): dojo.Deferred<any>;
+        /**
+        *Pans the map east. At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the pan operation is completed.
+        * @returns Deferred
+        */
         panRight(): dojo.Deferred<any>;
+        /**
+        *Pans the map north. At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the pan operation is completed.
+        * @returns Deferred
+        */
         panUp(): dojo.Deferred<any>;
+        /**
+        *Pans the map northwest. At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the pan operation is completed.
+        * @returns Deferred
+        */
         panUpperLeft(): dojo.Deferred<any>;
+        /**
+        *Pans the map northeast. At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the pan operation is completed.
+        * @returns Deferred
+        */
         panUpperRight(): dojo.Deferred<any>;
+        /**
+        *Removes all layers from the map. 
+        *@returns void
+        */
         removeAllLayers(): void;
-        removeLayer(layer : esri.layers.Layer): void;
-        reorderLayer(layer: esri.layers.Layer, index : number): void;
+        /**
+        *Removes the specified layer from the map. (Added at v1.3)
+        *@param layer Layer to be removed from the map. 
+        *@returns void
+        */
+        removeLayer(layer: esri.layers.Layer): void;
+        /**
+        *Changes the layer order in the map. Note that the first layer added is always the base layer, even if its order is changed.
+        *@param layer The layer to be moved. (As of v1.4) Beginning with version 1.4, use this parameter in place of "layerId".
+        *@param index Refers to the location for placing the layer. The bottom most layer has an index of 0.
+        *@returns void
+        */
+        reorderLayer(layer: esri.layers.Layer, index: number): void;
+        /**
+        *Repositions the map DIV on the page. This method should be used after the map DIV has been repostioned.
+        *@returns void
+        */
         reposition(): void;
-        resize(immediate? : boolean): void;
-        setBasemap(basemap : string): void;
-        setExtent(extent : esri.geometry.Extent, fit? : boolean): dojo.Deferred<any>;
-        setLevel(level : number): void;
-        setMapCursor(cursor : string): void;
+        /**
+        *Resizes the map DIV. This method should be used after the map DIV has been resized.
+        *@param immediate By default, the actual resize logic is delayed internally in order to throttle spurious resize events dispatched by some browsers. In cases where you explicitly call this method in a one-and-done situation, you can use the boolean immediate argument to indicate that the resize logic should be applied immediately without any delay.
+        *@returns void
+        */
+        resize(immediate?: boolean): void;
+        /**
+        *Change the map's current basemap.  (Added at v3.3)
+        *@param basemap A valid basemap name. Valid values are: "streets" , "satellite" , "hybrid", "topo", "gray", "oceans", "national-geographic", "osm". 
+        *@returns void
+        */
+        setBasemap(basemap: string): void;
+        /**
+        *Sets the extent of the map. The extent must be in the same spatial reference as the map.
+        *@param extent Sets the minx, miny, maxx, and maxy for a map.
+        *@param fit When true, for maps that contain tiled map service layers, you are guaranteed to have the input extent shown completely on the map. The default value is false. (As of v1.3) 
+        * @returns At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the extent change has been committed by the map.
+        */
+        setExtent(extent: esri.geometry.Extent, fit?: boolean): dojo.Deferred<any>;
+        /**
+        *Sets the map to the specified level. Zooms to the new level based on the current map center point. Valid only with an ArcGISTiledMapService layer.
+        *@param level The level ID.
+        *@returns void
+        */
+        setLevel(level: number): void;
+        /**
+        *Sets the default cursor for the map. This cursor is shown whenever the mouse is pointed over the map, except when panning by dragging the map or using SHIFT+Drag to zoom. If not set, the map uses the platform-dependent default cursor, usually an arrow. (Added at v1.5)
+        *@param cursor A standard CSS cursor value. Some common values include "default", "pointer", "crosshair", "text", "help", and "wait".
+        *@returns void
+        */
+        setMapCursor(cursor: string): void;
+        /**
+        *Sets the map scale to the specified value. The value must be greater than 0. 
+        *@param scale A map scale value greater than 0. 
+        */
         setScale(scale): dojo.Deferred<any>;
-        setTimeExtent(timeExtent : esri.TimeExtent): void;
-        setTimeSlider(timeSlider : esri.dijit.TimeSlider): void;
-        setZoom(zoom : number): dojo.Deferred<any>;
+        /**
+        *Sets the TimeExtent for the map. When the time extent is changed the onTimeExtentChange event fires. Time aware layers listen for this event and update to only display content for the current time extent. (Added at v2.0)
+        *@param timeExtent Set the time extent for which data is displayed on the map.
+        *@returns void
+        */
+        setTimeExtent(timeExtent: esri.TimeExtent): void;
+        /**
+        *Set the time slider associated with the map.
+        *@param timeSlider The time slider dijit to associate with the map.
+        *@returns void
+        */
+        setTimeSlider(timeSlider: esri.dijit.TimeSlider): void;
+        /**
+        *Set the map zoom level to the given value.
+        *@param zoom  	A valid zoom level value. 
+        * @returns At version 3.4, this method returns a deferred object. You can add a callback to the deferred object and get notified after the zoom level has been changed. (Added at v3.3)
+        */
+        setZoom(zoom: number): dojo.Deferred<any>;
+        /**
+        *Shows the pan arrows on the map. See Map navigation for more details.
+        *@returns void
+        */
         showPanArrows(): void;
+        /**
+        *Shows the zoom slider on the map. See Map navigation for more details.
+        *@returns void
+        */
         showZoomSlider(): void;
         // toMap(screenPoint: esri.geometry.Point): esri.geometry.Point; // deprecated since version 3.3
+        /**
+        *Converts a single screen point or an array of screen points to map coordinates.
+        *@param screenPoint Converts screen coordinates to map coordinates. Starting at version 3.3, screenPoint should be an instance of ScreenPoint. 
+        * @returns Point
+        */
         toMap(screenPoint: esri.geometry.ScreenPoint): esri.geometry.Point;
+        /**
+        *Converts a single map point or an array of map points to screen coordinates.
+        *@param mapPoint Converts map coordinates to screen coordinates.
+        * @returns Point
+        */
         toScreen(mapPoint: esri.geometry.Point): esri.geometry.ScreenPoint; // fleray : ESRI documentation has errors here I suppose... (Point is mentionned instead of ScreenPoint)
+        /**
+        *Fired when the map's basemap is changed.  (Added at v3.3)
+        *@returns void
+        */
         onBasemapChange(): void;
-        onClick(event : Object): void;
-        onDblClick(event : Object): void;
-        onExtentChange(extent: esri.geometry.Extent, delta: esri.geometry.Point, levelChange: boolean, lod : esri.layers.LOD): void;
-        onKeyDown(keyEvent : Object): void;
-        onKeyUp(keyEvent : Object): void;
-        onLayerAdd(layer : esri.layers.Layer): void;
-        onLayerAddResult(layer: esri.layers.Layer, error : Error): void;
+        /**
+        *Fires when a user single clicks on the map using the mouse and the mouse pointer is within the map region of the HTML page.
+        *@param event The result can be any JavaScript MouseEvent, or the x and y coordinates of screenPoint or mapPoint.
+        *@returns void
+        */
+        onClick(event: Object): void;
+        /**
+        *Fires when a user double clicks on the map using the mouse and the mouse pointer is within the map region of the HTML page.
+        *@param event The result can be any JavaScript MouseEvent, or the x and y coordinates of screenPoint or mapPoint.
+        *@returns void
+        */
+        onDblClick(event: Object): void;
+        /**
+        *Fires when the extent of the map has changed.
+        *@param extent Gets the extent when after the extent has changed.
+        *@param delta The change in the x and y values from the previous extent. The Point x and y values are in screen units. This point acts as an anchor point, and this part of the map stays within the map region during the zoom process.
+        *@param levelChange When using ArcGIS Server tiled map services, the value is "true" when the user zooms to a new level. The value remains "false" during pan operations.
+        *@param lod When using ArcGIS Server tiled map services, this argument returns characteristics about the level of detail.
+        *@returns void
+        */
+        onExtentChange(extent: esri.geometry.Extent, delta: esri.geometry.Point, levelChange: boolean, lod: esri.layers.LOD): void;
+        /**
+        *Fires when a keyboard key is pressed.
+        *@param keyEvent The keyCode is the Unicode number representing the pressed key. See http://msdn2.microsoft.com/en-us/library/ms536938.aspx.
+        *@returns void
+        */
+        onKeyDown(keyEvent: Object): void;
+        /**
+        *Fires when a keyboard key is released.
+        *@param keyEvent The keyCode is the Unicode number representing the pressed key.
+        *@returns void
+        */
+        onKeyUp(keyEvent: Object): void;
+        /**
+        *Fires any time a layer is added to the map.
+        *@param layer The layer added to the map.
+        *@returns void
+        */
+        onLayerAdd(layer: esri.layers.Layer): void;
+        /**
+        *Fires after specified layer has been added to the map. (Added at v2.0)
+        *@param layer The layer added to the map.
+        *@param error Optional argument, available when an error occurs during the update.
+        *@returns void
+        */
+        onLayerAddResult(layer: esri.layers.Layer, error: Error): void;
+        /**
+        *Fires after the layer has been removed. (Added at v1.3)
+        *@returns void
+        */
         onLayerRemove(): void;
-        onLayerReorder(layer: esri.layers.Layer, index : number): void;
-        onLayerResume(layer : esri.layers.Layer): void;
-        onLayerSuspend(layer : esri.layers.Layer): void;
-        onLayersAddResult(results : Object[]): void;
+        /**
+        *Fires when the map layer order has been changed.
+        *@param layer The reordered layer.
+        *@param index The index of the reordered layer.
+        *@returns void
+        */
+        onLayerReorder(layer: esri.layers.Layer, index: number): void;
+        /**
+        *Fires when a map layer resumes drawing. (Added at v3.1)
+        *@param layer The layer that has resumed drawing.
+        *@returns void
+        */
+        onLayerResume(layer: esri.layers.Layer): void;
+        /**
+        *Fires when a map layer suspends drawing. A layer is considered suspended when one of the following is true:
+            - The layer is hidden.
+            - The layer is not visible at the current map scale.
+            - The layer is explicitly suspended by calling the Layer.suspend method.
+        *@param layer The layer that has suspended drawing.
+        *@returns void
+        */
+        onLayerSuspend(layer: esri.layers.Layer): void;
+        /**
+        *Fires after all layers are added to the map using the map.addLayers method. (Added at v2.0)
+        *@param results Array of result objects with the following properties
+            <Layer> layer 	Layer added to the map.
+            <Boolean> success 	True if the layer was successfully added.
+            <Error> error 	Error message if the map was unable to add the layer.
+        *@returns void
+        */
+        onLayersAddResult(results: Object[]): void;
+        /**
+        *Fires after all the layers have been removed. (Added at v1.3)
+        *@returns void
+        */
         onLayersRemoved(): void;
-        onLayersReordered(layerIds : string[]): void;
-        onLoad(map : esri.Map): void;
-        onMouseDown(event : Object): void;
-        onMouseDrag(event : Object): void;
-        onMouseDragEnd(event : Object): void;
-        onMouseDragStart(event : Object): void;
-        onMouseMove(event : Object): void;
-        onMouseOut(event : Object): void;
-        onMouseOver(event : Object): void;
-        onMouseUp(event : Object): void;
-        onMouseWheel(event : Object): void;
-        onPan(extent : esri.geometry.Extent, delta : esri.geometry.Point): void;
+        /**
+        *Fires when all the layers have been reordered. (Added at v1.1)
+        *@param layerIds  	Gets the extent during the zoom event.
+        *@returns void
+        */
+        onLayersReordered(layerIds: string[]): void;
+        /**
+        *Fires when the first or base layer has been successfully added to the map.
+        *@param map Specifies the map to load.
+        *@returns void
+        */
+        onLoad(map: esri.Map): void;
+        /**
+        *Fires when a mouse button is pressed down and the mouse cursor is in the map region of the HTML page.
+        *@param event The result can be any JavaScript MouseEvent, or the x and y coordinates of screenPoint or mapPoint.
+        *@returns void
+        */
+        onMouseDown(event: Object): void;
+        /**
+        *Fires while the mouse is being dragged until the mouse button is released.
+        *@param event The result can be any JavaScript MouseEvent, or the x and y coordinates of screenPoint or mapPoint.
+        *@returns void
+        */
+        onMouseDrag(event: Object): void;
+        /**
+        *Fires when a mouse button is released and the user stops dragging the mouse.
+        *@param event The result can be any JavaScript MouseEvent, or the x and y coordinates of screenPoint or mapPoint.
+        *@returns void
+        */
+        onMouseDragEnd(event: Object): void;
+        /**
+        *Fires when a mouse button is pressed down and the user starts to drag the mouse.
+        *@param event The result can be any JavaScript MouseEvent, or the x and y coordinates of screenPoint or mapPoint.
+        *@returns void
+        */
+        onMouseDragStart(event: Object): void;
+        /**
+        *Fires any time the mouse pointer moves over the map region. A common use for this event is to show the current x,y coordinate of the map as the user moves the mouse pointer.
+        *@param event The result can be any JavaScript MouseEvent, or the x and y coordinates of screenPoint or mapPoint.
+        *@returns void
+        */
+        onMouseMove(event: Object): void;
+        /**
+        *Fires when the mouse moves out of the map region of the HTML page.
+        *@param event The result can be any JavaScript MouseEvent, or the x and y coordinates of screenPoint or mapPoint.
+        *@returns void
+        */
+        onMouseOut(event: Object): void;
+        /**
+        *Fires when the mouse moves into the map region of the HTML page.
+        *@param event The result can be any JavaScript MouseEvent, or the x and y coordinates of screenPoint or mapPoint.
+        *@returns void
+        */
+        onMouseOver(event: Object): void;
+        /**
+        *Fires when the mouse button is released and the mouse pointer is within the map region of the HTML page.
+        *@param event The result can be any JavaScript MouseEvent, or the x and y coordinates of screenPoint or mapPoint.
+        *@returns void
+        */
+        onMouseUp(event: Object): void;
+        /**
+        *Fires when the mouse wheel is scrolled.
+        *@param event The returned object contains screenPoint, mapPoint, and Graphic.
+        *@returns void
+        */
+        onMouseWheel(event: Object): void;
+        /**
+        *Fires during the pan process.
+        *@param extent The current extent of the map as the map is panning.
+        *@param delta The change in x,y values in screen units as the map is panning.
+        *@returns void
+        */
+        onPan(extent: esri.geometry.Extent, delta: esri.geometry.Point): void;
+        /**
+        *Fires when the pan is complete.
+        *@param extent The current extent of the map as the map is panning.
+        *@param delta The change in x,y values in screen units from the starting screen point once the map is finished panning.
+        *@returns void
+        */
         onPanEnd(extent: esri.geometry.Extent, delta: esri.geometry.Point): void;
+        /**
+        *Fires when a user commences panning.
+        *@param extent The current extent of the map as the map is panning.
+        *@param startPoint When using a mouse, the starting point in screen units where the mouse was clicked. If the keyboard is used, the starting point is 0,0.
+        *@returns void
+        */
         onPanStart(extent: esri.geometry.Extent, startPoint: esri.geometry.Point): void;
-        onReposition(x : number, y : number): void;
-        onResize(extent, width : number, height : number): void;
-        onTimeExtentChange(timeExtent : esri.TimeExtent): void;
-        onUnload(map : esri.Map): void;
+        /**
+        *Fires when the map DIV is repositioned.
+        *@param x X-coordinate in screen units.
+        *@param y Y-coordinate in screen units.
+        *@returns void
+        */
+        onReposition(x: number, y: number): void;
+        /**
+        *Fires when the map's container has been resized.
+        *@param extent The extent of the map.
+        *@param width The width of the map in pixels.
+        *@param height The height of the map in pixels.
+        *@returns void
+        */
+        onResize(extent, width: number, height: number): void;
+        /**
+        *Fires when the map's timeExtent property is set. (Added at v2.0)
+        *@param timeExtent Fires when the map's timeExtent property is changed. Time aware layers listen for this event and update to only display content for the map's specified time extent.
+        *@returns void
+        */
+        onTimeExtentChange(timeExtent: esri.TimeExtent): void;
+        /**
+        *Fires when the page is refreshed. 
+        *@param map Specified the map to unload.
+        *@returns void
+        */
+        onUnload(map: esri.Map): void;
+        /**
+        *Fires after layers that are updating their content have completed. This event is often used in combination with onUpdateStart to display a "Map is busy" or "Loading..." message as visual feedback to the end-user. (Added at v2.2)
+        *@returns void
+        */
         onUpdateEnd(): void;
+        /**
+        *Fires when one or more layers being updating their content. This event is often used in combination with onUpdateEnd to display a "Map is busy" or "Loading..." message as visual feedback to the end-user. (Added at v2.2)
+        *@returns void
+        */
         onUpdateStart(): void;
-        onZoom(extent : esri.geometry.Extent, zoomFactor : number, anchor : esri.geometry.Point): void;
-        onZoomEnd(extent : esri.geometry.Extent, zoomFactor : number, anchor : esri.geometry.Point, level : number): void;
+        /**
+        *Fires during the zoom process.
+        *@param extent Gets the extent during the zoom event.
+        *@param zoomFactor The scale factor represents the amount as a percentage that the map zoomed in or out from the previous extent. A value of 2 means the map was zoomed in twice as far as the previous extent. A value of 0.5 means the map zoomed out twice as far as previously.
+        *@param anchor The location of the mouse pointer. The Point x and y values are in screen units. This point acts as an anchor point, and this part of the map stays within the map region during the zoom process.
+        *@returns void
+        */
+        onZoom(extent: esri.geometry.Extent, zoomFactor: number, anchor: esri.geometry.Point): void;
+        /**
+        *Fires when the zoom is complete.
+        *@param extent Gets the extent when the zoom event ends.
+        *@param zoomFactor The scale factor represents the amount as a percentage that the map zoomed in or out from the previous extent. A value of 2 means the map was zoomed in twice as far as the previous extent. A value of 0.5 means the map zoomed out twice as far as previously.
+        *@param anchor The location of the mouse pointer. The Point x and y values are in screen units. This point acts as an anchor point, and this part of the map stays within the map region during the zoom process.
+        *@param level Level of an ArcGISTiledMapServiceLayer after zoom is complete.
+        *@returns void
+        */
+        onZoomEnd(extent: esri.geometry.Extent, zoomFactor: number, anchor: esri.geometry.Point, level: number): void;
+        /**
+        *Fires when a user commences zooming.
+        *@param extent Gets the extent when the zoom event starts.
+        *@param zoomFactor The scale factor represents the amount as a percentage that the map zoomed in or out from the previous extent. A value of 2 means the map was zoomed in twice as far as the previous extent. A value of 0.5 means the map zoomed out twice as far as previously.
+        *@param anchor The location of the mouse pointer. The Point x and y values are in screen units. This point acts as an anchor point, and this part of the map stays within the map region during the zoom process.
+        *@param level Level of an ArcGISTiledMapServiceLayer before the zoom commences.
+        *@returns void
+        */
         onZoomStart(extent: esri.geometry.Extent, zoomFactor: number, anchor: esri.geometry.Point, level: number): void;
         //basemap-change : void;
         //click : <MouseEvent> <MouseEvent>;
@@ -396,124 +1446,445 @@ declare module esri {
 		on(type: string, listener: Dojo.Action): Dojo.RemovableHandle;
 		on(type: string, listener: EventListener): Dojo.RemovableHandle;
     }
+
+    /**
+    *The OperationBase class defines operations that can be added to the UndoManager. Extend this class to create custom operations. The following edit operations in the esri.dijit.editing namespace inherit from this class. 
+    */
     export class OperationBase {
-        constructor(params : Object);
+        /**
+        *Creates a new OperationBase object
+        *@param params See options list for parameters:
+        <String> label 	Provide information about the operation.
+        <String> type 	Specify the type of operation, for example: "edit" or "navigation".
+        */
+        constructor(params: Object);
+        /**
+        *Details about the operation, for example: "Update" may be the label for an edit operation that updates features.
+        */
         label: string;
+        /**
+        *The type of operation, for example: "edit" or "navigation".
+        */
         type: string;
+        /**
+        *Re-perform the last undo operation. When inherting from OperationBase provide a custom implementation for this method.
+        *@returns void
+        */
         performRedo(): void;
+        /**
+        *Reverse the operation. When inheriting from OperationBase provide a custom implementation for this method.
+        *@returns void
+        */
         performUndo(): void;
     }
+
+    /**
+    *This class contains information about an ArcGIS Server and its token endpoint. 
+    */
     export class ServerInfo {
+        /**
+        *The token service URL used to generate tokens for ArcGIS Server Admin resources
+        */
         adminTokenServiceUrl: string;
+        /**
+        *Version of the ArcGIS Server REST API deployed on this server.
+        */
         currentVersion: number;
+        /**
+        *Server URL in the following format:
+         scheme://host[:port]
+        */
         server: string;
+        /**
+        *Validity of short-lived token in minutes
+        */
         shortLivedTokenValidity: number;
+        /**
+        *The token service URL used to generate tokens for the secured resources on the server
+        */
         tokenServiceUrl: string;
+        /**
+        *Return the properties of this object in JSON
+        */
         toJson(): Object;
     }
+
+    /**
+    *The SnappingManager is used to add snapping capability to the Editor, Measurement Widget, Draw toolbar and Edit toolbar.
+    */
     export class SnappingManager {
+        /**
+        *Create a new SnappingManager object.
+        *@param options Optional parameters. See options list.
+        <Boolean> alwaysSnap 	When true, snapping is always enabled. When false users press the snapKey to enable snapping. Default value is false.
+        <Object[]> layerInfos 	Specify an array of layerInfo objects.
+        <Object> layerInfos 	Optional 	An array of layerInfo objects that define the snapping target layers. All values are optional. If no snapping options are set the default values will be used.
+        <Layer> layer 	Reference to a feature or graphics layer that will be a target snapping layer. The default option is to set all feature and graphics layers in the map to be target snapping layers.
+        <Boolean> snapToPoint 	Default is true. When true snapping to points will be enabled for layers with point geometry.
+        <Boolean> snapToVertex 	Default is true. When true snapping to vertices will be enabled for layers with polyline or polygon geometry.
+        <Boolean> snapToEdge 	Default is true. When true snapping to edges will be enabled for layers with polyline or polygon geometry.
+        <Map> map 	Reference to the map. Required parameter.
+        <dojo.keys> snapKey 	When alwaysSnap is set to false use this option to define the key users press to enable snapping. The default value is the dojo.copyKey. The dojo.copyKey is a virtual key that maps to CTRL on Windows and the Command key on mac.
+        <SimpleMarkerSymbol> snapPointSymbol 	Define a symbol for the snapping location. The default symbol is a simple marker symbol with the following properties: size:15px, color:cyan, style:STYLE_CROSS.
+        <Number> tolerance 	Specify the radius of the snapping circle in pixels. The default value is 15 pixels.
+        */
         constructor(options?: Object);
+        /**
+        *Destroy the SnappingManager object. All related objects will be set to null.
+        *@returns void
+        */
         destroy(): void;
+        /**
+        *Returns a deferred object, which can be added to a callback to find the snap point.
+        *@param screenPoint The input screen point for which to find the snapping location.
+		*@returns 
+        */
         getSnappingPoint(screenPoint: esri.geometry.ScreenPoint): dojo.Deferred<any>;
-        setLayerInfos(layerInfos : Object[]): void;
+        /**
+        *An array of layerInfo objects used to specify the target snapping layers.
+        *@param layerInfos An array of layerInfo objects that define the snapping target layers. All values are optional. If no snapping options are set the default values will be used.
+        <Layer> layer 	Reference to a feature or graphics layer that will be a target snapping layer. The default option is to set all feature and graphics layers in the map to be target snapping layers.
+        <Boolean> snapToPoint 	Default is true. When true snapping to points will be enabled for layers with point geometry.
+        <Boolean> snapToVertex 	Default is true. When true snapping to vertices will be enabled for layers with polyline or polygon geometry.
+        <Boolean> snapToEdge 	Default is true. When true snapping to edges will be enabled for layers with polyline or polygon geometry. 
+        *@returns void
+        */
+        setLayerInfos(layerInfos: Object[]): void;
     }
+
+    /**
+    *The spatial reference of a map, layer, or inputs to and outputs from a task. Each projected and geographic coordinate system is defined by both a well-known ID (WKID) or a definition string (WKT). Note that pre 10 only wkid was supported. 
+    */
     export class SpatialReference {
-        constructor(json : Object);
+        /**
+        *Creates a new SpatialReference object.
+        *@param json The REST JSON representation of the spatial reference: {"wkid" : <wkid>}
+        */
+        constructor(json: Object);
+        /**
+        *Create a spatial reference object and initialize it with a well-known ID (wkid). (Added at v2.8)
+        *@param wkid The well-known id (wkid) of the coordinate system.
+        */
         constructor(wkid: number);
+        /**
+        *Create a spatial reference object and initialize it with the given well-known text (wkt). (Added at v2.8)
+        *@param wkt The well-known text (wkt) of the coordinate system.
+        */
         constructor(wkt: string);
+        /**
+        *The well-known ID of a spatial reference. 
+        */
         wkid: number;
+        /**
+        *The well-known text that defines a spatial reference. Many browser have a limit to the length of a GET request of approximately 2048 characters. When using well-known text to specify the spatial reference you can easily exceed this limit. In these cases, you will need to setup and use a proxy page.
+        */
         wkt: string;
-        equals(sr : esri.SpatialReference): boolean;
+        /**
+        *Returns true if the input spatial reference object has the same wkid or wkt as this spatial reference object. Returns false otherwise.  (Added at v3.3)
+        *@param sr The spatial reference to compare. 
+		*@returns 
+        */
+        equals(sr: esri.SpatialReference): boolean;
+        /**
+        *Returns true if the wkid of the spatial reference object is one of the following values: 102113, 102100, 3857 (Added at v3.3)
+		*@returns Boolean
+        */
         isWebMercator(): boolean;
+        /**
+        *Returns an easily serializable object representation of the spatial reference.
+		*@returns JSON Object
+        */
         toJson(): Object;
     }
+
+    /**
+    *Represents the period in time within which the data was collected.
+    */
     export class TimeExtent {
+        /**
+        *Creates a new TimeExtent object with the specifed start and end time.
+        *@param startTime The start time for the specified time extent.
+        *@param endTime The end time for the specified time extent.
+        */
         constructor(startTime: esri.tasks.Date, endTime: esri.tasks.Date);
+        /**
+        *The end time for the specified time extent.
+        */
         endTime: esri.tasks.Date;
+        /**
+        *The start time for the specified time extent.
+        */
         startTime: esri.tasks.Date;
-        intersection(timeExtent : number): esri.TimeExtent;
+        /**
+        *Returns a new time extent indicating the intersection between "this" and the argument time extent.
+        *@param timeExtent The input time extent.
+		*@returns esri.TimeExtent
+        */
+        intersection(timeExtent: number): esri.TimeExtent;
+        /**
+        *Returns a new time extent with the given offset from "this' time extent.
+        *@param offsetValue The length of time to offset from "this" time extent.
+        *@param offsetUnits The offset units, see the TimeInfo constants for a list of valid values.
+		*@returns esri.TimeExtent
+        */
         offset(offsetValue : number, offsetUnits : string): esri.TimeExtent;
     }
+
+    /**
+    *The Undo Manager is a utility object that allows you to easily build applications with undo/redo functionality. Use the Undo Manager to add operations (edits, navigation changes, graphics drawing) to the stack.
+    */
     export class UndoManager {
-        constructor(options : Object);
+        /**
+        *Creates a new UndoManager object.
+        *@param options See options list for parameters.
+            <Number> maxOperations 	The maximum number of operations the UndoManager can perform. If a number less than or equal to zero is provided the number of operations is unlimited. The default value is 10.
+        */
+        constructor(options: Object);
+        /**
+        *When true, there are redo operations available on the stack.
+        */
         canRedo: boolean;
+        /**
+        *When true, there are undo operations available on the stack.
+        */
         canUndo: boolean;
+        /**
+        *The number of operations stored in the history stack.
+        */
         length: number;
+        /**
+        *The current operation position. A position value of 0 means that no operations are available on the stack. When an undo operation is performed the position decreases by 1. When a redo occurs the position is incremented by 1.
+        */
         position: number;
-        add(operation : esri.OperationBase) : void;
-        clearRedo() : void;
-        clearUndo() : void;
-        destroy() : void;
+        /**
+        *Adds an undo operation to the stack and clears the redo stack.
+        *@param operation An operation to add to the stack.
+		*@returns void
+        */
+        add(operation: esri.OperationBase): void;
+        /**
+        *Clear the redo stack
+		*@returns void
+        */
+        clearRedo(): void;
+        /**
+        *Clear the undo stack.
+		*@returns void
+        */
+        clearUndo(): void;
+        /**
+        *Destroy the operation manager. Sets the history stack to null and cleans up all references.
+		*@returns void
+        */
+        destroy(): void;
+        /**
+        *Get the specified operation from the stack.
+        *@param operation The operation id.
+		*@returns Opertion
+        */
         get(operation): esri.OperationBase;
+        /**
+        *Get the next redo operation from the stack
+		*@returns Operation
+        */
         peekRedo(): esri.OperationBase;
+        /**
+        *Get the next undo operation from the stack.
+		*@returns Operation
+        */
         peekUndo(): esri.OperationBase;
-        redo() : void;
-        remove(operation : esri.OperationBase): esri.OperationBase;
-        undo() : void;
+        /**
+        *Moves the current position to the next redo operation and calls the operation's performRedo() method.
+		*@returns void
+        */
+        redo(): void;
+        /**
+        *Remove the specified operation from the stack.
+        *@param operation The operation id.
+		*@returns Operation
+        */
+        remove(operation: esri.OperationBase): esri.OperationBase;
+        /**
+        *Moves the current position to the next undo operation and calls the operation's performUndo method.
+		*@returns void
+        */
+        undo(): void;
+        /**
+        *Fires when the add method is called to add an operation is added to the stack.
+		*@returns void
+        */
         onAdd(): void;
+        /**
+        *Fires when the undo/redo stack changes.
+		*@returns void
+        */
         onChange(): void;
+        /**
+        *Fires when the redo method is called.
+		*@returns void
+        */
         onRedo(): void;
+        /**
+        *Fires when the undo method is called.
+		*@returns void
+        */
         onUndo(): void;
         //add : void; // Events
         //change : void;
         //redo : void;
         //undo : void;
     }
+
+    /**
+    *ESRI unit constants.
+    */
     export class Units {
+        /**
+        *Units are centimeters.
+        */
         static CENTIMETERS: string;
+        /**
+        *Units are decimal degrees.
+        */
         static DECIMAL_DEGREES: string;
+        /**
+        *Units are decimeters.
+        */
         static DECIMETERS: string;
+        /**
+        *Units are feet.
+        */
         static FEET: string;
+        /**
+        *Units are inches.
+        */
         static INCHES: string;
+        /**
+        *Units are kilometers.
+        */
         static KILOMETERS: string;
+        /**
+        *Units are acres.
+        */
         static ACRES: string;
+        /**
+        *Units are meters.
+        */
         static METERS: string;
+        /**
+        *Units are ares.
+        */
         static ARES: string;
+        /**
+        *Units are miles.
+        */
         static MILES: string;
+        /**
+        *Units are square kilometers.
+        */
         static SQUARE_KILOMETERS: string;
+        /**
+        *Units are square millimeters.
+        */
         static MILLIMETERS: string;
+        /**
+        *Units are square miles.
+        */
         static SQUARE_MILES: string;
+        /**
+        *Units are nautical miles.
+        */
         static NAUTICAL_MILES: string;
+        /**
+        *Units are points.
+        */
         static POINTS: string;
+        /**
+        *Units are square feet.
+        */
         static SQUARE_FEET: string;
+        /**
+        *Units are unknown.
+        */
         static UNKNOWN: string;
+        /**
+        *Units are square meters.
+        */
         static SQUARE_METERS: string;
+        /**
+        *Units are square yards.
+        */
         static YARDS: string;
+        /**
+        *Units are hectares.
+        */
         static HECTARES: string;
+        /**
+        *Units are square yards.
+        */
         static SQUARE_YARDS: string;
+        /**
+        *Units are square inches.
+        */
         static SQUARE_INCHES: string;
+        /**
+        *Units are square millimeters.
+        */
         static SQUARE_MILLIMETERS: string;
+        /**
+        *Units are square centimeters.
+        */
         static SQUARE_CENTIMETERS: string;
+        /**
+        *Units are square deciemeters.
+        */
         static SQUARE_DECIMETERS: string;
     }
 }
 
+/**
+*Utility methods for retrieving API version.
+*/
 declare module "esri/kernel" {
 	var i : esri.esriNS;
 	export = i;
 }
 
-
+/**
+*Utility methods for working with strings, arrays and objects.
+*/
 declare module "esri/lang" {
 	var i : esri.esriLang;
 	export = i;
 }
 
+/**
+*Utility methods for working with graphics.
+*/
 declare module "esri/graphicsUtils" {
 	var i : esri.graphicsUtils;
 	export = i;
 }
 
+/**
+*Utility methods for working with URLs.
+*/
 declare module "esri/urlUtils" {
 	var i : esri.urlUtils;
 	export = i;
 }
 
+/**
+*Retrieve data from a remote server or upload a file.
+*/
 declare module "esri/request" {
 	var i : esri.esriRequest;
 	export = i;
 }
 
+/**
+*Utility methods related to working with a DOM.
+*/
 declare module "esri/domUtils" {
 	var i : esri.domUtils;
 	export = i;
@@ -522,46 +1893,118 @@ declare module "esri/domUtils" {
 
 declare module esri {
 
-	interface esriConfigIo {
-		alwaysUseProxy : boolean;
-		corsDetection : boolean;
-		corsEnabledServers : Array<string>;
-		proxyRules : Array<ProxyRule>;
-		proxyUrl : string;
-		timeout : number;
-		useCors : boolean;
-		
+    /**
+    * IO default configurations.
+    */
+    interface esriConfigIo {
+        /**
+        *Whether or not to always use the proxy for communication to a REST endpoint. 
+        Default: False
+        */
+        alwaysUseProxy: boolean;
+        /**
+        *Whether or not to detect support for cross-origin resource sharing (CORS). Setting this to false will stop the API from sending requests that result in "XMLHttpRequest cannot load http://some.url.com/ArcGIS/rest/info?f=json. Origin http://yourapp.com is not allowed by Access-Control-Allow-Origin." messages in browser developer tools but it will also prevent the API from discovering that a resource supports CORS if it is not explicitly added to. Default: True
+        */
+        corsDetection: boolean;
+        /**
+        *Add URLs for servers with cross-origin resource sharing enabled to this array. Cross-Origin Resource Sharing (CORS) allows web applications to bypass the browser's same origin policy file and access resources or services on different servers/domains. When both the web server and browser support CORS, esri.request will not use a proxy to perform cross-domain requests. The API includes some Esri servers by default so it's important to push items on to this array rather than overwriting it. 
+        */
+        corsEnabledServers: Array<string>;
+        /**
+        *A proxy rule defines a proxy for set of resources with identical URL prefix. When using esri/request, if a target URL matches a rule, then the request will be sent to the specified proxy. Rather than populating this array directly, use the API's addProxyRule method. Rule objects have the following properties:
+            - proxyUrl: URL for the proxy.
+            - urlPrefix: URL prefix for resources that need to be accessed through a specific proxy.
+        */
+        proxyRules: Array<ProxyRule>;
+        /**
+        *The location of the proxy url that should be used when posting large payloads to an endpoint. This must reside on the same domain as the HTML application. 
+        Default: null
+        */
+        proxyUrl: string;
+        /**
+        *Each request through esri.request is allowed up to 60 seconds to respond. If no response is returned or a server-side error is returned, the esri.Error and error back handlers are called, in that order. (As of 1.3). 
+        Default: 60 seconds
+        */
+        timeout: number;
+        /**
+        *Whether or not requests made via esri/request should try to use CORS. 
+        Default: True
+        */
+        useCors: boolean;
 	}
 
-	interface esriConfigMap {
-		basemaps : any;
-		panDuration : number;
-		panRate : number;
-		slider : Object;
-		sliderLabel : Object;
-		zoomDuration : number;
-		zoomRate : number;
-		zoomSymbol : esri.symbol.SimpleFillSymbol;
+    /**
+    * Map default configurations.
+    */
+    interface esriConfigMap {
+        /**
+        *Object with name and information for default basemaps available in the API. Inspect this object in your browser's developer tools for more information.
+        */
+        basemaps: any;
+        /**
+        *The length of time in milliseconds that the map will take to pan from one extent to another. 
+        Default: 350
+        */
+        panDuration: number;
+        /**
+        *The length of time in milliseconds that the map will refresh as it pans to the next extent. 
+        Default: 50
+        */
+        panRate: number;
+        /**
+        *The parameters that define the location, size, and orientation of the slider. 
+        Default: {left:"30px",top:"30px",width:null,height:"200px"}
+        */
+        slider: Object;
+        /**
+        *The parameters that define the slider tick and accompanying tick label. If this is null then the slider will not show tick marks.
+            Default: {tick:5,labels:null,style:"width:2em; font-family:Verdana; font-size:75%;"}
+        */
+        sliderLabel: Object;
+        /**
+        *The length of time in milliseconds that the map will take to zoom from one extent to another.
+        Default: 500
+        */
+        zoomDuration: number;
+        /**
+        *The length of time in milliseconds that the map will refresh as it zooms to the next extent.
+        Default: 50
+        */
+        zoomRate: number;
+        /**
+        *The SimpleFillSymbol to use to represent the color, fill, and outline properties of the RubberBand zoom. This is the JSON representation of the SimpleFillSymbol.
+        Default: {color:[0,0,0,64],outline:{color:[255,0,0,255],width:1.5,style:"esriSLSSolid"},style:"esriSFSSolid"}
+        */
+        zoomSymbol: esri.symbol.SimpleFillSymbol;
 	}
 
+    /**
+    * Esri default configurations.
+    */
 	interface esriConfigDefaults {
-		
-		geometryService : esri.tasks.GeometryService;
-		io : esriConfigIo;
-		map : esriConfigMap;
-	
+        /**
+        * GeometryService default configurations.
+        */
+        geometryService: esri.tasks.GeometryService;
+        /**
+        * IO default configurations.
+        */
+        io: esriConfigIo;
+        /**
+        * Map default configurations.
+        */
+        map: esriConfigMap;	
 	}
 
-
-
+    /**
+    * Esri configurations.
+    */
 	interface esriConfig {
-
-		defaults : esriConfigDefaults;
-
+        /**
+        * Default configurations.
+        */
+        defaults: esriConfigDefaults;
 	}
-
-
-
 }
 
 
@@ -627,209 +2070,887 @@ declare module "esri/arcgis/utils" {
 
 }
 
+/**
+* ArcGIS Namespace.
+*/
 declare module esri.arcgis {
+
+    /**
+    *Utility methods to work with content from ArcGIS.com.
+    */
     export class utils {
+        /**
+        *
+        */
         arcgisUrl: string;
+        /**
+        *Create a map using information from an ArcGIS.com item. The information included in the response object returned to the callback depends on the version. 
+        *@param itemId An itemId for an ArcGIS.com item. You can discover the item's unique ID by browsing to the item in ArcGIS.com then extracting the id from the item's URL.
+        *@param mapDiv Container ID for referencing map.
+        *@param options Optional parameters that define the map functionality:
+            <Object> mapOptions 	See the optional parameters for the esri.map constructor for more details.
+            <String> bingMapsKey 	The Bing Maps Key, required if working with Microsoft Bing Maps.
+            <Boolean> ignorePopups 	When true, webmap defined popups will not display.
+            <String> geometryServiceURL 	URL to the ArcGIS Server REST resource that represents a geometry service. For more information on constructing a URL, see The Services Directory and the REST API. 
+		*@returns dojo.Deferred
+        */
         createMap(itemId: string, mapDiv: string, options?: Object): dojo.Deferred<any>;
+        /**
+        *Create a map using information from an ArcGIS.com item. The information included in the response object returned to the callback depends on the version. 
+        *@param itemId The response object obtained from calling the esri.arcgis.utils.getItem method. You can discover the item's unique ID by browsing to the item in ArcGIS.com then extracting the id from the item's URL.
+        *@param mapDiv Container ID for referencing map.
+        *@param options Optional parameters that define the map functionality:
+            <Object> mapOptions 	See the optional parameters for the esri.map constructor for more details.
+            <String> bingMapsKey 	The Bing Maps Key, required if working with Microsoft Bing Maps.
+            <Boolean> ignorePopups 	When true, webmap defined popups will not display.
+            <String> geometryServiceURL 	URL to the ArcGIS Server REST resource that represents a geometry service. For more information on constructing a URL, see The Services Directory and the REST API. 
+		*@returns dojo.Deferred
+        */
         createMap(itemInfo: Object, mapDiv: string, options?: Object): dojo.Deferred<any>;
-        getItem(itemId : string): dojo.Deferred<any>;
-        getLegendLayers(): Array<esri.layers.Layer>;   
+        /**
+        *Get details about the input ArcGIS.com item. An object with the following specification is passed to the callback:
+            {
+                item: <Object>,
+                itemData: <Object>
+            }
+        *@param itemId The itemId for a publicly shared ArcGIS.com item. You can discover the item's unique ID by browsing to the item in ArcGIS.com then extracting the id from the item's URL.
+		*@returns dojo.Deferred
+        */
+        getItem(itemId: string): dojo.Deferred<any>;
+        /**
+        *Can be used with esri.dijit.Legend to get the layerInfos list to be passed into the Legend constructor. It will honor show/hide legend settings of each layer and will not include the basemap layers. (Added at v3.4)
+        *@returns Layer[]
+        */
+        getLegendLayers(): Array<esri.layers.Layer>;
     }
 
+    /**
+    *The Portal class is part of the ArcGIS Portal API which provides a way to build applications that work with content from ArcGIS Online or an ArcGIS Portal. ArcGIS Portal is software technology from Esri that customers can deploy either on premise or in the cloud. 
+    */
     export class Portal {
-        constructor(url:  string);
+        /**
+        *Creates a new Portal object.
+        *@param url The url to the ArcGIS.com site or in-house portal.
+        */
+        constructor(url: string);
+        /**
+        *The access level of the organization. When public, anonymous users can access the organization. When private access is restricted to only members of the organization.
+        Known values: public | private
+        */
         access: string;
+        /**
+        *When true, access to the organization's Portal resources must occur over SSL.
+        */
         allSSL: boolean;
+        /**
+        *The query that defines the basemaps that are displayed in the Basemap Gallery.
+        */
         basemapGalleryGroupQuery: string;
+        /**
+        *When true, the organization's public items, groups and users are included in search queries. When false, no public items outside of the organization are included. However, public items which are part of the organization are included.
+        */
         canSearchPublic: boolean;
+        /**
+        *When true, members of the organization can share resources outside the organization.
+        */
         canSharePublic: boolean;
+        /**
+        *Date the organization was created.
+        */
         created: Date;
+        /**
+        *The default locale (language and country) information.
+        */
         culture: string;
+        /**
+        *The default basemap the portal displays in the map viewer. Returns an object that provides the url and title to the default basemap service.
+        */
         defaultBasemap: Object;
+        /**
+        *The default extent for the map the portal displays in the map viewer. The extent will be in the default basemap's spatial reference.
+        */
         defaultExtent: Object;
+        /**
+        *A description of the organization / portal.
+        */
         description: string;
+        /**
+        *The featured groups for the portal. Returns an array of objects that provide access to the owner and title for each featured group.
+        */
         featuredGroups: Object[];
+        /**
+        *The query that defines the featured group. If null, then the most viewed items in the organization will be the featured items.
+        */
         featuredItemsGroupQuery: string;
+        /**
+        *The id of the organization that owns this portal. If null then this is the default portal for anonymous and non organizational users.
+        */
         id: string;
+        /**
+        *Indicates if the portal is an organization.
+        */
         isOrganization: boolean;
+        /**
+        *The query that defines the collection of editable layer templates.
+        */
         layerTemplatesGroupQuery: string;
+        /**
+        *Date the organization was last modified.
+        */
         modified: Date;
+        /**
+        *The Name of the organization / portal.
+        */
         name: string;
+        /**
+        *Denotes multitenant or singletenant.
+        */
         portalMode: string;
+        /**
+        *The name of the portal i.e. ArcGIS Online.
+        */
         portalName: string;
+        /**
+        *The query that defines the symbols sets used by the map viewer.
+        */
         symbolSetsGroupQuery: string;
+        /**
+        *The query that defines the collection of templates that will appear in the template gallery.
+        */
         templatesGroupQuery: string;
+        /**
+        *The url to the thumbnail of the organization.
+        */
         thumbnailUrl: string;
+        /**
+        *The portal url.
+        */
         url: string;
+        /**
+        *Returns a PortalUser object that describes the user currently signed in to the portal.  (Added at v3.3)
+		*@returns PortalUser
+        */
         getPortalUser(): PortalUser;
-        queryGroups(queryParams : esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
-        queryItems(queryParams : esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
-        queryUsers(queryParams : esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
+        /**
+        *Execute a query against the Portal to return a deferred that when resolved returns PortalQueryResult that contain a results array of PortalGroup objects for all the groups that match the input query.
+        *@param queryParams The input query parameters.
+		*@returns dojo.Deferred
+        */
+        queryGroups(queryParams: esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
+        /**
+        *Execute a query against the Portal to return a deferred that when resolved returns PortalQueryResult that contain a results array of PortalItem objects that match the input query.
+        *@param queryParams The input query parameters.
+		*@returns dojo.Deferred
+        */
+        queryItems(queryParams: esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
+        /**
+        *Execute a query against the Portal to return a deferred that when resolved returns PortalQueryResult that contain a results array of PortalUser objects that match the input query.
+        *@param queryParams The input query parameters.
+		*@returns dojo.Deferred
+        */
+        queryUsers(queryParams: esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
+        /**
+        *Prompts the user using the IdentityManager and returns a deferred that when resolved returns the PortalUser for the input credentials.
+		*@returns dojo.Deferred
+        */
         signIn(): dojo.Deferred<any>;
+        /**
+        *Sign out of the Portal which resets the Portal and disables identity checking.
+		*@returns Portal
+        */
         signOut(): Portal;
+        /**
+        *Fired when the portal has loaded. Once the portal has loaded the properties and methods of the Portal class are available.
+		*@returns void
+        */
         onLoad(): void;
     }
+
+    /**
+    *Details about a comment on a Portal item.View the ArcGIS Portal API REST documentation for the item comment for more details.
+    */
     export class PortalComment {
+        /**
+        *The comment text
+        */
         comment: string;
+        /**
+        *The date and time the comment was created
+        */
         created: string;
+        /**
+        *The comment id
+        */
         id: string;
+        /**
+        *The user name of the user who created the comment
+        */
         owner: string;
     }
+
+    /**
+    *The PortalFolder class provides information about folders used to organize content in a portal. Folders are only visible to the user and are used for organizing content within the user's content space.
+    */
     export class PortalFolder {
+        /**
+        *The date the folder was created
+        */
         created: Date;
+        /**
+        *The id of the folder
+        */
         id: string;
+        /**
+        *The portal for the folder
+        */
         portal: Portal;
+        /**
+        *The title of the folder
+        */
         title: string;
+        /**
+        *The url to to the folder
+        */
         url: string;
+        /**
+        *Find all the items in the folder.
+		*@returns dojo.Deferred
+        */
         getItems(): dojo.Deferred<any>;
     }
+
+    /**
+    *The group resource represents a group within the Portal. A group resource represents a group (e.g., "San Bernardino Fires"). The visibility of the group to other users is deteremined by the access property. If the group is private no one except the administrators and the members of the group will be able to see it. If the group is shared with an organization, then all members of the organization will be able to find the group. View the ArcGIS Portal API REST documentation for the Group for more details. 
+    */
     export class PortalGroup {
+        /**
+        *The access privileges on the group which determines who can see and access the group.
+        */
         access: string;
+        /**
+        *The date the group was created
+        */
         created: Date;
+        /**
+        *A detailed description of the group
+        */
         description: string;
+        /**
+        *The id for the group
+        */
         id: string;
+        /**
+        *If this is set to true, then users will not be able to apply to join the group
+        */
         isInvitationOnly: boolean;
+        /**
+        *Denotes a view only group where members are not able to share items.
+        */
         isViewOnly: boolean;
+        /**
+        *The date the group was last modified
+        */
         modified: Date;
+        /**
+        *The username of the group's owner
+        */
         owner: Portal;
+        /**
+        *The portal for the group
+        */
         portal: Portal;
+        /**
+        *A short summary that describes the group
+        */
         snippet: string;
+        /**
+        *User defined tags that describe the group
+        */
         tags: string;
+        /**
+        *The url to the thumbnail used for the group
+        */
         thumbnailUrl: string;
+        /**
+        *The title for the group.
+        */
         title: string;
+        /**
+        *The url to the group
+        */
         url: string;
+        /**
+        *Get the current members for the group.
+		*@returns dojo.Deferred
+        */
         getMembers(): dojo.Deferred<any>;
-		queryItems(queryParams ? : esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
+        /**
+        *Execute a query against the group to return a deferred that when resolved returns PortalQueryResults that contain a results array of PortalItem objects that match the input query
+        *@param queryParams The input query parameters.
+		*@returns dojo.Deferred
+        */
+        queryItems(queryParams?: esri.arcgis.PortalQueryParams): dojo.Deferred<any>;
     }
+
+    /**
+    *List the users, owner and administrator of a group. Only available to members or administrators of the group. View the ArcGIS Portal API REST documentation for the Group Users for more details.
+    */
     export class PortalGroupMembers {
+        /**
+        *An array containing the user names for each administrator of the group
+        */
         admins: string[];
+        /**
+        *The user name of the owner of the group
+        */
         owner: string;
+        /**
+        *An array containing the user names for each user in the group
+        */
         users: string[];
     }
+
+    /**
+    *An item (a unit of content) in the Portal. Each item has a unique identifier and a well known url that is independent of the user owning the item. An item may have associated binary or textual data which is available via the item data resource. View the ArcGIS Portal API REST documentation for the item for more details. 
+    */
     export class PortalItem {
+        /**
+        *Indicates the level of access: private, shared, org, or public
+        */
         access: string;
+        /**
+        *Information on the source of the item
+        */
         accessInformation: string;
+        /**
+        *Average rating.
+        */
         avgRating: number;
+        /**
+        *The date the item was created
+        */
         created: Date;
+        /**
+        *The item locale information (language and country)
+        */
         culture: string;
+        /**
+        *The detailed description of the item
+        */
         description: string;
+        /**
+        *The bounding rectangle of the item returned as an extent object with the following format:
+            "extent": [  [ minX, minY ], [ maxX, maxY ] ]
+        */
         extent: Object;
+        /**
+        *The unique id for this item
+        */
         id: string;
+        /**
+        *The url to the data resource associated with the item
+        */
         itemDataUrl: string;
+        /**
+        *The url to the item
+        */
         itemUrl: string;
+        /**
+        *Any license information or restrictions
+        */
         licenseInfo: string;
+        /**
+        *Date the item was last modified
+        */
         modified: Date;
+        /**
+        *The name of the item
+        */
         name: string;
+        /**
+        *Number of comments on the item
+        */
         numComments: number;
+        /**
+        *Number of ratings on the item
+        */
         numRatings: number;
+        /**
+        *Number of views on the item
+        */
         numViews: number;
+        /**
+        *The username of the user who owns this item
+        */
         owner: string;
+        /**
+        *The portal that contains the item
+        */
         portal: Portal;
+        /**
+        *The size of the item
+        */
         size: number;
+        /**
+        *A summary description of the item
+        */
         snippet: string;
+        /**
+        *The item's coordinate system
+        */
         spatialReference: string;
+        /**
+        *User defined tags that describe the item
+        */
         tags: string[];
+        /**
+        *The url to the thumbnail used for the item
+        */
         thumbnailUrl: string;
+        /**
+        *The title for the item.
+        */
         title: string;
+        /**
+        *The gis content type of this item.
+        */
         type: string;
+        /**
+        *A set of keywords that further describes the type of this item.
+        */
         typeKeywords: string[];
+        /**
+        *The url for the resource represented by the item
+        */
         url: string;
+        /**
+        *The url to the user item
+        */
         userItemUrl: string;
-        addComment(comment : string): dojo.Deferred<any>;
-        addRating(rating : number): void;
+        /**
+        *Add a comment to the item.Only available for authenticated users who have access to the item.
+        *@param comment The text for the comment.
+		*@returns dojo.Deferred
+        */
+        addComment(comment: string): dojo.Deferred<any>;
+        /**
+        *Add a rating to an item that you have access to. Only 1 rating can be given to an item per user. If this call is made on an already rated item, the new rating will overwrite the current one. A user cannot rate their own item. Available only to authenticated users. Returns a deferred that when resolved provides access to a PortalRating object.
+        *@param rating Rating to set for the item. Rating must be a number between 1.0 and 5.0.
+		*@returns void
+        */
+        addRating(rating: number): void;
+        /**
+        *Deletes an item comment. Only available to the authenticated user who created the comment.
+        *@param comment The PortalComment to delete.
+		*@returns dojo.Deferred
+        */
         deleteComment(comment: string): void;
-        deleteRating(rating : esri.arcgis.PortalRating): dojo.Deferred<any>;
+        /**
+        *Delete a rating that you created for the specified item. Returns a deferred that when resolved provides access to a PortalRating object.
+        *@param rating Rating to delete.
+		*@returns dojo.Deferred
+        */
+        deleteRating(rating: esri.arcgis.PortalRating): dojo.Deferred<any>;
+        /**
+        *Get the comments associated with the item. Returns a deferred that when resolved provides access to an array of PortalComment objects.
+		*@returns dojo.Deferred
+        */
         getComments(): dojo.Deferred<any>;
+        /**
+        *Returns the rating (if any) given to the item. Returns a deferred that when resolved provides access to a PortalRating object.
+		*@returns dojo.Deferred
+        */
         getRating(): dojo.Deferred<any>;
-        updateComment(comment : esri.arcgis.PortalComment): void;
+        /**
+        *Updates an item comment. Only available to the authenticated user who created the comment.
+        *@param comment A PortalComment that contains the comment updates.
+		*@returns void
+        */
+        updateComment(comment: esri.arcgis.PortalComment): void;
     }
+
+    /**
+    *Define parameters to use when querying. View the ArcGIS Portal API REST documentation for details. 
+    */
     export class PortalQueryParams {
+        /**
+        *The maximum number of results to be included in the result set response. The default value is 10 and the maximum allowed value is 100. The start parameter combined with the num parameter can be used to paginate the search results. Note that the actual number of returned results may be less than num if the number of results remaining after start is less than num
+        */
         num: string;
+        /**
+        *The query string to search with.
+        */
         q: string;
+        /**
+        *A comma seperated list of field(s) to sort by. Valid fields are: title, created, type, owner, avgRating, numRatings, numComments and numViews.
+        */
         sortField: string;
+        /**
+        *The number of the first entry in the result set response. The index number is 1-based. The start parameter, along with the num parameter can be used to paginate the search results.
+        */
         start: string;
     }
+
+    /**
+    *Details about the result of a query.
+    */
     export class PortalQueryResult {
+        /**
+        *The query parameters for the next set of results
+        */
         nextQueryParams: esri.arcgis.PortalQueryParams;
+        /**
+        *The query parameters for the first set of results
+        */
         queryParams: esri.arcgis.PortalQueryParams;
+        /**
+        *An array of result item objects
+        */
         results: Object[];
+        /**
+        *The total number of results. The maximum number of results is limited to 1000.
+        */
         total: number;
     }
+
+    /**
+    *Details about the rating associated with a Portal item. View the ArcGIS Portal API REST documentation for the Item Rating for more details. 
+    */
     export class PortalRating {
+        /**
+        *Date the rating was added to the item
+        */
         created: Date;
+        /**
+        *A rating between 1.0 and 5.0 for the item.
+        */
         rating: number;
     }
+
+    /**
+    *Represents a registered user of the Portal. Personal details of the user, such as email and groups, are returned only to the user or the administrator of the user's organization. A user is not visible to any other users (except their organization's administrator) if their access setting is set to 'private'.View the ArcGIS Portal API REST documentation for the user for more details.
+    */
     export class PortalUser {
+        /**
+        *The access level for the user: private, org or public. If private, the users descriptive information will not be available and the user name will not be searchable. Available only if the user is signed-in. Known values: private | org | public
+        */
         access: string;
+        /**
+        *The date the user was created.
+        */
         created: Date;
+        /**
+        *The default culture for the user.
+        */
         culture: string;
+        /**
+        *Description of the user.
+        */
         description: string;
+        /**
+        *The user's email address. Available only if the user is signed-in.
+        */
         email: string;
+        /**
+        *The user's full name.
+        */
         fullName: string;
+        /**
+        *The date the user was modified.
+        */
         modified: Date;
+        /**
+        *The id of the organization the user belongs to.
+        */
         orgId: string;
+        /**
+        *The portal.
+        */
         portal: Portal;
+        /**
+        *The user's preferred view for content, either Web or GIS. Available only if the user is signed-in.
+        */
         preferredView: string;
+        /**
+        *The user's preferred region, used to set the featured maps on the portal home page, content in the gallery and the default extent for new maps in the Viewer.
+        */
         region: string;
+        /**
+        *The user's role in the organization: administrator (org_admin), publisher (org_publisher), or user (org_user).
+        */
         role: string;
+        /**
+        *User-defined tags that describe the user.
+        */
         tags: string[];
+        /**
+        *The url to the thumbnail image for the user.
+        */
         thumbnailUrl: string;
+        /**
+        *The url for the user content. (Added at v3.2)
+        */
         userContentUrl: string;
+        /**
+        *The username for the user.
+        */
         username: string;
+        /**
+        *Find folders for the portal user. Returns a deferred that when resolved provides access to an array of PortalFolder objects.
+		*@returns dojo.Deferred
+        */
         getFolders(): dojo.Deferred<any>;
+        /**
+        *Provides access to the group invitations for the portal user. Returns a deferred that when resolved provides access to the results as json. View the REST API documentation for details on the result format.
+		*@returns dojo.Deferred
+        */
         getGroupInvitations(): dojo.Deferred<any>;
+        /**
+        *Find all the groups that the portal user has permissions to access. Returns a deferred that when resolved provides access to an array of PortalGroup objects.
+		*@returns dojo.Deferred
+        */
         getGroups(): dojo.Deferred<any>;
+        /**
+        *Get the portal item along with folder info for the input item id. (Added at v3.4)
+        *@param itemId The id of the item.
+		*@returns PortalItem
+        */
         getItem(itemId): PortalItem;
+        /**
+        *Retrieve all the items in the specified folder. Returns a deferred that when resolved provides access to an array of PortalItem objects
+        *@param folderId The id of the folder that contains the items to retrieve.
+		*@returns dojo.Deferred
+        */
         getItems(folderId): dojo.Deferred<any>;
+        /**
+        *Get information about any notifications for the portal user. Returns a deferred that when resolved provides access to the results as json. View the REST API documentation for details on the result format.
+		*@returns dojo.Deferred
+        */
         getNotifications(): dojo.Deferred<any>;
+        /**
+        *Access the tag objects that have been created by the portal user. Returns a deferred that when resolved provides access to an array of tag objects used by the user. Each tag object contains a tag property with the name of the tag along with a count that reports the number of times the tag was used.
+		*@returns dojo.Deferred
+        */
         getTags(): dojo.Deferred<any>;
     }
 }
 
+/**
+* Dijit.Editing Namespace.
+*/
 declare module esri.dijit.editing {
+
+    /**
+    * Widget that supports viewing attachments for feature layers that have attachments enabled. If the feature layers are from a feature service then the attachment editor will include the ability to create, view and delete attachments.
+    */
     export class AttachmentEditor {
+        /**
+		* Creates a new AttachmentEditor object.
+		*@params params No parameter options.
+		*@params srcNodeRef HTML element where the widget is rendered.
+		*/
         constructor(params: Object, srcNodeRef: string);
-        constructor(params: Object, domNode : HTMLElement);
-        showAttachments(graphic : esri.Graphic, featureLayer : esri.layers.FeatureLayer): void;
+        /**
+		* Creates a new AttachmentEditor object.
+		*@params params No parameter options.
+		*@params domNode DOM element.
+		*/
+        constructor(params: Object, domNode: HTMLElement);
+        /**
+		* Display the attachment editor.
+		*@params graphic Graphic, with attachments, to display in the attachment editor.
+		*@params featureLayer The feature layer to display attachments for. The feature layer must have attachments enabled.
+		*/
+        showAttachments(graphic: esri.Graphic, featureLayer: esri.layers.FeatureLayer): void;
+        /**
+		* Finalizes the creation of the attachment editor. Call startup() after creating the widget when you are ready for user interaction.
+		*@returns void
+		*/
         startup(): void;
     }
 
+    /**
+    * Load the Editor using one of the dojo.require statements below.
+        dojo.require("esri.dijit.editing.Editor-all");
+        or
+        dojo.require("esri.dijit.editing.Editor");
+    */
     export class Editor {
+        /**
+		* Creates a new Editor object.
+		*@params params Parameters that define the functionality of the editor widget. Create a new settings object to pass to the widget (see options).
+        <Object> settings 	Create a new settings object that defines the capabilities of the widget.
+            <Object> createOptions: Specify the polygon and polyline draw tools to include on the toolbar. Only applicable when toolbarVisible is true. This object has following properties:
+                <String[]> polylineDrawTools: See the constants list for valid options.
+                <String[]> polygonDrawTools: See the constants list for valid options.
+            <Boolean> enableUndoRedo: Default is false. When true enable undo/redo behavior.
+            <String> geometryService: Reference to the geometry service. Alternatively, you can set the geometry service using esri.config.defaults.geometryService (Required).
+            <Map> map: Reference to the map (Required).
+            <Number> maxUndoRedoOperations: When undo/redo is enabled, specify the maximum number of undo/redo operations to maintain. The default value is 10.
+            <TemplatePicker> templatePicker: Reference to the TemplatePicker. Use this option if you want to modify the appearance of the template picker, for example set the number of rows and columns.
+            <Object> toolbarOptions: Specify the tools to include on the toolbar. Only applicable when toolbarVisible is true. This object has following properties:
+                <Boolean> mergeVisible: If true show the merge tool.
+                <Boolean> cutVisible: If true show the cut tool.
+                <Boolean> reshapeVisible: If true show the reshape tool.
+            <Boolean> toolbarVisible: If true display the editing toolbar.
+            <UndoManager> undoManager: Specify an instance of the UndoManager for the Editor.
+            <Object> layerInfos: Feature layer information. This object has following properties:
+                <FeatureLayer> featureLayer: Reference to the feature layer.
+                <String> userId: Provide a userId for the currently logged-in user. If the application is using the IdentityManager it is not necessary to specify a userId since the feature layer has access to the credential object which contains this information. Requires ArcGIS Server feature service version 10.1 or greater. (As of 2.6)
+                <Boolean> disableGeometryUpdate: When true,the geometry is not editable. The default value is false. Requires ArcGIS Server feature service version 10.1 or greater. (As of 2.6)
+                <Boolean> showObjectID: Default is false. When true display the ObjectID field in the attribute inspector.
+                <Boolean> showGlobalID: Default is false. When true display the GlobalID field in the attribute inspector.
+                <Object[]> fieldInfos: Customize how fields appear in the attribute inspector. If nothing is specified all fields, except the ObjectId and GlobalId are displayed. Specify FieldInfos to explicitly define the fields that are displayed and the field order. Added at version 2.2. See the sample section below for properties.
+                <Boolean> disableAttributeUpdate: If true, attributeInspector won't pop up when features in this featureLayer are selected. When adding a new feature, attributeInspector won't pop up either.
+            <String[]> htmlFields: Specify which fields to display as a rich text editor.
+		*@params srcNodeRef HTML element where the widget should be rendered.
+		*/
         constructor(params: Object, srcNodeRef: Object);
+        /**
+		* Freehand polygon tool
+		*/
         static CREATE_TOOL_FREEHAND_POLYGON: string;
+        /**
+		* Polygon tool
+		*/
         static CREATE_TOOL_POLYGON: string;
+        /**
+		* Autocomplete polygon tool
+		*/
         static CREATE_TOOL_AUTOCOMPLETE: string;
+        /**
+		* Freehand polyline tool
+		*/
         static CREATE_TOOL_FREEHAND_POLYLINE: string;
+        /**
+		* Polyline tool
+		*/
         static CREATE_TOOL_POLYLINE: string;
+        /**
+		* Arrow tool
+		*/
         static CREATE_TOOL_ARROW: string;
+        /**
+		* Triangle tool
+		*/
         static CREATE_TOOL_TRIANGLE: string;
+        /**
+		* Rectangle tool
+		*/
         static CREATE_TOOL_RECTANGLE: string;
+        /**
+		* Circle tool
+		*/
         static CREATE_TOOL_CIRCLE: string;
+        /**
+		* Ellipse tool
+		*/
         static CREATE_TOOL_ELLIPSE: string;
     }
 
-   export class TemplatePicker {
-       constructor(params: Object, srcNodeRef: string);
-       constructor(params: Object, domNode: HTMLElement);
+    /**
+    * Load the TemplatePicker using one of the dojo.require statements below. See the Coding Guidelines help topic for details.
+        dojo.require("esri.dijit.editing.TemplatePicker-all");
+        or
+        dojo.require("esri.dijit.editing.TemplatePicker");
+    * CSS Elements:
+    grid	Define styles for the grid node that displays the templates.
+    groupLabel	Define styles for the group labels. Only applicable when grouping is enabled.
+    item	Define styles for the node that contains the template label and symbol.
+    itemLabel	Define styles for the template labels.    
+        .itemLabel{color:#266A2E;}
+    itemSymbol	Define styles for the node that contains the template symbol.
+    selectedItem	Define styles for the node that contains the template symbol.
+    templatePicker	Define styles for the template picker.
+    tooltip	Define styles for the template tooltips. Only applicable when tooltips are enabled.
+    */
+    export class TemplatePicker {
+        /**
+		* Creates a new TemplatePicker object that displays a gallery of templates from the input feature layers or items. A symbol and label is displayed for each template. The symbol is defined by the template's feature type. The label is the template's name.
+		*@params params FeatureLayers or items are required all other parameters are optional. See options list.
+		*@params srcNodeRef HTML element where the TemplatePicker will be rendered. Specify the HTML element using the "id" or a reference to the element.
+		*/
+        constructor(params: Object, srcNodeRef: string);
+        /**
+		* Creates a new TemplatePicker object that displays a gallery of templates from the input feature layers or items. A symbol and label is displayed for each template. The symbol is defined by the template's feature type. The label is the template's name.
+		*@params params FeatureLayers or items are required all other parameters are optional. See options list.
+		*@params domNode HTML element where the TemplatePicker will be rendered. Specify the HTML element using a reference to the element.
+		*/
+        constructor(params: Object, domNode: HTMLElement);
+        /**
+		* 
+		*/
         templatePicker: string;
         // grid : string; // TODO FLE : remove all CSS stuff !!!
+        /**
+		* 
+		*/
         groupLabel: string;
+        /**
+		* 
+		*/
         item: string;
+        /**
+		* 
+		*/
         itemLabel: string;
+        /**
+		* 
+		*/
         itemSymbol: string;
+        /**
+		* 
+		*/
         selectedItem: string;
         // tooltip : string; // TODO FLE : remove all CSS stuff !!!
         // grid: Dojo.grid.DataGrid;
+        /**
+		* 
+		*/
         tooltip: any; //div;
-        attr(name : string, value? : Object): void;
+        /**
+		* Get or set the properties of the template picker. See the dojo documentation for more details about this method.
+		*@params name Name of the attribute of interest.
+		*@params value Value for the specified attribute.
+		*@returns void
+		*/
+        attr(name: string, value?: Object): void;
+        /**
+		* Clears the current selection.
+		*@returns void
+		*/
         clearSelection(): void;
+        /**
+		* Destroys the template picker. Call destroy() when the widget is no longer needed by the application.
+		*@returns void
+		*/
         destroy(): void;
+        /**
+		* Gets the selected item picked by the user. 
+		*@returns Object
+		*/
         getSelected(): Object;
+        /**
+		* Finalizes the creation of the template picker. Call startup() after creating the widget when you are ready for user interaction.
+		*@returns void
+		*/
         startup(): void;
+        /**
+		* Updates the templatePicker after modifying the properties of the widget.
+		*@returns void
+		*/
         update(): void;
+        /**
+		* Fires when an item is selected or unselected in the template picker. You can retrieve the selected item using the getSelected() method.
+		*@returns void
+		*/
         onSelectionChange(): void;
     }
 }
+
+/**
+* Dijit Namespace.
+*/
 declare module esri.dijit {
     export class AttributeInspector {
         constructor(params: Object, srcNodeRef: string);
@@ -1428,6 +3549,10 @@ declare module esri.dijit {
         onTimeExtentChange(timeExtent : esri.TimeExtent): void;
     }
 }
+
+/**
+* Dijit.Analysis Namespace.
+*/
 declare module esri.dijit.analysis {
     export class AnalysisBase {
 		cancel(jobInfo : Object) : void;
@@ -1930,6 +4055,10 @@ declare module esri.dijit.analysis {
 		onSave() : void;
     }
 }
+
+/**
+* Dijit.GeoEnrichment Namespace.
+*/
 declare module esri.dijit.geoenrichment {
     export class Infographic {
         constructor(params: Object, srcNodeRef: string);
@@ -1996,6 +4125,9 @@ declare module esri.dijit.geoenrichment {
     }
 }
 
+/**
+* Geometry Namespace.
+*/
 declare module esri.geometry {
 
 	interface webMercatorUtils {
@@ -2148,6 +4280,10 @@ declare module esri.geometry {
     export class ScreenPoint extends Point {
     }
 }
+
+/**
+* Layers Namespace.
+*/
 declare module esri.layers {
     export class ArcGISDynamicMapServiceLayer extends DynamicMapServiceLayer {
         constructor(url : string, options? : Object);
@@ -3537,6 +5673,9 @@ declare module esri.layers {
     }
 }
 
+/**
+* Renderer Namespace.
+*/
 declare module esri.renderer {
 
 	interface jsonUtils {
@@ -3674,6 +5813,9 @@ declare module esri.renderer {
     }
 }
 
+/**
+* Symbol Namespace.
+*/
 declare module esri.symbol {
 
 	interface jsonUtils {
@@ -3925,6 +6067,9 @@ declare module esri.symbol {
     }
 }
 
+/**
+* Tasks Namespace.
+*/
 declare module esri.tasks {
     export class AddressCandidate {
         address: Object;
@@ -4655,6 +6800,10 @@ declare module esri.tasks {
         toJson(): Object;
     }
 }
+
+/**
+* Tasks.GeoEnrichment Namespace.
+*/
 declare module esri.tasks.geoenrichment {
     export class DriveBuffer {
 		constructor(params : Object);
@@ -4714,6 +6863,10 @@ declare module esri.tasks.geoenrichment {
 		units : esri.Units;
     }
 }
+
+/**
+* Toolbars Namespace.
+*/
 declare module esri.toolbars {
     export class Draw {
         constructor(map: esri.Map, options: Object);
@@ -4799,6 +6952,10 @@ declare module esri.toolbars {
         onExtentHistoryChange(): void;
     }
 }
+
+/**
+* VirtualEarth Namespace.
+*/
 declare module esri.virtualearth {
     export class VEAddress {
         addressLine: string;
