@@ -1,5 +1,5 @@
 
-Notice : this repository has been deprecated as ESRI implements a full typescript definition of API 3.x and 4.x : please see https://github.com/Esri/jsapi-resources
+**Important Notice** : this repository has been deprecated as ESRI implements a full typescript definition of API 3.x and 4.x : please see https://github.com/Esri/jsapi-resources
 
 
 
